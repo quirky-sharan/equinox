@@ -1,5 +1,5 @@
 """
-ClinicalMind — ML API Service
+Meowmeow — ML API Service
 FastAPI microservice exposing all ML pipeline endpoints.
 Runs on port 8001 — called by the main backend at port 8000.
 """
@@ -20,7 +20,7 @@ from .speech_processor import process_audio
 
 # ─── FastAPI App ───────────────────────────────────────────────────────────────
 app = FastAPI(
-    title="ClinicalMind ML Service",
+    title="Meowmeow ML Service",
     description="AI/ML microservice for symptom analysis, clinical inference, and risk assessment",
     version="1.0.0",
 )
@@ -141,7 +141,7 @@ class AudioProcessRequest(BaseModel):
 @app.get("/")
 def root():
     return {
-        "service": "ClinicalMind ML Service",
+        "service": "Meowmeow ML Service",
         "version": "1.0.0",
         "endpoints": [
             "/ml/extract-symptoms",

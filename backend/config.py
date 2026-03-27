@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    DATABASE_URL: str = "sqlite:///./clinicalmind.db"
+    DATABASE_URL: str = "sqlite:///./meowmeow.db"
     REDIS_URL: str = "redis://localhost:6379"
     JWT_SECRET: str = "change-me-in-production"
     JWT_ALGORITHM: str = "HS256"

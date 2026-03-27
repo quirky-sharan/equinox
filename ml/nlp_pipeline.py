@@ -1,5 +1,5 @@
 """
-ClinicalMind — NLP Pipeline
+Meowmeow — NLP Pipeline
 Medical symptom extraction + ICD-10 normalization from raw user text.
 Uses keyword dictionary + fuzzy matching (no heavy model downloads).
 """

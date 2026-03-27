@@ -24,7 +24,7 @@ export default function Navbar() {
     <nav className="navbar">
       <Link to="/dashboard" className="navbar-brand">
         <Brain size={22} color="var(--accent-blue)" />
-        <span>Clinical<span style={{ color: "var(--accent-blue)" }}>Mind</span></span>
+        <span>Meow<span style={{ color: "var(--accent-blue)" }}>meow</span></span>
         <span className="brand-dot" />
       </Link>
 

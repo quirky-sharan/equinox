@@ -81,7 +81,7 @@ export default function LoginPage() {
             Welcome back
           </h1>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
-            Sign in to your ClinicalMind account
+            Sign in to your Meowmeow account
           </p>
         </div>
 

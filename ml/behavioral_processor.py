@@ -1,5 +1,5 @@
 """
-ClinicalMind — Behavioral Signal Processor
+Meowmeow — Behavioral Signal Processor
 Analyzes HOW the user typed — not just WHAT they typed.
 Processes keystroke timing, deletions, and hedge language.
 """

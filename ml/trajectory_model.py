@@ -1,5 +1,5 @@
 """
-ClinicalMind — Temporal Trajectory Model
+Meowmeow — Temporal Trajectory Model
 Compares current session symptom vector to past visits
 to detect escalating, improving, or stable patterns.
 """

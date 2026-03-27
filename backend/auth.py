@@ -40,7 +40,7 @@ def _ensure_demo_user(db: Session) -> User:
     if not user:
         user = User(
             id=DEMO_USER_ID,
-            email="demo@clinicalmind.ai",
+            email="demo@meowmeow.ai",
             full_name="Demo Patient",
             age=28,
             is_active=True,

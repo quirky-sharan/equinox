@@ -1,5 +1,5 @@
 """
-ClinicalMind — Intensity Analyzer
+Meowmeow — Intensity Analyzer
 Detects the difference between "it hurts" and "IT HURTS!!" and "it hurts a little maybe."
 Multi-signal intensity scoring from text, behavioral metadata, and optional audio features.
 """

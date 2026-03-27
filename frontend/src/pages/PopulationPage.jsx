@@ -52,7 +52,7 @@ export default function PopulationPage() {
             </h1>
           </div>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
-            Anonymized aggregate symptom signals across ClinicalMind users. No personal data is included.
+            Anonymized aggregate symptom signals across Meowmeow users. No personal data is included.
           </p>
         </div>
 

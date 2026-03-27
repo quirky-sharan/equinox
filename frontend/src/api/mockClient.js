@@ -14,7 +14,7 @@ const mock = {
     if (url.includes("/auth/login") || url.includes("/auth/register") || url.includes("/auth/google")) {
       const user = {
         id: "demo-user-001",
-        email: data?.email || "demo@clinicalmind.ai",
+        email: data?.email || "demo@meowmeow.ai",
         full_name: data?.full_name || "Demo Patient",
         age: data?.age || 28,
         sex: data?.sex || "prefer not to say",
@@ -149,7 +149,7 @@ const mock = {
       return {
         data: {
           id: "demo-user-001",
-          email: "demo@clinicalmind.ai",
+          email: "demo@meowmeow.ai",
           full_name: "Demo Patient",
           age: 28, sex: null, photo_url: null,
           created_at: new Date().toISOString(),
@@ -162,7 +162,7 @@ const mock = {
 
   async patch(url, data) {
     await delay(300);
-    return { data: { ...data, id: "demo-user-001", email: "demo@clinicalmind.ai", created_at: new Date().toISOString() } };
+    return { data: { ...data, id: "demo-user-001", email: "demo@meowmeow.ai", created_at: new Date().toISOString() } };
   }
 };
 

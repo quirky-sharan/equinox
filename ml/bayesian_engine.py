@@ -1,5 +1,5 @@
 """
-ClinicalMind — Bayesian Inference Engine
+Meowmeow — Bayesian Inference Engine
 Takes normalized symptoms + intensity scores and calculates condition probabilities.
 Uses a built-in symptom→condition knowledge base (no external CSV needed).
 """

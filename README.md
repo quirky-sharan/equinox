@@ -1,8 +1,8 @@
-# ClinicalMind
+# Meowmeow
 
 **Intelligent Symptom Analysis & Risk Assessment Platform**
 
-ClinicalMind is a structured healthcare reasoning system that interviews users the way a clinician would — conversationally — and extracts clinical signals using NLP, Bayesian inference, and behavioral analysis.
+Meowmeow is a structured healthcare reasoning system that interviews users the way a clinician would — conversationally — and extracts clinical signals using NLP, Bayesian inference, and behavioral analysis.
 
 ## Architecture
 
@@ -103,4 +103,4 @@ If the ML service is unavailable, the backend degrades gracefully with default q
 
 ## Medical Disclaimer
 
-ClinicalMind is **not** a medical diagnostic tool and does not replace professional medical advice. All outputs are informational only and based on probabilistic inference from symptom datasets. Always consult a qualified healthcare provider for medical decisions.
+Meowmeow is **not** a medical diagnostic tool and does not replace professional medical advice. All outputs are informational only and based on probabilistic inference from symptom datasets. Always consult a qualified healthcare provider for medical decisions.

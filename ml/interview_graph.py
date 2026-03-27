@@ -1,5 +1,5 @@
 """
-ClinicalMind — Dynamic Differential Diagnosis Interview Engine (V4)
+Meowmeow — Dynamic Differential Diagnosis Interview Engine (V4)
 Generates unique, non-repeating, clinically relevant follow-up questions.
 
 ANTI-REPETITION GUARANTEES:

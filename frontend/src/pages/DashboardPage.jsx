@@ -46,7 +46,7 @@ export default function DashboardPage() {
             </span>
           </h1>
           <p style={{ color: "var(--text-secondary)", maxWidth: 500, fontSize: "1.05rem", marginBottom: "2rem", lineHeight: 1.7 }}>
-            ClinicalMind interviews you the way a clinician would — conversationally — and extracts clinical signals you didn't know you had.
+            Meowmeow interviews you the way a clinician would — conversationally — and extracts clinical signals you didn't know you had.
           </p>
           <motion.button
             className="btn btn-primary btn-lg"
@@ -121,7 +121,7 @@ export default function DashboardPage() {
 
         {/* Disclaimer */}
         <div style={{ marginTop: "2.5rem", padding: "1rem 1.25rem", borderRadius: "var(--radius-md)", background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)", fontSize: "0.8rem", color: "var(--text-muted)", lineHeight: 1.6 }}>
-          ⚕️ <strong style={{ color: "var(--text-secondary)" }}>Medical Disclaimer:</strong> ClinicalMind is not a medical diagnostic tool and does not replace professional medical advice. All outputs are informational only and based on probabilistic inference. Always consult a qualified healthcare provider.
+          ⚕️ <strong style={{ color: "var(--text-secondary)" }}>Medical Disclaimer:</strong> Meowmeow is not a medical diagnostic tool and does not replace professional medical advice. All outputs are informational only and based on probabilistic inference. Always consult a qualified healthcare provider.
         </div>
       </motion.div>
     </div>

@@ -1,5 +1,5 @@
 """
-ClinicalMind — Speech Processor
+Meowmeow — Speech Processor
 Extracts audio features from base64-encoded WAV blobs for intensity analysis.
 Uses librosa for RMS energy, speech rate estimation, and MFCC stress indicators.
 """
