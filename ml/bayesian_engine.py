@@ -276,8 +276,12 @@ def _compute_scores(
 def _determine_risk_tier(
     top_conditions: List[Dict[str, Any]],
     intensity_score: float,
+    is_emergency: bool = False,
 ) -> str:
     """Determine overall risk tier."""
+    if is_emergency:
+        return "critical"
+
     if not top_conditions:
         return "low"
 
@@ -302,9 +306,13 @@ def _build_reasoning(
     top_conditions: List[Dict[str, Any]],
     intensity_level: str,
     behavioral_flags: List[str],
+    is_emergency: bool = False,
 ) -> List[str]:
     """Build a human-readable reasoning chain."""
     chain = []
+
+    if is_emergency:
+        chain.append("CRITICAL: Emergency keywords detected in patient input. Immediate triage required.")
 
     # Symptom summary
     symptom_names = [s["normalized_term"] for s in symptoms[:6]]
@@ -384,14 +392,20 @@ def run_inference(
     condition_scores = _compute_scores(icd10_codes, intensity["intensity_score"])
     top_conditions = condition_scores[:5]
 
+    # 3.5 Emergency check
+    emergency_keywords = ["suicide", "kill myself", "chest pain", "can't breathe", "heart attack", "dying", "emergency"]
+    is_emergency = any(kw in text.lower() for kw in emergency_keywords)
+
     # 4. Risk tier
-    risk_tier = _determine_risk_tier(top_conditions, intensity["intensity_score"])
+    risk_tier = _determine_risk_tier(top_conditions, intensity["intensity_score"], is_emergency)
 
     # 5. Behavioral flags
     behavioral_flags = intensity.get("signals_detected", [])
+    if is_emergency:
+        behavioral_flags.append("EMERGENCY_KEYWORD_DETECTED")
 
     # 6. Reasoning chain
-    reasoning = _build_reasoning(symptoms, top_conditions, intensity["intensity_level"], behavioral_flags)
+    reasoning = _build_reasoning(symptoms, top_conditions, intensity["intensity_level"], behavioral_flags, is_emergency)
 
     # 7. Recommended action
     top_name = top_conditions[0]["name"] if top_conditions else ""

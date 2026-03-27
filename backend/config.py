@@ -6,7 +6,7 @@ class Settings(BaseSettings):
     JWT_SECRET: str = "change-me-in-production"
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
-    ML_SERVICE_URL: str = "http://localhost:8002"
+    ML_SERVICE_URL: str = "http://localhost:8001"
     FIREBASE_PROJECT_ID: str = ""
     FIREBASE_API_KEY: str = ""
     FRONTEND_URL: str = "http://localhost:5173"
