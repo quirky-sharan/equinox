@@ -25,14 +25,15 @@ DEFAULT_QUESTIONS = [
     {"text": "Have you noticed anything that makes it better or worse?", "category": "modifiers"},
 ]
 
-async def call_ml(endpoint: str, payload: dict) -> dict:
+async def call_ml(endpoint: str, payload: dict, timeout: float = 10.0) -> dict:
     """Call ML microservice, return empty dict on failure (graceful degradation)."""
     try:
-        async with httpx.AsyncClient(timeout=5.0) as client:
+        async with httpx.AsyncClient(timeout=timeout) as client:
             r = await client.post(f"{settings.ML_SERVICE_URL}/ml/{endpoint}", json=payload)
             r.raise_for_status()
             return r.json()
-    except Exception:
+    except Exception as e:
+        print(f"[ML call failed] {endpoint}: {e}")
         return {}
 
 @router.post("/start", response_model=SessionStartResponse)
@@ -83,13 +84,21 @@ async def submit_answer(
     db.add(answer)
     db.commit()
 
-    # Try ML service for next question
-    ml_result = await call_ml("next-question", {
+    # Try ML service for next question (forward behavioral metadata)
+    ml_payload = {
         "session_id": str(payload.session_id),
         "answer_text": payload.answer_text,
         "current_category": payload.question_category,
         "depth": answer_count + 1,
-    })
+    }
+    ml_result = await call_ml("next-question", ml_payload)
+
+    # Also run intensity analysis on this answer asynchronously
+    intensity_payload = {
+        "text": payload.answer_text,
+        "behavioral_metadata": meta if meta else None,
+    }
+    intensity_result = await call_ml("analyze-intensity", intensity_payload)
 
     total_questions = 5
     next_idx = answer_count + 1
@@ -121,7 +130,7 @@ async def submit_answer(
 
 @router.get("/result/{session_id}", response_model=RiskOutput)
 async def get_result(
-    session_id: uuid.UUID,
+    session_id: str,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -138,12 +147,24 @@ async def get_result(
 
     all_text = " ".join([a.answer_text for a in answers])
 
-    # Try ML inference
+    # Collect all behavioral metadata from answers
+    all_behavioral = {}
+    for a in answers:
+        if a.behavioral_metadata:
+            for key in ["deleted_segments", "typing_latency_ms"]:
+                if key in a.behavioral_metadata:
+                    all_behavioral.setdefault(key, []).extend(a.behavioral_metadata[key])
+            for key in ["edit_count", "hedge_word_count"]:
+                if key in a.behavioral_metadata:
+                    all_behavioral[key] = all_behavioral.get(key, 0) + a.behavioral_metadata.get(key, 0)
+
+    # Try ML inference with full behavioral context
     ml_result = await call_ml("infer", {
         "session_id": str(session_id),
         "combined_text": all_text,
         "answers": [{"question": a.question_text, "answer": a.answer_text} for a in answers],
-    })
+        "behavioral_metadata": all_behavioral if all_behavioral else None,
+    }, timeout=15.0)
 
     if ml_result.get("risk_tier"):
         risk_tier = ml_result["risk_tier"]

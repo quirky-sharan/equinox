@@ -1,13 +1,12 @@
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 from datetime import datetime
-import uuid
 
 class SessionStart(BaseModel):
-    user_id: uuid.UUID
+    user_id: str
 
 class SessionStartResponse(BaseModel):
-    session_id: uuid.UUID
+    session_id: str
     first_question: str
     question_category: str
 
@@ -19,7 +18,7 @@ class BehavioralMetadata(BaseModel):
     typing_latency_ms: List[int] = []
 
 class AnswerSubmit(BaseModel):
-    session_id: uuid.UUID
+    session_id: str
     question_text: str
     question_category: str
     answer_text: str
@@ -34,7 +33,7 @@ class AnswerResponse(BaseModel):
     progress_pct: float
 
 class RiskOutput(BaseModel):
-    session_id: uuid.UUID
+    session_id: str
     risk_tier: str
     risk_score: float
     top_conditions: List[Dict[str, Any]]
@@ -45,7 +44,7 @@ class RiskOutput(BaseModel):
     trajectory_score: Optional[float]
 
 class SessionHistoryItem(BaseModel):
-    session_id: uuid.UUID
+    session_id: str
     created_at: datetime
     risk_tier: Optional[str]
     top_condition: Optional[str]

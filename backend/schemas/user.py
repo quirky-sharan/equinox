@@ -20,7 +20,7 @@ class FirebaseAuthRequest(BaseModel):
     photo_url: Optional[str] = None
 
 class UserOut(BaseModel):
-    id: uuid.UUID
+    id: str
     email: str
     full_name: Optional[str]
     age: Optional[int]

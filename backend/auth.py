@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Optional
-from jose import JWTError, jwt
+import jwt
+from jwt.exceptions import PyJWTError as JWTError
 from passlib.context import CryptContext
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -8,9 +9,12 @@ from sqlalchemy.orm import Session
 from .database import get_db
 from .models.user import User
 from .config import settings
+import uuid
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
+
+DEMO_USER_ID = "demo-user-001"
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
@@ -30,11 +34,33 @@ def decode_token(token: str) -> dict:
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
 
+def _ensure_demo_user(db: Session) -> User:
+    """Create or fetch the demo user for demo mode."""
+    user = db.query(User).filter(User.id == DEMO_USER_ID).first()
+    if not user:
+        user = User(
+            id=DEMO_USER_ID,
+            email="demo@clinicalmind.ai",
+            full_name="Demo Patient",
+            age=28,
+            is_active=True,
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+    return user
+
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(security),
     db: Session = Depends(get_db)
 ) -> User:
-    payload = decode_token(credentials.credentials)
+    token = credentials.credentials
+
+    # Demo mode: accept the mock token from frontend
+    if token == "demo-token-xyz":
+        return _ensure_demo_user(db)
+
+    payload = decode_token(token)
     user_id = payload.get("sub")
     if not user_id:
         raise HTTPException(status_code=401, detail="Invalid token payload")

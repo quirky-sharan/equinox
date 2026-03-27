@@ -125,3 +125,12 @@ logs/
 *.sqlite
 *.sqlite3
 *.db
+
+# API Keys and Secrets
+*secret*
+*api_key*
+*.key
+*.pem
+.env*
+config/*.json
+credentials.json
