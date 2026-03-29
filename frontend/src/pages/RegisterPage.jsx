@@ -54,40 +54,57 @@ export default function RegisterPage() {
   const strengthColors = ["", "#ef4444", "#f97316", "#f59e0b", "#10b981"];
   const strengthLabels = ["", "Weak", "Fair", "Good", "Strong"];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
+  };
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  };
+
   return (
-    <div className="page-center">
+    <div className="page-center" style={{ position: "relative", overflow: "hidden" }}>
+      <div style={{ position: "absolute", top: "-10%", right: "-10%", width: "40%", height: "40%", background: "radial-gradient(circle, rgba(14, 165, 233, 0.03) 0%, transparent 70%)", zIndex: 0 }} />
+      <div style={{ position: "absolute", bottom: "-10%", left: "-10%", width: "40%", height: "40%", background: "radial-gradient(circle, rgba(139, 92, 246, 0.03) 0%, transparent 70%)", zIndex: 0 }} />
+
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        style={{ width: "100%", maxWidth: 460 }}
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        style={{ width: "100%", maxWidth: 460, zIndex: 1 }}
       >
-        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <div style={{
-            display: "inline-flex", alignItems: "center", justifyContent: "center",
-            width: 56, height: 56, borderRadius: 16,
-            background: "linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2))",
-            border: "1px solid rgba(59,130,246,0.3)", marginBottom: "1rem"
-          }}>
-            <Cat size={28} color="var(--accent-blue)" />
-          </div>
-          <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "1.75rem", fontWeight: 800, letterSpacing: "-0.03em", marginBottom: 8 }}>
+        <motion.div variants={itemVariants} style={{ textAlign: "center", marginBottom: "2.5rem" }}>
+          <motion.div 
+            whileHover={{ scale: 1.05, rotate: -5 }}
+            style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              width: 64, height: 64, borderRadius: "20px",
+              background: "var(--bg-card)",
+              border: "1px solid var(--border-color)", marginBottom: "1.5rem",
+              boxShadow: "var(--shadow-md)"
+            }}>
+            <Cat size={32} color="var(--accent-blue)" strokeWidth={1.5} />
+          </motion.div>
+          <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "2rem", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 10 }}>
             Create your account
           </h1>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem" }}>
             Start your intelligent health assessment
           </p>
-        </div>
+        </motion.div>
 
-        <div className="card" style={{ padding: "2rem" }}>
-          <button
+        <motion.div variants={itemVariants} className="card" style={{ padding: "2.5rem", backdropFilter: "blur(10px)", background: "var(--glass-bg)" }}>
+          <motion.button
+            whileHover={{ y: -2 }}
+            whileTap={{ scale: 0.98 }}
             className="btn btn-google btn-full"
             onClick={handleGoogle}
             disabled={googleLoading}
-            style={{ marginBottom: "1.25rem", fontSize: "0.95rem" }}
+            style={{ marginBottom: "1.5rem", fontSize: "0.92rem", fontWeight: 600, border: "1px solid var(--border-color)", background: "var(--bg-base)" }}
           >
             {googleLoading ? <div className="spinner" style={{ borderTopColor: "#4285f4" }} /> : (
-              <svg width="20" height="20" viewBox="0 0 24 24">
+              <svg width="18" height="18" viewBox="0 0 24 24" style={{ marginRight: 10 }}>
                 <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                 <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -95,41 +112,45 @@ export default function RegisterPage() {
               </svg>
             )}
             Continue with Google
-          </button>
+          </motion.button>
 
-          <div className="form-divider">or register with email</div>
+
+          <motion.div variants={itemVariants} className="form-divider">or register with email</motion.div>
 
           {error && (
-            <div style={{
-              display: "flex", alignItems: "center", gap: 8,
-              background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.3)",
-              borderRadius: "var(--radius-md)", padding: "10px 14px",
-              color: "#f87171", fontSize: "0.85rem", marginBottom: "1rem", marginTop: "0.5rem"
-            }}>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              style={{
+                display: "flex", alignItems: "center", gap: 8,
+                background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.2)",
+                borderRadius: "var(--radius-md)", padding: "12px 16px",
+                color: "#f87171", fontSize: "0.85rem", marginBottom: "1.5rem", marginTop: "1rem"
+              }}>
               <AlertCircle size={16} /> {error}
-            </div>
+            </motion.div>
           )}
 
-          <form onSubmit={handleRegister} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <div className="form-group">
+          <form onSubmit={handleRegister} style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+            <motion.div variants={itemVariants} className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">Full Name</label>
               <div style={{ position: "relative" }}>
                 <User size={16} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
                 <input name="full_name" type="text" className="form-input" placeholder="Jane Smith"
                   value={form.full_name} onChange={handleChange} style={{ paddingLeft: 42 }} />
               </div>
-            </div>
+            </motion.div>
 
-            <div className="form-group">
+            <motion.div variants={itemVariants} className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">Email address *</label>
               <div style={{ position: "relative" }}>
                 <Mail size={16} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
                 <input name="email" type="email" required className="form-input" placeholder="you@example.com"
                   value={form.email} onChange={handleChange} style={{ paddingLeft: 42 }} />
               </div>
-            </div>
+            </motion.div>
 
-            <div className="form-group">
+            <motion.div variants={itemVariants} className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">Password *</label>
               <div style={{ position: "relative" }}>
                 <Lock size={16} style={{ position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)", color: "var(--text-muted)" }} />
@@ -137,52 +158,46 @@ export default function RegisterPage() {
                   placeholder="Min. 8 characters" value={form.password} onChange={handleChange}
                   style={{ paddingLeft: 42, paddingRight: 42 }} />
                 <button type="button" onClick={() => setShowPass(!showPass)}
-                  style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "pointer", color: "var(--text-muted)", display: "flex" }}>
+                  style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", background: "none", border: "none", cursor: "none", color: "var(--text-muted)", display: "flex" }}>
                   {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              {form.password && (
-                <div style={{ marginTop: 6 }}>
-                  <div style={{ display: "flex", gap: 4, marginBottom: 4 }}>
-                    {[1,2,3,4].map((i) => (
-                      <div key={i} style={{ flex: 1, height: 3, borderRadius: 2, background: i <= s ? strengthColors[s] : "var(--border)", transition: "background 0.3s" }} />
-                    ))}
-                  </div>
-                  <span style={{ fontSize: "0.75rem", color: strengthColors[s] }}>{strengthLabels[s]}</span>
-                </div>
-              )}
-            </div>
+            </motion.div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-              <div className="form-group">
+            <motion.div variants={itemVariants} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
+              <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Age</label>
                 <input name="age" type="number" min="1" max="120" className="form-input" placeholder="e.g. 28"
                   value={form.age} onChange={handleChange} />
               </div>
-              <div className="form-group">
+              <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Sex</label>
                 <select name="sex" className="form-input" value={form.sex} onChange={handleChange}
-                  style={{ cursor: "pointer" }}>
+                  style={{ cursor: "none" }}>
                   <option value="">Prefer not to say</option>
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                   <option value="other">Other</option>
                 </select>
               </div>
-            </div>
+            </motion.div>
 
-            <button type="submit" className="btn btn-primary btn-full btn-lg" disabled={loading} style={{ marginTop: 4 }}>
-              {loading ? <><div className="spinner" /> Creating account...</> : "Create Account"}
-            </button>
+            <motion.button 
+              variants={itemVariants}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.99 }}
+              type="submit" className="btn btn-primary btn-full btn-lg" disabled={loading} style={{ marginTop: 8 }}>
+              {loading ? <><div className="spinner" /> Initializing...</> : "Create Account"}
+            </motion.button>
           </form>
-        </div>
+        </motion.div>
 
-        <p style={{ textAlign: "center", marginTop: "1.25rem", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
+        <motion.p variants={itemVariants} style={{ textAlign: "center", marginTop: "2rem", color: "var(--text-secondary)", fontSize: "0.9rem" }}>
           Already have an account?{" "}
-          <Link to="/login" style={{ color: "var(--accent-blue-light)", fontWeight: 600, textDecoration: "none" }}>
+          <Link to="/login" style={{ color: "var(--text-primary)", fontWeight: 700, textDecoration: "none", borderBottom: "1.5px solid var(--border-color)" }}>
             Sign in
           </Link>
-        </p>
+        </motion.p>
       </motion.div>
     </div>
   );

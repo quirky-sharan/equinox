@@ -24,21 +24,25 @@ export default function HistoryPage() {
   const sessions = data || [];
 
   return (
-    <div className="page-container" style={{ maxWidth: 800 }}>
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "2rem", flexWrap: "wrap", gap: 12 }}>
+    <div className="page-container" style={{ maxWidth: 840 }}>
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "3rem", flexWrap: "wrap", gap: 20 }}>
           <div>
-            <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "1.75rem", fontWeight: 800, letterSpacing: "-0.03em" }}>
-              Assessment History
+            <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "2.5rem", fontWeight: 800, letterSpacing: "-0.04em", color: "var(--text-primary)" }}>
+              History audit.
             </h1>
-            <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", marginTop: 4 }}>
-              Your past clinical interviews and risk outputs
+            <p style={{ color: "var(--text-secondary)", fontSize: "1rem", marginTop: 8 }}>
+              Comprehensive longitudinal record of your clinical interactions.
             </p>
           </div>
-          <button className="btn btn-primary" onClick={() => navigate("/interview")} style={{ gap: 8 }}>
-            <Cat size={16} /> New Assessment
-          </button>
+          <motion.button 
+            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+            className="btn btn-primary" onClick={() => navigate("/interview")} style={{ gap: 10, padding: "0.85rem 1.5rem" }}
+          >
+            <Cat size={18} /> New Assessment
+          </motion.button>
         </div>
+
 
         {isLoading && (
           <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
@@ -63,54 +67,48 @@ export default function HistoryPage() {
           {sessions.map((s, i) => (
             <motion.div key={s.session_id}
               className="card"
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.06 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05 }}
               style={{
-                padding: "1.25rem 1.5rem",
-                display: "flex", alignItems: "center", gap: "1rem",
-                cursor: s.status === "completed" ? "pointer" : "default"
+                padding: "1.25rem 2rem",
+                display: "flex", alignItems: "center", gap: "1.5rem",
+                cursor: s.status === "completed" ? "pointer" : "default",
+                border: "none", background: "var(--bg-subtle)"
               }}
               onClick={() => s.status === "completed" && navigate(`/result/${s.session_id}`)}
-              whileHover={s.status === "completed" ? { borderColor: "rgba(59,130,246,0.3)" } : {}}
+              whileHover={s.status === "completed" ? { background: "var(--bg-card)", x: 8 } : {}}
             >
-              {/* Risk indicator */}
               <div style={{
-                width: 48, height: 48, borderRadius: 12, flexShrink: 0,
-                background: RISK_BG[s.risk_tier] || "rgba(255,255,255,0.05)",
-                border: `1px solid ${RISK_COLORS[s.risk_tier] || "var(--border)"}33`,
+                width: 52, height: 52, borderRadius: 14, flexShrink: 0,
+                background: RISK_BG[s.risk_tier] || "var(--bg-card)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                fontSize: "1.1rem", fontWeight: 900,
+                fontSize: "1.2rem", fontWeight: 900,
                 color: RISK_COLORS[s.risk_tier] || "var(--text-muted)",
                 fontFamily: "'Plus Jakarta Sans',sans-serif"
               }}>
                 {s.risk_tier ? s.risk_tier[0].toUpperCase() : "?"}
               </div>
 
-              {/* Info */}
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontWeight: 600, fontSize: "0.95rem", marginBottom: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {s.top_condition || "Assessment completed"}
+                <div style={{ fontWeight: 700, fontSize: "1.05rem", marginBottom: 4 }}>
+                  {s.top_condition || "Interaction Segment"}
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-muted)", fontSize: "0.8rem" }}>
-                  <Clock size={12} />
-                  {s.created_at ? format(new Date(s.created_at), "MMM d, yyyy • h:mm a") : "—"}
+                <div style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
+                  {s.created_at ? format(new Date(s.created_at), "MMMM d, yyyy") : "—"}
                 </div>
               </div>
 
-              {/* Status badge */}
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <span className={`badge badge-${s.risk_tier || "medium"}`}>
-                  {s.risk_tier?.toUpperCase() || "—"}
+              <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+                <span style={{ fontSize: "0.75rem", fontWeight: 800, letterSpacing: "0.1em", color: RISK_COLORS[s.risk_tier] || "var(--text-muted)", textTransform: "uppercase" }}>
+                  {s.risk_tier || "UNRATED"}
                 </span>
-                <span style={{ fontSize: "0.75rem", color: "var(--text-muted)", textTransform: "capitalize" }}>
-                  {s.status}
-                </span>
-                {s.status === "completed" && <ChevronRight size={16} color="var(--text-muted)" />}
+                {s.status === "completed" && <ChevronRight size={18} color="var(--text-muted)" />}
               </div>
             </motion.div>
           ))}
         </div>
+
       </motion.div>
     </div>
   );

@@ -1,13 +1,14 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { sessionApi } from "../api/endpoints";
 import {
   Shield, AlertTriangle, CheckCircle, XCircle,
   TrendingUp, TrendingDown, Minus, Download, RotateCcw,
-  Activity, MessageSquare, ChevronRight, Cat
+  Activity, MessageSquare, ChevronRight, Cat, MapPin
 } from "lucide-react";
+import DoctorMapModal from "../components/DoctorMapModal";
 
 const RISK_CONFIG = {
   low:      { color: "var(--risk-low)",      bg: "rgba(16,185,129,0.08)",  border: "rgba(16,185,129,0.25)",  icon: CheckCircle,   label: "LOW RISK" },
@@ -27,6 +28,7 @@ export default function ResultPage() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState("patient");
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["result", sessionId],
@@ -34,103 +36,154 @@ export default function ResultPage() {
   });
 
   if (isLoading) return (
-    <div className="page-center" style={{ flexDirection: "column", gap: 16 }}>
-      <div className="spinner spinner-lg" />
-      <p style={{ color: "var(--text-secondary)" }}>Running clinical inference…</p>
+    <div className="page-center" style={{ flexDirection: "column", gap: 24 }}>
+      <motion.div 
+        animate={{ rotate: 360 }} 
+        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        style={{ width: 48, height: 48, borderRadius: "14px", border: "2px solid var(--border-color)", borderTopColor: "var(--accent-blue)", display: "flex", alignItems: "center", justifyContent: "center" }}
+      >
+        <Cat size={20} color="var(--accent-blue)" />
+      </motion.div>
+      <p style={{ color: "var(--text-secondary)", fontVariantNumeric: "tabular-nums", letterSpacing: "0.02em", fontSize: "0.9rem" }}>Synthesizing clinical results…</p>
     </div>
   );
 
   if (error) return (
     <div className="page-center">
-      <div style={{ textAlign: "center", color: "#f87171" }}>Failed to load results. <button className="btn btn-secondary btn-sm" onClick={() => navigate("/dashboard")}>Go Home</button></div>
+      <div style={{ textAlign: "center", color: "var(--risk-critical)" }}>
+        <p style={{ marginBottom: 16 }}>The clinical engine failed to retrieve the result set.</p>
+        <button className="btn btn-secondary btn-sm" onClick={() => navigate("/dashboard")}>Return to Dashboard</button>
+      </div>
     </div>
   );
 
   const risk = RISK_CONFIG[data?.risk_tier] || RISK_CONFIG.medium;
+  const traj = TRAJECTORY_CONFIG[data?.trajectory] || TRAJECTORY_CONFIG.stable;
   const RiskIcon = risk.icon;
-  const traj = data?.trajectory_label ? TRAJECTORY_CONFIG[data.trajectory_label] : null;
-  const TrajIcon = traj?.icon;
+  const TrajIcon = traj.icon;
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
+  };
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+  };
 
   return (
-    <div className="page-container" style={{ maxWidth: 780 }}>
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+    <div className="page-container" style={{ maxWidth: 840, position: "relative" }}>
+      {/* Background glow for critical state */}
+      <AnimatePresence>
+        {data?.risk_tier === "critical" && (
+          <motion.div 
+            initial={{ opacity: 0 }} animate={{ opacity: 0.04 }} exit={{ opacity: 0 }}
+            style={{ position: "fixed", inset: 0, background: "radial-gradient(circle, var(--risk-critical) 0%, transparent 70%)", zIndex: -1 }} 
+          />
+        )}
+      </AnimatePresence>
+
+      <motion.div variants={containerVariants} initial="hidden" animate="visible">
 
         {/* View Mode Toggle */}
-        <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.5rem" }}>
-          <div style={{ display: "inline-flex", background: "var(--bg-subtle)", borderRadius: "100px", padding: 4, border: "1px solid var(--border-color)" }}>
+        <motion.div variants={itemVariants} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "3rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 40, height: 40, borderRadius: "10px", background: "var(--bg-subtle)", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Activity size={20} color="var(--accent-blue)" strokeWidth={1.5} />
+            </div>
+            <div>
+              <div style={{ fontSize: "1rem", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>Inference Report</div>
+              <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Session ID: {sessionId?.slice(0, 8)}</div>
+            </div>
+          </div>
+
+          <div style={{ display: "inline-flex", background: "var(--bg-subtle)", borderRadius: "var(--radius-full)", padding: 4, border: "1px solid var(--border-color)" }}>
             <button 
               onClick={() => setViewMode("patient")}
-              style={{ padding: "8px 16px", borderRadius: "100px", border: "none", background: viewMode === "patient" ? "var(--text-primary)" : "transparent", color: viewMode === "patient" ? "var(--bg-base)" : "var(--text-muted)", cursor: "pointer", fontWeight: 600, fontSize: "0.85rem", transition: "all 0.2s" }}
+              style={{ padding: "8px 18px", borderRadius: "100px", border: "none", background: viewMode === "patient" ? "var(--bg-card)" : "transparent", color: viewMode === "patient" ? "var(--text-primary)" : "var(--text-muted)", cursor: "pointer", fontWeight: 700, fontSize: "0.85rem", transition: "all 0.3s", boxShadow: viewMode === "patient" ? "0 4px 12px rgba(0,0,0,0.1)" : "none" }}
             >
-              Patient Overview
+              Patient
             </button>
             <button 
               onClick={() => setViewMode("doctor")}
-              style={{ padding: "8px 16px", borderRadius: "100px", border: "none", background: viewMode === "doctor" ? "var(--text-primary)" : "transparent", color: viewMode === "doctor" ? "var(--bg-base)" : "var(--text-muted)", cursor: "pointer", fontWeight: 600, fontSize: "0.85rem", transition: "all 0.2s" }}
+              style={{ padding: "8px 18px", borderRadius: "100px", border: "none", background: viewMode === "doctor" ? "var(--bg-card)" : "transparent", color: viewMode === "doctor" ? "var(--text-primary)" : "var(--text-muted)", cursor: "pointer", fontWeight: 700, fontSize: "0.85rem", transition: "all 0.3s", boxShadow: viewMode === "doctor" ? "0 4px 12px rgba(0,0,0,0.1)" : "none" }}
             >
-              Doctor Detailed View
+              Clinical
             </button>
           </div>
-        </div>
-
-        {/* Risk tier hero */}
-        <motion.div className="card" 
-          initial={{ scale: 0.97 }} 
-          animate={data?.risk_tier === "critical" ? { scale: [1, 1.02, 1], boxShadow: ["0px 0px 0px rgba(239,68,68,0)", "0px 0px 40px rgba(239,68,68,0.5)", "0px 0px 0px rgba(239,68,68,0)"] } : { scale: 1 }}
-          transition={data?.risk_tier === "critical" ? { repeat: Infinity, duration: 1.5 } : {}}
-          style={{ padding: "2rem", marginBottom: "1.5rem", textAlign: "center",
-            background: risk.bg, borderColor: data?.risk_tier === "critical" ? "rgba(239,68,68,0.6)" : risk.border }}>
-          <RiskIcon size={48} color={risk.color} style={{ marginBottom: 12 }} />
-          <div style={{ fontSize: "0.75rem", letterSpacing: "0.15em", fontWeight: 700, color: risk.color, marginBottom: 8 }}>
-            RISK ASSESSMENT
-          </div>
-          <div style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "2.5rem", fontWeight: 900, color: risk.color, letterSpacing: "-0.03em", lineHeight: 1 }}>
-            {risk.label}
-          </div>
-          <div style={{ marginTop: 12, color: "var(--text-secondary)", fontSize: "0.9rem" }}>
-            Confidence: <strong style={{ color: "var(--text-primary)" }}>{((data?.risk_score || 0.5) * 100).toFixed(0)}%</strong>
-          </div>
-
-          {traj && (
-            <div style={{ marginTop: 14, display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <span className={`badge ${traj.cls}`}>
-                <TrajIcon size={11} /> {traj.label}
-              </span>
-              {data.trajectory_score != null && (
-                <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
-                  escalation score: {(data.trajectory_score * 100).toFixed(0)}%
-                </span>
-              )}
-            </div>
-          )}
         </motion.div>
 
-        <div className="grid-2" style={{ marginBottom: "1.5rem" }}>
+        {/* Risk tier hero */}
+        <motion.div 
+          variants={itemVariants} 
+          className="card" 
+          style={{ 
+            padding: "3rem 2rem", marginBottom: "2rem", textAlign: "center",
+            background: `linear-gradient(135deg, ${risk.bg} 0%, transparent 100%)`, 
+            borderColor: risk.border,
+            boxShadow: `0 30px 60px -12px ${risk.bg}`
+          }}
+        >
+          <div style={{ position: "relative", display: "inline-block", marginBottom: 20 }}>
+            <motion.div 
+              animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              style={{ position: "absolute", inset: -15, borderRadius: "50%", background: risk.color, filter: "blur(20px)", zIndex: -1 }}
+            />
+            <RiskIcon size={64} color={risk.color} strokeWidth={1.5} />
+          </div>
+          
+          <div style={{ fontSize: "0.8rem", letterSpacing: "0.2em", fontWeight: 800, color: risk.color, marginBottom: 12, textTransform: "uppercase" }}>
+            Validated Result
+          </div>
+          <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "4rem", fontWeight: 900, color: "var(--text-primary)", letterSpacing: "-0.05em", lineHeight: 0.9, marginBottom: "1rem" }}>
+            {risk.label.split(" ")[0]}<br />
+            <span style={{ color: risk.color }}>{risk.label.split(" ").slice(1).join(" ") || "RISK"}</span>
+          </h1>
+          
+          <div style={{ display: "flex", justifyContent: "center", gap: "2rem", marginTop: "2rem" }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Confidence</div>
+              <div style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text-primary)" }}>{((data?.risk_score || 0.5) * 100).toFixed(0)}%</div>
+            </div>
+            {traj && (
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Trajectory</div>
+                <div style={{ fontSize: "1.25rem", fontWeight: 800, color: traj.color, display: "flex", alignItems: "center", gap: 6 }}>
+                  <TrajIcon size={18} /> {traj.label}
+                </div>
+              </div>
+            )}
+          </div>
+        </motion.div>
+
+
+        <motion.div variants={itemVariants} className="grid-2-col" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "2rem", marginBottom: "2rem" }}>
           {/* Top conditions */}
           {viewMode === "doctor" && (
-            <div className="card" style={{ padding: "1.5rem" }}>
-              <h3 style={{ fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: "1rem", display: "flex", alignItems: "center", gap: 6 }}>
-                <Activity size={13} /> Differential Diagnosis
+            <div className="card" style={{ padding: "2rem" }}>
+              <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-primary)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
+                <Activity size={16} color="var(--accent-blue)" /> Differential Diagnosis
               </h3>
-              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                 {(data?.top_conditions || []).map((cond, i) => (
                   <div key={i}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                      <span style={{ fontWeight: 600, fontSize: "0.9rem" }}>{cond.name}</span>
-                      <span style={{ fontWeight: 700, fontSize: "0.9rem", color: "var(--accent-blue-light)" }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+                      <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>{cond.name}</span>
+                      <span style={{ fontWeight: 800, fontSize: "0.95rem", color: "var(--accent-blue)" }}>
                         {((cond.confidence || 0) * 100).toFixed(0)}%
                       </span>
                     </div>
-                    <div className="progress-bar-track" style={{ background: "var(--bg-subtle)" }}>
+                    <div className="progress-bar-track" style={{ height: 6, background: "var(--bg-subtle)" }}>
                       <motion.div className="progress-bar-fill"
                         initial={{ width: 0 }}
                         animate={{ width: `${(cond.confidence || 0) * 100}%` }}
-                        transition={{ duration: 0.8, delay: i * 0.15 }}
-                        style={{ background: i === 0 ? "var(--text-primary)" : "var(--text-muted)" }}
+                        transition={{ duration: 1, delay: 0.5 + (i * 0.15), ease: [0.16, 1, 0.3, 1] }}
+                        style={{ background: i === 0 ? "var(--accent-blue)" : "var(--text-muted)" }}
                       />
                     </div>
                     {cond.icd10 && (
-                      <div style={{ fontSize: "0.72rem", color: "var(--text-muted)", marginTop: 2 }}>ICD-10: {cond.icd10}</div>
+                      <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: 4, letterSpacing: "0.02em" }}>CODING: {cond.icd10}</div>
                     )}
                   </div>
                 ))}
@@ -139,32 +192,26 @@ export default function ResultPage() {
           )}
 
           {/* Reasoning & action */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "1rem", gridColumn: viewMode === "patient" ? "1 / -1" : "auto" }}>
-            <div className="card" style={{ padding: "1.5rem", flex: 1, border: data?.risk_tier === "critical" ? "1px solid rgba(239,68,68,0.5)" : "1px solid var(--border-color)" }}>
-              <h3 style={{ fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.08em", color: data?.risk_tier === "critical" ? "var(--risk-critical)" : "var(--text-muted)", marginBottom: "1rem", display: "flex", alignItems: "center", gap: 6 }}>
-                <Shield size={13} /> {viewMode === "patient" ? "Assessment & Advice" : "Clinical Action Plan"}
+          <div style={{ display: "flex", flexDirection: "column", gap: "2rem", gridColumn: viewMode === "patient" ? "1 / -1" : "auto" }}>
+            <div className="card" style={{ padding: "2rem", flex: 1, borderTop: `4px solid ${risk.color}` }}>
+              <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-primary)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
+                <Shield size={16} color={risk.color} /> {viewMode === "patient" ? "Assessment Summary" : "Inference Logic"}
               </h3>
               
-              {data?.risk_tier === "low" && viewMode === "patient" && (
-                <div style={{ padding: "12px", background: "rgba(16,185,129,0.1)", borderRadius: "8px", marginBottom: "1rem", color: "var(--risk-low)", fontWeight: "bold" }}>
-                  🌿 Chill out! The AI sees no alarming red flags. You can relax and take it easy.
-                </div>
-              )}
-
-              <p style={{ fontSize: viewMode === "patient" ? "1.05rem" : "0.95rem", lineHeight: 1.6, color: "var(--text-primary)", fontWeight: 500, whiteSpace: "pre-line" }}>
+              <div style={{ fontSize: "1.1rem", lineHeight: 1.8, color: "var(--text-secondary)", fontWeight: 400, whiteSpace: "pre-line" }}>
                 {viewMode === "patient" ? (data?.patient_explanation || data?.recommended_action) : (data?.doctor_explanation || data?.recommended_action)}
-              </p>
+              </div>
             </div>
 
             {viewMode === "doctor" && (data?.behavioral_flags || []).length > 0 && (
-              <div className="card" style={{ padding: "1.5rem" }}>
-                <h3 style={{ fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: "1rem", display: "flex", alignItems: "center", gap: 6 }}>
-                  <MessageSquare size={13} /> Behavioral Signals
+              <div className="card" style={{ padding: "2rem" }}>
+                <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-primary)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
+                  <MessageSquare size={16} color="var(--accent-cyan)" /> Nuance Capture
                 </h3>
-                <ul style={{ display: "flex", flexDirection: "column", gap: 6, listStyle: "none" }}>
+                <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
                   {data.behavioral_flags.map((flag, i) => (
-                    <li key={i} style={{ fontSize: "0.85rem", color: "var(--text-secondary)", paddingLeft: 14, position: "relative" }}>
-                      <span style={{ position: "absolute", left: 0, top: "50%", transform: "translateY(-50%)", width: 5, height: 5, borderRadius: "50%", background: "var(--accent-cyan)", display: "block" }} />
+                    <li key={i} style={{ fontSize: "0.95rem", color: "var(--text-secondary)", paddingLeft: 20, position: "relative" }}>
+                      <span style={{ position: "absolute", left: 0, top: 10, width: 6, height: 6, borderRadius: "50%", background: "var(--accent-cyan)" }} />
                       {flag}
                     </li>
                   ))}
@@ -172,39 +219,58 @@ export default function ResultPage() {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
+
 
         {/* Reasoning chain */}
         {viewMode === "doctor" && (data?.reasoning_chain || []).length > 0 && (
-          <div className="card" style={{ padding: "1.5rem", marginBottom: "1.5rem" }}>
-            <h3 style={{ fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: "1rem" }}>
-              Clinical Reasoning
+          <motion.div variants={itemVariants} className="card" style={{ padding: "2rem", marginBottom: "2rem" }}>
+            <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-primary)", fontWeight: 800, marginBottom: "1.5rem" }}>
+              Analytic Traversal
             </h3>
-            <ol style={{ display: "flex", flexDirection: "column", gap: 8, paddingLeft: 20 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {data.reasoning_chain.map((step, i) => (
-                <li key={i} style={{ fontSize: "0.88rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>
-                  {step}
-                </li>
+                <div key={i} style={{ display: "flex", gap: 16 }}>
+                  <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--accent-blue)", fontVariantNumeric: "tabular-nums" }}>{(i + 1).toString().padStart(2, '0')}</div>
+                  <div style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>{step}</div>
+                </div>
               ))}
-            </ol>
-          </div>
+            </div>
+          </motion.div>
         )}
 
         {/* Actions */}
-        <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-          <button className="btn btn-primary" onClick={() => navigate("/interview")} style={{ gap: 8 }}>
-            <Cat size={16} /> New Assessment
-          </button>
-          <button className="btn btn-secondary" onClick={() => navigate("/history")} style={{ gap: 8 }}>
-            <Activity size={16} /> View History
-          </button>
-        </div>
+        <motion.div variants={itemVariants} style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
+          <motion.button 
+            whileHover={{ scale: 1.05, x: 5 }} whileTap={{ scale: 0.95 }}
+            className="btn btn-primary" onClick={() => navigate("/interview")} style={{ gap: 12, padding: "1rem 2rem" }}
+          >
+            <Cat size={20} /> New Assessment
+          </motion.button>
+          <motion.button 
+            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+            className="btn btn-secondary" onClick={() => navigate("/history")} style={{ gap: 12, padding: "1rem 2rem" }}
+          >
+            <Activity size={20} /> Audit History
+          </motion.button>
+          
+          <motion.button 
+            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+            className="btn btn-primary" onClick={() => setIsMapModalOpen(true)} style={{ gap: 12, padding: "1rem 2rem", background: "var(--bg-subtle)", color: "var(--accent-blue)", border: "1px solid var(--border-color)", boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
+          >
+            <MapPin size={20} /> Contact Nearest Doctors
+          </motion.button>
+        </motion.div>
 
         {/* Disclaimer */}
-        <div style={{ marginTop: "2.5rem", padding: "1.25rem", borderTop: "1px solid var(--border-color)", fontSize: "0.8rem", color: "var(--text-muted)", lineHeight: 1.6, textAlign: "center" }}>
-          Meowmeow is an informational probabilistic engine. Always consult a qualified healthcare provider for final medical diagnostics.
-        </div>
+        <motion.div variants={itemVariants} style={{ marginTop: "4rem", padding: "2rem", borderTop: "1px solid var(--border-color)", fontSize: "0.85rem", color: "var(--text-muted)", lineHeight: 1.6, textAlign: "center" }}>
+          Meowmeow is a high-fidelity informational probabilistic engine. Always consult a qualified clinical professional for final diagnostics.
+        </motion.div>
       </motion.div>
+
+      <AnimatePresence>
+        {isMapModalOpen && <DoctorMapModal onClose={() => setIsMapModalOpen(false)} />}
+      </AnimatePresence>
     </div>
   );
 }

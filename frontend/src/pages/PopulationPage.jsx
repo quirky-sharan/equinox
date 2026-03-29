@@ -40,35 +40,41 @@ export default function PopulationPage() {
   const spikes = chartData.filter((d) => d.count > spikeThreshold);
 
   return (
-    <div className="page-container" style={{ maxWidth: 900 }}>
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+    <div className="page-container" style={{ maxWidth: 1000 }}>
+      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
 
         {/* Header */}
-        <div style={{ marginBottom: "2rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-            <Globe size={22} color="var(--accent-blue)" />
-            <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "1.75rem", fontWeight: 800, letterSpacing: "-0.03em" }}>
-              PopulationWatch
+        <div style={{ marginBottom: "4rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 12 }}>
+            <div style={{ width: 44, height: 44, borderRadius: "12px", background: "var(--bg-subtle)", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Globe size={22} color="var(--accent-blue)" strokeWidth={1.5} />
+            </div>
+            <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "2.5rem", fontWeight: 800, letterSpacing: "-0.05em", color: "var(--text-primary)" }}>
+              Global Signals.
             </h1>
           </div>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem" }}>
-            Anonymized aggregate symptom signals across Meowmeow users. No personal data is included.
+          <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem", maxWidth: 600, lineHeight: 1.6 }}>
+            Anonymized, high-fidelity symptom trends aggregated across the Meowmeow network.
           </p>
         </div>
 
         {/* Spike alert */}
         {spikes.length > 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            style={{ padding: "1rem 1.25rem", borderRadius: "var(--radius-md)", background: "rgba(239,68,68,0.08)", border: "1px solid rgba(239,68,68,0.3)", marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 10 }}>
-            <AlertTriangle size={18} color="var(--risk-critical)" />
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}
+            style={{ padding: "1.5rem 2rem", borderRadius: "16px", background: "rgba(239,68,68,0.05)", border: "1px solid rgba(239,68,68,0.2)", marginBottom: "3rem", display: "flex", alignItems: "center", gap: 20 }}>
+            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "rgba(239,68,68,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <AlertTriangle size={20} color="var(--risk-critical)" />
+            </div>
             <div>
-              <strong style={{ color: "var(--risk-critical)", fontSize: "0.9rem" }}>Outbreak Alert</strong>
-              <span style={{ color: "var(--text-secondary)", fontSize: "0.85rem", marginLeft: 8 }}>
-                Elevated reports detected in: {spikes.map(s => s.cat).join(", ")}
-              </span>
+              <div style={{ color: "var(--risk-critical)", fontSize: "0.75rem", fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 4 }}>Anomaly Detected</div>
+              <div style={{ color: "var(--text-primary)", fontSize: "1rem", fontWeight: 600 }}>
+                Elevated clinical reports for: {spikes.map(s => s.cat).join(", ")}
+              </div>
             </div>
           </motion.div>
         )}
+
 
         {isLoading && (
           <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>

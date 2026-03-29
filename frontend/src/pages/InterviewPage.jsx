@@ -158,173 +158,242 @@ export default function InterviewPage() {
 
   if (loading) {
     return (
-      <div className="page-center" style={{ flexDirection: "column", gap: 16 }}>
-        <div className="spinner spinner-lg" />
-        <p style={{ color: "var(--text-secondary)" }}>Preparing your clinical interview…</p>
+      <div className="page-center" style={{ flexDirection: "column", gap: 24 }}>
+        <motion.div 
+          animate={{ rotate: 360 }} 
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          style={{ width: 48, height: 48, borderRadius: "14px", border: "2px solid var(--border-color)", borderTopColor: "var(--accent-blue)", display: "flex", alignItems: "center", justifyContent: "center" }}
+        >
+          <Cat size={20} color="var(--accent-blue)" />
+        </motion.div>
+        <p style={{ color: "var(--text-secondary)", fontVariantNumeric: "tabular-nums", letterSpacing: "0.02em", fontSize: "0.9rem" }}>Initializing clinical session…</p>
       </div>
     );
   }
 
+
   return (
-    <div className="page-center" style={{ alignItems: "stretch", padding: "1rem" }}>
-      <div style={{ width: "100%", maxWidth: 700, margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+    <div className="page-center" style={{ alignItems: "stretch", padding: "1rem", position: "relative", overflow: "hidden" }}>
+      {/* Dynamic background ambient glow */}
+      <motion.div 
+        animate={{ 
+          scale: [1, 1.1, 1],
+          opacity: [0.03, 0.05, 0.03]
+        }}
+        transition={{ duration: 8, repeat: Infinity }}
+        style={{ position: "absolute", top: "20%", left: "50%", x: "-50%", width: "80%", height: "60%", background: "radial-gradient(circle, var(--accent-blue) 0%, transparent 70%)", zIndex: 0, pointerEvents: "none" }}
+      />
 
-        {/* Progress */}
-        <div>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <Cat size={16} color="var(--text-primary)" />
-              <span style={{ fontSize: "0.8rem", color: "var(--text-secondary)", fontWeight: 500 }}>Clinical Interview</span>
+      <div style={{ width: "100%", maxWidth: 740, margin: "0 auto", display: "flex", flexDirection: "column", gap: "2rem", zIndex: 1 }}>
+
+        {/* Top Navigation / Status */}
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 32, height: 32, borderRadius: "8px", background: "var(--bg-card)", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Cat size={16} color="var(--text-primary)" strokeWidth={1.5} />
             </div>
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-              <span style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>Question {depth + 1}</span>
-              <button
-                onClick={() => { setTtsEnabled(!ttsEnabled); window.speechSynthesis?.cancel(); }}
-                className="btn btn-secondary btn-sm btn-icon"
-                title={ttsEnabled ? "Mute voice" : "Enable voice"}
-              >
-                {ttsEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
-              </button>
+            <div>
+              <div style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text-primary)", letterSpacing: "-0.01em" }}>Session Active</div>
+              <div style={{ fontSize: "0.7rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Clinical Core V2.4</div>
             </div>
           </div>
-          <div className="progress-bar-track">
-            <motion.div className="progress-bar-fill" animate={{ width: `${progress}%` }} />
-          </div>
-        </div>
-
-        {/* Category badge */}
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <span style={{
-            display: "inline-flex", alignItems: "center", gap: 6,
-            padding: "4px 14px", borderRadius: "100px",
-            background: "var(--bg-card)", border: "1px solid var(--border-color)",
-            fontSize: "0.75rem", fontWeight: 600, color: "var(--text-primary)",
-            letterSpacing: "0.06em", textTransform: "uppercase"
-          }}>
-            {categoryLabel}
-          </span>
-        </div>
-
-        {/* Question */}
-        <AnimatePresence mode="wait">
-          {questionVisible && (
-            <motion.div
-              key={currentQuestion}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.4 }}
-              style={{ textAlign: "center" }}
+          
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ textAlign: "right", marginRight: 8 }}>
+              <div style={{ fontSize: "0.7rem", color: "var(--text-muted)", textTransform: "uppercase" }}>Queue Position</div>
+              <div style={{ fontSize: "0.85rem", fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{depth + 1} of 12</div>
+            </div>
+            <button
+              onClick={() => { setTtsEnabled(!ttsEnabled); window.speechSynthesis?.cancel(); }}
+              className="avatar-btn"
+              title={ttsEnabled ? "Mute Voice Assistance" : "Enable Voice Assistance"}
+              style={{ width: 40, height: 40, background: "var(--bg-card)" }}
             >
-              <h2 style={{
-                fontFamily: "'Plus Jakarta Sans', sans-serif",
-                fontSize: "clamp(1.3rem, 3.5vw, 1.85rem)",
-                fontWeight: 700,
-                lineHeight: 1.45,
-                letterSpacing: "-0.02em",
-                color: "var(--text-primary)",
-                maxWidth: 600,
-                margin: "0 auto",
-              }}>
-                {currentQuestion}
-              </h2>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              {ttsEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+            </button>
+          </div>
+        </motion.div>
 
-        {/* Answer area */}
+        {/* Progress System */}
+        <div style={{ position: "relative" }}>
+          <div className="progress-bar-track" style={{ height: 4, background: "var(--border-color)", opacity: 0.5 }}>
+            <motion.div 
+              className="progress-bar-fill" 
+              initial={{ width: 0 }}
+              animate={{ width: `${progress}%` }} 
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              style={{ background: "var(--accent-blue)", boxShadow: "0 0 20px rgba(14, 165, 233, 0.3)" }}
+            />
+          </div>
+        </div>
+
+        {/* Main Content Area */}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "2.5rem", justifyContent: "center", minHeight: "400px" }}>
+          
+          {/* Category Signal */}
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <motion.span 
+              key={currentCategory}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              style={{
+                padding: "6px 20px", borderRadius: "var(--radius-full)",
+                background: "var(--bg-subtle)", border: "1px solid var(--border-color)",
+                fontSize: "0.75rem", fontWeight: 700, color: "var(--accent-blue)",
+                letterSpacing: "0.1em", textTransform: "uppercase"
+              }}>
+              {categoryLabel}
+            </motion.span>
+          </div>
+
+          {/* Question Hub */}
+          <div style={{ minHeight: "120px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <AnimatePresence mode="wait">
+              {questionVisible && (
+                <motion.div
+                  key={currentQuestion}
+                  initial={{ opacity: 0, filter: "blur(10px)", y: 10 }}
+                  animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                  exit={{ opacity: 0, filter: "blur(10px)", y: -10 }}
+                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ textAlign: "center" }}
+                >
+                  <h2 style={{
+                    fontFamily: "'Plus Jakarta Sans', sans-serif",
+                    fontSize: "clamp(1.5rem, 4vw, 2.2rem)",
+                    fontWeight: 800,
+                    lineHeight: 1.3,
+                    letterSpacing: "-0.04em",
+                    color: "var(--text-primary)",
+                    maxWidth: 640,
+                    margin: "0 auto",
+                  }}>
+                    {currentQuestion}
+                  </h2>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* Interaction Sector */}
         <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="card"
-          style={{ padding: "1.5rem" }}
-          animate={{ borderColor: answer.length >= 3 ? "var(--text-primary)" : "var(--border-color)" }}
+          style={{ padding: "2rem", background: "var(--glass-bg)", backdropFilter: "blur(20px)", border: "1px solid var(--border-color)", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.1)" }}
         >
           {transcript && (
-            <div style={{
-              marginBottom: 10, padding: "8px 12px",
-              background: "rgba(6,182,212,0.08)", border: "1px solid rgba(6,182,212,0.2)",
-              borderRadius: "var(--radius-sm)", fontSize: "0.85rem", color: "var(--accent-cyan)",
-              fontStyle: "italic"
-            }}>
+            <motion.div 
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              style={{
+                marginBottom: 16, padding: "12px 16px",
+                background: "rgba(14, 165, 233, 0.05)", border: "1px solid rgba(14, 165, 233, 0.15)",
+                borderRadius: "var(--radius-md)", fontSize: "0.9rem", color: "var(--accent-blue)",
+                fontStyle: "italic", borderLeft: "4px solid var(--accent-blue)"
+              }}>
               🎙️ {transcript}
-            </div>
+            </motion.div>
           )}
 
           <textarea
             ref={textareaRef}
             className="form-input"
-            placeholder="Describe how you're feeling… speak freely, there are no wrong answers."
+            placeholder="Describe your symptoms in detail…"
             value={answer}
             onChange={(e) => { setAnswer(e.target.value); behavCapture.onChange(e); }}
             onKeyDown={handleKeyDown}
             onBeforeInput={behavCapture.onBeforeInput}
-            rows={4}
-            style={{ resize: "none", marginBottom: "1rem", fontSize: "1rem", lineHeight: 1.6 }}
+            rows={5}
+            style={{ 
+              resize: "none", marginBottom: "1.5rem", fontSize: "1.1rem", lineHeight: 1.6, 
+              background: "transparent", border: "none", borderBottom: "1px solid var(--border-color)", 
+              borderRadius: 0, paddingLeft: 0, paddingRight: 0 
+            }}
             autoFocus
           />
 
           {currentOptions && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: "1rem" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: "2rem" }}>
               {currentOptions.map((opt, i) => (
-                <button
+                <motion.button
                   key={i}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => { setAnswer(opt.label); setTimeout(handleSubmit, 200); }}
                   style={{
-                    padding: "8px 16px", borderRadius: "100px", border: "1px solid var(--border-color)",
-                    background: answer === opt.label ? "var(--accent-blue)" : "rgba(255,255,255,0.05)",
-                    color: answer === opt.label ? "#fff" : "var(--text-primary)",
-                    cursor: "pointer", fontWeight: 600, fontSize: "0.85rem", transition: "all 0.2s"
+                    padding: "10px 20px", borderRadius: "var(--radius-md)", border: "1px solid var(--border-color)",
+                    background: answer === opt.label ? "var(--accent-base)" : "var(--bg-card)",
+                    color: answer === opt.label ? "var(--bg-base)" : "var(--text-primary)",
+                    cursor: "none", fontWeight: 600, fontSize: "0.85rem", transition: "all 0.2s"
                   }}
                 >
                   {opt.label}
-                </button>
+                </motion.button>
               ))}
             </div>
           )}
 
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1rem", flexWrap: "wrap" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1.5rem", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <motion.button
-                className={`btn ${listening ? "btn-danger" : "btn-secondary"} btn-icon`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className={`btn ${listening ? "btn-primary" : "btn-secondary"} btn-icon`}
                 onClick={toggleListening}
-                title={listening ? "Stop recording" : "Speak your answer"}
-                animate={listening ? { boxShadow: ["0 0 0 0 rgba(239,68,68,0.4)", "0 0 0 8px rgba(239,68,68,0)"] } : {}}
-                transition={{ repeat: Infinity, duration: 1 }}
+                style={{ width: 44, height: 44, background: listening ? "#ef4444" : "var(--bg-subtle)" }}
+                animate={listening ? { scale: [1, 1.1, 1] } : {}}
+                transition={{ repeat: Infinity, duration: 2 }}
               >
-                {listening ? <MicOff size={16} /> : <Mic size={16} />}
+                {listening ? <MicOff size={18} color="#fff" /> : <Mic size={18} />}
               </motion.button>
-              {listening && <span style={{ fontSize: "0.8rem", color: "var(--risk-critical)" }}>Listening…</span>}
-              {!listening && behavCapture.hedgeCount > 0 && (
-                <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>
-                  💭 {behavCapture.hedgeCount} hedge word{behavCapture.hedgeCount > 1 ? "s" : ""} detected
-                </span>
-              )}
+              
+              <AnimatePresence>
+                {listening ? (
+                  <motion.span 
+                    initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }}
+                    style={{ fontSize: "0.85rem", color: "#ef4444", fontWeight: 700, letterSpacing: "0.05em" }}>
+                    RECORDING ACTIVE
+                  </motion.span>
+                ) : (
+                  behavCapture.hedgeCount > 0 && (
+                    <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontSize: "0.8rem", color: "var(--text-muted)" }}>
+                      <span style={{ color: "var(--accent-blue)", fontWeight: 700 }}>{behavCapture.hedgeCount}</span> nuanced signals captured
+                    </motion.span>
+                  )
+                )}
+              </AnimatePresence>
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
               {depth >= 4 && (
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   className="btn btn-secondary"
                   disabled={submitting}
                   onClick={() => navigate(`/result/${sessionId}`)}
-                  style={{ gap: 8 }}
+                  style={{ gap: 8, padding: "0.75rem 1.25rem", border: "1px solid var(--accent-blue)", color: "var(--accent-blue)" }}
                 >
-                  <Cat size={16} /> Generate Diagnosis
-                </button>
+                  <Cat size={16} /> Finish Early
+                </motion.button>
               )}
-              <span style={{ fontSize: "0.75rem", color: "var(--text-muted)" }}>Ctrl+Enter to submit</span>
               <motion.button
-                className="btn btn-primary"
+                className="btn btn-primary btn-lg"
                 disabled={answer.trim().length < 3 || submitting}
                 onClick={handleSubmit}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-                style={{ gap: 8 }}
+                whileHover={{ scale: 1.02, x: 5 }}
+                whileTap={{ scale: 0.98 }}
+                style={{ gap: 12, padding: "1rem 2rem" }}
               >
-                {submitting ? <><div className="spinner" /> Analyzing…</> : <><Send size={16} /> Submit / Continue</>}
+                {submitting ? <div className="spinner" style={{ width: 18, height: 18, borderTopColor: "var(--bg-base)" }} /> : <><Send size={18} /> Continue</>}
               </motion.button>
             </div>
           </div>
         </motion.div>
+
 
         {error && (
           <div style={{ textAlign: "center", color: "#f87171", fontSize: "0.85rem", padding: "8px 16px", background: "rgba(239,68,68,0.08)", borderRadius: "var(--radius-md)", border: "1px solid rgba(239,68,68,0.2)" }}>

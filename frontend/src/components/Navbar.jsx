@@ -1,8 +1,9 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { Cat, BarChart2, Clock, Moon, Sun, Monitor, Coffee, LogOut } from "lucide-react";
+import { useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import { useThemeStore } from "../store/themeStore";
-import { Cat, BarChart2, Clock, Moon, Sun, Monitor, Coffee } from "lucide-react";
-import { useState } from "react";
 
 export default function Navbar() {
   const { user, token, logout } = useAuthStore();
@@ -35,11 +36,19 @@ export default function Navbar() {
     : user?.email?.[0]?.toUpperCase() || "?";
 
   return (
-    <nav className="navbar">
-      <Link to="/dashboard" className="navbar-brand">
-        <Cat size={24} style={{ fill: "var(--text-primary)" }} strokeWidth={1} />
+    <motion.nav 
+      className="navbar"
+      initial={{ y: -20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <Link to="/" className="navbar-brand" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "var(--text-primary)" }}>
+        <motion.div whileHover={{ rotate: 10, scale: 1.1 }} style={{ marginRight: 8 }}>
+          <Cat size={24} style={{ fill: "var(--text-primary)" }} strokeWidth={1.5} />
+        </motion.div>
         <span style={{ fontWeight: 800, letterSpacing: "-0.05em" }}>Meowmeow</span>
       </Link>
+
 
       {token && (
         <>
@@ -58,18 +67,20 @@ export default function Navbar() {
             >
               {getThemeIcon()}
             </button>
-            <div className="tooltip-wrap" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", marginLeft: "10px", paddingLeft: "20px", borderLeft: "1px solid var(--border-color)" }}>
               <Link to="/profile" className="avatar-btn" title="Your Profile">
                 {user?.photo_url
-                  ? <img src={user.photo_url} alt="avatar" style={{width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover"}} referrerPolicy="no-referrer" />
-                  : <div className="avatar-initials">{initials}</div>
+                  ? <img src={user.photo_url} alt="avatar" style={{width: "100%", height: "100%", objectFit: "cover"}} referrerPolicy="no-referrer" />
+                  : initials
                 }
               </Link>
               <button 
                 onClick={handleLogout} 
-                style={{ background: "transparent", border: "1px solid rgba(239,68,68,0.3)", color: "#ef4444", padding: "6px 12px", borderRadius: "8px", cursor: "pointer", fontSize: "0.8rem", fontWeight: 600 }}
+                className="btn-icon"
+                title="Logout"
+                style={{ background: "transparent", border: "none", color: "var(--text-muted)", cursor: "none", display: "flex", padding: 4 }}
               >
-                Logout
+                <LogOut size={16} />
               </button>
             </div>
           </div>
@@ -82,6 +93,6 @@ export default function Navbar() {
           <Link to="/register" className="btn btn-primary btn-sm">Get Started</Link>
         </div>
       )}
-    </nav>
+      </motion.nav>
   );
 }

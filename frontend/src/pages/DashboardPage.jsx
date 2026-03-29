@@ -31,32 +31,59 @@ export default function DashboardPage() {
     { icon: TrendingUp, title: "Temporal Tracking", desc: "Compares visits to detect escalating patterns" },
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1, 
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 } 
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } 
+    }
+  };
+
   return (
-    <div className="page-container">
-      {/* Hero */}
-      <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
-        <div style={{ marginBottom: "4rem", marginTop: "2rem" }}>
-          <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", marginBottom: 12, letterSpacing: "0.02em" }}>
-            {greeting()}, <span style={{ fontWeight: 600, color: "var(--text-primary)" }}>{user?.full_name?.split(" ")[0] || "there"}</span>
+    <div className="page-container" style={{ position: "relative" }}>
+      <motion.div 
+        animate={{ y: [0, -20, 0] }} 
+        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        style={{ position: "absolute", top: "10%", right: "-5%", width: 300, height: 300, background: "radial-gradient(circle, rgba(14, 165, 233, 0.03) 0%, transparent 70%)", borderRadius: "50%", zIndex: -1 }} 
+      />
+
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Hero */}
+        <motion.div variants={itemVariants} style={{ marginBottom: "5rem", marginTop: "2rem" }}>
+          <p style={{ color: "var(--accent-blue)", fontSize: "0.85rem", fontWeight: 700, marginBottom: 16, letterSpacing: "0.15em", textTransform: "uppercase" }}>
+            {greeting()}, {user?.full_name?.split(" ")[0] || "there"}
           </p>
-          <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(2.5rem,6vw,4rem)", fontWeight: 800, letterSpacing: "-0.05em", lineHeight: 1.05, marginBottom: "1.5rem", color: "var(--text-primary)" }}>
-            Intelligence,<br />
-            <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>refined for your health.</span>
+          <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(3rem, 7vw, 5rem)", fontWeight: 800, letterSpacing: "-0.06em", lineHeight: 0.95, marginBottom: "2rem", color: "var(--text-primary)" }}>
+            Deep clinical<br />
+            <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>intelligence.</span>
           </h1>
-          <p style={{ color: "var(--text-secondary)", maxWidth: 500, fontSize: "1.1rem", marginBottom: "3rem", lineHeight: 1.8 }}>
-            Meowmeow interviews you conversationally, extracting highly subtle clinical signals to evaluate your systemic wellbeing.
+          <p style={{ color: "var(--text-secondary)", maxWidth: 540, fontSize: "1.15rem", marginBottom: "3.5rem", lineHeight: 1.7 }}>
+            Meowmeow transforms conversational data into high-fidelity clinical signals, providing a nuanced perspective on your systemic health.
           </p>
           <motion.button
             className="btn btn-primary btn-lg"
             onClick={() => navigate("/interview")}
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.02, x: 5 }}
             whileTap={{ scale: 0.98 }}
-            style={{ gap: 12, fontSize: "1rem", padding: "1.25rem 2.5rem" }}
+            style={{ gap: 12, fontSize: "1rem", padding: "1.25rem 2.5rem", boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
           >
             <Cat size={20} /> Begin Assessment
             <ChevronRight size={18} />
           </motion.button>
-        </div>
+        </motion.div>
 
         {/* Stats row */}
         {history.length > 0 && (
@@ -97,24 +124,27 @@ export default function DashboardPage() {
           </motion.div>
         )}
 
-        {/* Features grid */}
-        <div style={{ marginBottom: "1rem" }}>
-          <h2 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "1.25rem", fontWeight: 700, marginBottom: "1.25rem", color: "var(--text-secondary)" }}>
+        <motion.div variants={itemVariants} style={{ marginBottom: "2rem" }}>
+          <h2 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "1.25rem", fontWeight: 700, marginBottom: "1.5rem", color: "var(--text-secondary)", letterSpacing: "0.02em" }}>
             Platform Capabilities
           </h2>
           <div className="grid-3">
             {features.map((f, i) => (
-              <motion.div key={i} className="card" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                style={{ padding: "1.5rem" }}>
-                <div style={{ display: "inline-flex", padding: 12, borderRadius: "50%", background: "var(--bg-subtle)", marginBottom: 16 }}>
-                  <f.icon size={18} color="var(--text-primary)" />
+              <motion.div 
+                key={i} 
+                className="card" 
+                whileHover={{ y: -5, boxShadow: "var(--shadow-lg)" }}
+                style={{ padding: "2rem", background: "var(--glass-bg)", backdropFilter: "blur(10px)" }}
+              >
+                <div style={{ display: "inline-flex", padding: 12, borderRadius: "16px", background: "var(--bg-subtle)", marginBottom: 20 }}>
+                  <f.icon size={20} color="var(--text-primary)" strokeWidth={1.5} />
                 </div>
-                <div style={{ fontWeight: 600, marginBottom: 4, fontSize: "0.95rem" }}>{f.title}</div>
-                <div style={{ color: "var(--text-secondary)", fontSize: "0.82rem", lineHeight: 1.5 }}>{f.desc}</div>
+                <div style={{ fontWeight: 700, marginBottom: 8, fontSize: "1rem", letterSpacing: "-0.01em" }}>{f.title}</div>
+                <div style={{ color: "var(--text-secondary)", fontSize: "0.85rem", lineHeight: 1.6 }}>{f.desc}</div>
               </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Disclaimer */}
         <div style={{ marginTop: "4rem", padding: "1.25rem", borderTop: "1px solid var(--border-color)", fontSize: "0.8rem", color: "var(--text-muted)", lineHeight: 1.6, textAlign: "center" }}>

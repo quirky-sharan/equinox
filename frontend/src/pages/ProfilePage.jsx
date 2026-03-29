@@ -34,6 +34,15 @@ export default function ProfilePage() {
     ? user.full_name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
     : user?.email?.[0]?.toUpperCase() || "?";
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
+  };
+  const itemVariants = {
+    hidden: { opacity: 0, y: 15 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } }
+  };
+
   const handleUpdate = async () => {
     setLoading(true);
     try {
@@ -50,11 +59,11 @@ export default function ProfilePage() {
 
   return (
     <div className="page-container" style={{ paddingBottom: "4rem" }}>
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+      <motion.div variants={containerVariants} initial="hidden" animate="visible">
         
         {/* Header Profile Card */}
-        <div className="card" style={{ padding: "2.5rem", marginBottom: "3rem", display: "flex", alignItems: "center", gap: "2rem", flexWrap: "wrap", border: "none", background: "var(--bg-subtle)" }}>
-          <div style={{ width: 90, height: 90, borderRadius: "50%", background: "var(--bg-base)", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", fontSize: "1.75rem", fontWeight: 800, color: "var(--text-primary)" }}>
+        <motion.div variants={itemVariants} className="card" style={{ padding: "2rem", marginBottom: "3rem", display: "flex", alignItems: "center", gap: "1.5rem", flexWrap: "wrap", border: "none", background: "var(--bg-subtle)" }}>
+          <div style={{ width: 72, height: 72, borderRadius: "50%", background: "var(--bg-base)", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", fontSize: "1.5rem", fontWeight: 800, color: "var(--text-primary)" }}>
             {user?.photo_url 
               ? <img src={user.photo_url} alt="Profile" style={{ width: "100%", height: "100%", objectFit: "cover" }} referrerPolicy="no-referrer" />
               : initials}
@@ -75,17 +84,22 @@ export default function ProfilePage() {
                 </div>
              </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="grid-2-col" style={{ gap: "2rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "2rem" }}>
           
           {/* Health Stats Panel */}
-          <div>
+          <motion.div variants={itemVariants}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
               <h2 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "1.25rem", fontWeight: 700, display: "flex", alignItems: "center", gap: 8 }}>
                 <Activity size={20} color="var(--accent-blue)" /> Basic Health Metrics
               </h2>
-              <button onClick={() => editing ? handleUpdate() : setEditing(true)} className={`btn ${editing ? 'btn-primary' : 'btn-secondary'} btn-sm`} disabled={loading} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+              <button 
+                onClick={() => editing ? handleUpdate() : setEditing(true)} 
+                className={`btn ${editing ? 'btn-primary' : 'btn-secondary'} btn-sm`} 
+                disabled={loading} 
+                style={{ display: "flex", alignItems: "center", gap: 6 }}
+              >
                 {editing ? <><Check size={14}/> Save Changes {loading && <div className="spinner" style={{ width: 12, height: 12 }}/>}</> : <><Edit3 size={14}/> Edit Profile</>}
               </button>
             </div>
@@ -101,7 +115,7 @@ export default function ProfilePage() {
                 </>
               )}
                 
-              <div className="grid-2" style={{ gap: "1rem", display: "grid", gridTemplateColumns: "1fr 1fr" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
                 <div className="form-group" style={{ marginBottom: 0 }}>
                   <label className="form-label">Blood Group</label>
                   <input type="text" className="form-input" placeholder="e.g. O+" value={healthForm.blood_group} onChange={e => setHealthForm({...healthForm, blood_group: e.target.value})} disabled={!editing} />
@@ -127,10 +141,10 @@ export default function ProfilePage() {
                 <textarea className="form-input" rows={2} placeholder="e.g. Type 2 Diabetes, Hypertension (or 'None')" value={healthForm.medical_conditions} onChange={e => setHealthForm({...healthForm, medical_conditions: e.target.value})} disabled={!editing} style={{ resize: "vertical" }} />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Assessment History Mini-Panel */}
-          <div>
+          <motion.div variants={itemVariants}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
               <h2 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "1.25rem", fontWeight: 700, display: "flex", alignItems: "center", gap: 8 }}>
                 <Clock size={20} color="var(--accent-purple)" /> Recent Assessments
@@ -151,7 +165,8 @@ export default function ProfilePage() {
               ) : (
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   {history.slice(0, 4).map((record, i) => (
-                    <motion.div key={record.session_id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.05 }}
+                    <motion.div 
+                      key={record.session_id}
                       onClick={() => navigate(`/result/${record.session_id}`)}
                       style={{ padding: "1rem 1.25rem", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: i < 3 ? "1px solid var(--border-color)" : "none", cursor: "pointer", borderRadius: "var(--radius-md)" }}
                       whileHover={{ background: "rgba(255,255,255,0.02)" }}
@@ -159,7 +174,7 @@ export default function ProfilePage() {
                       <div>
                         <div style={{ fontWeight: 600, fontSize: "0.95rem", color: "var(--text-primary)" }}>{record.top_condition || "Assessment"}</div>
                         <div style={{ fontSize: "0.8rem", color: "var(--text-secondary)", marginTop: 4 }}>
-                          {format(new Date(record.created_at), "MMM d, yyyy • h:mm a")}
+                          {format(new Date(record.created_at), "MMM d, yyyy")}
                         </div>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
@@ -173,7 +188,7 @@ export default function ProfilePage() {
                 </div>
               )}
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </motion.div>

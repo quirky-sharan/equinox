@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import { useAuthStore } from "./store/authStore";
 import { useThemeStore } from "./store/themeStore";
 import { authApi } from "./api/endpoints";
@@ -13,6 +14,8 @@ import ResultPage from "./pages/ResultPage";
 import HistoryPage from "./pages/HistoryPage";
 import PopulationPage from "./pages/PopulationPage";
 import ProfilePage from "./pages/ProfilePage";
+import LandingPage from "./pages/LandingPage";
+import Footer from "./components/Footer";
 
 function PrivateRoute({ children }) {
   const token = useAuthStore((s) => s.token);
@@ -40,21 +43,35 @@ export default function App() {
     }
   }, [token, setUser, logout]);
 
+  const location = useLocation();
+
   return (
     <div className="app-layout">
       <Cursor />
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Navigate to="/dashboard" replace />} />
-        <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
-        <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
-        <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
-        <Route path="/interview" element={<PrivateRoute><InterviewPage /></PrivateRoute>} />
-        <Route path="/result/:sessionId" element={<PrivateRoute><ResultPage /></PrivateRoute>} />
-        <Route path="/history" element={<PrivateRoute><HistoryPage /></PrivateRoute>} />
-        <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
-        <Route path="/population" element={<PopulationPage />} />
-      </Routes>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0, scale: 0.99 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 1.01 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          style={{ flex: 1, display: "flex", flexDirection: "column" }}
+        >
+          <Routes location={location}>
+            <Route path="/" element={<PublicRoute><LandingPage /></PublicRoute>} />
+            <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+            <Route path="/register" element={<PublicRoute><RegisterPage /></PublicRoute>} />
+            <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+            <Route path="/interview" element={<PrivateRoute><InterviewPage /></PrivateRoute>} />
+            <Route path="/result/:sessionId" element={<PrivateRoute><ResultPage /></PrivateRoute>} />
+            <Route path="/history" element={<PrivateRoute><HistoryPage /></PrivateRoute>} />
+            <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+            <Route path="/population" element={<PopulationPage />} />
+          </Routes>
+        </motion.div>
+      </AnimatePresence>
+      <Footer />
     </div>
   );
 }
