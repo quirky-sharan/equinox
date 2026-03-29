@@ -1,0 +1,226 @@
+[
+  {
+    "id": "fever",
+    "condition": "Fever",
+    "icd10": "R50.9",
+    "category": "general",
+    "description": "Temporary increase in body temperature above 38C (100.4F), usually indicating the body is fighting an infection.",
+    "symptoms": ["elevated body temperature", "chills", "sweating", "headache", "muscle aches", "loss of appetite", "dehydration", "general weakness", "irritability"],
+    "common_causes": ["viral infections (flu, COVID-19, common cold)", "bacterial infections (UTI, strep throat, pneumonia)", "heat exhaustion or sunburn", "inflammatory conditions", "certain medications", "post-vaccination response"],
+    "risk_factors": ["weakened immune system", "chronic illness", "dehydration", "poor nutrition", "lack of sleep", "recent travel to tropical regions"],
+    "differential_diagnosis": ["influenza", "COVID-19", "urinary tract infection", "pneumonia", "malaria", "dengue fever", "meningitis", "appendicitis"],
+    "key_questions": [
+      "What is your current temperature reading?",
+      "When did the fever first start?",
+      "Is the fever constant or does it come and go?",
+      "Do you have any other symptoms like cough, sore throat, body aches, or rash?",
+      "Have you traveled recently to any tropical or endemic areas?",
+      "How much water and fluids have you been drinking today?",
+      "How many cups of coffee, tea, or caffeinated drinks do you have daily?",
+      "Do you drink alcohol? If yes, how often?",
+      "Have you been in contact with anyone who is sick?",
+      "Are you currently taking any medications?"
+    ],
+    "lifestyle_factors": ["hydration habits", "caffeine consumption", "alcohol intake", "sleep patterns", "clothing choices", "room ventilation", "recent travel"],
+    "dos": [
+      "Drink at least 2-3 liters of water throughout the day — dehydration worsens fever",
+      "Use Oral Rehydration Salts (ORS) to replenish lost electrolytes",
+      "Rest completely — your body heals fastest during sleep",
+      "Wear lightweight, breathable cotton clothing",
+      "Keep the room well-ventilated with fresh air circulation",
+      "Use a damp cloth on the forehead and neck for comfort — sponge bathing with lukewarm water",
+      "Take paracetamol (acetaminophen) as directed for temperature above 38.5C",
+      "Monitor temperature every 4-6 hours and keep a written log",
+      "Eat light, easily digestible foods: rice porridge, bananas, toast, clear soups, khichdi",
+      "Drink warm turmeric milk (haldi doodh) — natural anti-inflammatory",
+      "Sip ginger tea with honey — helps with body aches and immunity",
+      "Take a lukewarm (not cold) bath if temperature exceeds 39C"
+    ],
+    "donts": [
+      "Do NOT drink coffee or caffeinated beverages — caffeine is a diuretic that worsens dehydration",
+      "Do NOT consume alcohol — it dehydrates and suppresses your immune system",
+      "Do NOT take cold/ice baths — shivering actually raises core body temperature",
+      "Do NOT bundle up in heavy blankets — this traps heat and prevents cooling",
+      "Do NOT skip meals — your body needs energy to fight the infection",
+      "Do NOT exercise or do any strenuous physical activity",
+      "Do NOT self-medicate with antibiotics — antibiotics do not work on viral infections",
+      "Do NOT ignore fever above 39.4C (103F) lasting more than 2 days",
+      "Do NOT give aspirin to children or teenagers — risk of Reye's syndrome",
+      "Do NOT eat spicy, oily, or heavy foods — they are harder to digest when sick"
+    ],
+    "home_remedies": [
+      "Tulsi (Holy Basil) tea: Boil 8-10 tulsi leaves in water, add honey — natural antipyretic",
+      "Ginger-honey drink: Grate fresh ginger in hot water with a spoon of honey",
+      "Turmeric milk: Warm milk with 1/2 tsp turmeric powder — anti-inflammatory",
+      "Coriander seed water: Boil 1 tbsp coriander seeds in water, strain, drink warm",
+      "Rice starch water (kanji): Boil rice with extra water, strain, drink the starchy liquid — rehydrating",
+      "Cold compress: Damp cloth on forehead and armpits to naturally lower temperature"
+    ],
+    "dietary_guidelines": [
+      "Eat: clear broths, soups, rice porridge, bananas, boiled potatoes, toast, yogurt, coconut water",
+      "Drink: water, ORS, herbal teas (ginger, chamomile, peppermint), warm lemon water",
+      "Avoid: fried foods, spicy foods, dairy (except yogurt), caffeine, alcohol, sugary drinks, processed foods"
+    ],
+    "warning_signs": [
+      "Temperature above 39.4C (103F) in adults",
+      "Fever lasting more than 3 days without improvement",
+      "Severe headache with stiff neck — possible meningitis",
+      "Difficulty breathing or chest pain",
+      "Confusion or altered mental state",
+      "Persistent vomiting or inability to keep fluids down",
+      "Sudden rash appearing with fever",
+      "Seizures or convulsions",
+      "Dark or reduced urine output — severe dehydration sign"
+    ]
+  },
+  {
+    "id": "common_cold",
+    "condition": "Common Cold (Upper Respiratory Infection)",
+    "icd10": "J00",
+    "category": "respiratory",
+    "description": "Viral infection of the upper respiratory tract causing nasal congestion, runny nose, sneezing, and mild sore throat. Usually self-limiting within 7-10 days.",
+    "symptoms": ["runny or stuffy nose", "sneezing", "sore throat", "mild cough", "mild body aches", "slight headache", "low-grade fever", "fatigue", "watery eyes", "postnasal drip"],
+    "common_causes": ["rhinoviruses (most common)", "coronaviruses", "respiratory syncytial virus", "adenoviruses", "parainfluenza viruses"],
+    "risk_factors": ["weakened immune system", "lack of sleep", "stress", "smoking", "close contact with infected persons", "cold weather exposure", "being in crowded spaces"],
+    "differential_diagnosis": ["influenza", "allergic rhinitis", "sinusitis", "COVID-19", "strep throat", "pertussis"],
+    "key_questions": [
+      "When did your symptoms first start?",
+      "Do you have a runny nose, stuffy nose, or both?",
+      "Is your nasal discharge clear, yellow, or green?",
+      "Do you have a sore throat along with the cold?",
+      "Have you had a fever? If so, how high?",
+      "How many hours of sleep are you getting each night?",
+      "Do you take any Vitamin C supplements or eat citrus fruits regularly?",
+      "Are you exposed to air conditioning or indoor heating for long periods?",
+      "Do you smoke or are you around secondhand smoke?",
+      "Has anyone at home or work been sick recently?"
+    ],
+    "lifestyle_factors": ["sleep quality", "vitamin C intake", "AC/heating exposure", "hand hygiene", "stress levels", "smoking status", "diet quality"],
+    "dos": [
+      "Rest as much as possible — aim for 8-10 hours of sleep during illness",
+      "Drink warm fluids frequently: herbal tea, warm water with honey and lemon, clear broths",
+      "Gargle with warm salt water (1/2 teaspoon salt in a cup of warm water) 3-4 times daily",
+      "Use saline nasal drops or spray to relieve congestion naturally",
+      "Keep indoor air humid using a humidifier or by placing a bowl of warm water in the room",
+      "Wash hands frequently with soap for 20 seconds to prevent spreading",
+      "Take steam inhalation — add a few drops of eucalyptus oil for better effect",
+      "Eat foods rich in Vitamin C: oranges, guava, amla, kiwi, bell peppers, broccoli",
+      "Take zinc lozenges within 24 hours of symptoms — shown to reduce cold duration",
+      "Eat chicken soup — scientifically shown to reduce inflammation and thin mucus",
+      "Drink kadha (Ayurvedic immunity drink): ginger, tulsi, black pepper, turmeric boiled in water"
+    ],
+    "donts": [
+      "Do NOT take antibiotics — colds are viral, antibiotics only work on bacteria",
+      "Do NOT smoke or vape — it directly irritates the respiratory tract and delays healing",
+      "Do NOT drink very cold beverages — they worsen throat irritation",
+      "Do NOT overuse nasal decongestant sprays beyond 3 days — causes rebound congestion",
+      "Do NOT go to work/school during the first 2-3 days — you are most contagious then",
+      "Do NOT skip sleep — inadequate rest significantly prolongs recovery",
+      "Do NOT drink alcohol — it dehydrates and suppresses immune function",
+      "Do NOT exercise intensely — light movement is OK, but heavy workouts delay recovery",
+      "Do NOT suppress sneezing — it can damage eardrums and blood vessels",
+      "Do NOT touch your face with unwashed hands — this spreads the virus"
+    ],
+    "home_remedies": [
+      "Honey-lemon-ginger tea: Mix 1 tbsp honey, juice of half a lemon, and grated ginger in hot water",
+      "Steam inhalation: Lean over a bowl of hot water with towel over head, breathe deeply for 10 minutes",
+      "Tulsi-ginger kadha: Boil tulsi leaves, ginger, black pepper, and cinnamon in water for 15 min",
+      "Turmeric gargle: Add 1/2 tsp turmeric and salt to warm water, gargle 3-4 times daily",
+      "Honey (raw): Take 1-2 teaspoons before bed — WHO-recommended cough suppressant",
+      "Ajwain (carom seed) steam: Add ajwain to boiling water and inhale the steam"
+    ],
+    "dietary_guidelines": [
+      "Eat: citrus fruits, garlic, ginger, chicken soup, yogurt, warm oatmeal, honey, green leafy vegetables",
+      "Drink: warm water, herbal teas, fresh orange juice, warm lemon water, bone broth",
+      "Avoid: dairy (increases mucus for some), sugary foods, fried foods, cold drinks, processed foods, alcohol"
+    ],
+    "warning_signs": [
+      "Symptoms lasting more than 10 days without improvement",
+      "High fever above 39C (102F)",
+      "Symptoms that worsen after initial improvement",
+      "Difficulty breathing or shortness of breath",
+      "Persistent chest pain or pressure",
+      "Severe sinus pain or swelling",
+      "Earache or ear discharge",
+      "Difficulty swallowing"
+    ]
+  },
+  {
+    "id": "headache_migraine",
+    "condition": "Headache and Migraine",
+    "icd10": "G43.9 / R51",
+    "category": "neurological",
+    "description": "Headaches range from mild tension-type to severe migraines. Tension headaches feel like band pressure. Migraines are throbbing, usually one-sided, with nausea and light sensitivity.",
+    "symptoms": ["head pain (dull, throbbing, or sharp)", "pressure sensation", "light sensitivity (photophobia)", "sound sensitivity", "nausea or vomiting", "blurred vision", "aura (visual disturbances)", "neck stiffness", "scalp tenderness", "difficulty concentrating"],
+    "common_causes": ["stress and tension", "dehydration", "excessive screen time", "poor sleep", "caffeine withdrawal", "skipping meals", "alcohol", "hormonal changes", "weather changes", "eye strain", "poor posture"],
+    "risk_factors": ["family history of migraines", "female sex", "high stress job", "excessive caffeine use", "irregular sleep schedule", "sedentary lifestyle"],
+    "differential_diagnosis": ["tension headache", "migraine with aura", "cluster headache", "sinusitis", "medication overuse headache", "hypertension headache", "temporal arteritis", "brain tumor (rare)"],
+    "key_questions": [
+      "Where exactly is the pain? One side, both sides, behind the eyes, or forehead?",
+      "Is the pain throbbing/pulsating, or a constant pressure like a tight band?",
+      "On a scale of 1-10, how severe is the pain right now?",
+      "When did this headache start? Hours ago, yesterday, or has it been weeks?",
+      "Are you sensitive to light or sound right now?",
+      "Do you feel nauseous or have you vomited?",
+      "How many hours of screen time (phone + computer) do you have daily?",
+      "How much water have you drunk today?",
+      "How many cups of coffee/tea do you drink daily? Did you skip it today?",
+      "How many hours of sleep did you get last night?",
+      "Are you currently stressed about anything — work, exams, relationships?",
+      "Have you eaten today? When was your last meal?",
+      "Do you wear glasses? When was your last eye checkup?",
+      "Have you taken any painkillers? How often do you take them?"
+    ],
+    "lifestyle_factors": ["screen time", "sleep duration", "caffeine consumption", "water intake", "meal patterns", "stress levels", "posture", "glasses prescription"],
+    "dos": [
+      "Drink 2-3 glasses of water immediately — dehydration headaches resolve within 30-60 minutes",
+      "Rest in a quiet, dark room — especially critical for migraines",
+      "Apply a cold compress to the forehead and temples for 15 minutes",
+      "Apply a warm compress to the back of the neck — relaxes tension",
+      "Take paracetamol or ibuprofen at the FIRST sign of pain — don't wait until it's severe",
+      "Follow the 20-20-20 rule: every 20 minutes, look at something 20 feet away for 20 seconds",
+      "Maintain a strict sleep schedule — go to bed and wake at the same time daily",
+      "Practice deep breathing: 4 seconds in, 7 seconds hold, 8 seconds out",
+      "Gently massage temples and the base of the skull in circular motions",
+      "Keep a headache diary to identify your personal triggers",
+      "Eat regular meals — never skip breakfast",
+      "Take regular breaks from screens — at least 10 minutes every hour",
+      "Apply peppermint oil to temples — clinically shown to relieve tension headaches"
+    ],
+    "donts": [
+      "Do NOT take painkillers more than 15 days per month — causes medication overuse headache",
+      "Do NOT consume more than 3 cups of coffee daily — and never suddenly stop caffeine",
+      "Do NOT stare at screens for hours without breaks — use blue light filter and night mode",
+      "Do NOT read or use your phone in a dark room — the contrast strains your eyes severely",
+      "Do NOT skip meals — low blood sugar is a major headache trigger",
+      "Do NOT drink alcohol when you already have a headache — alcohol dilates blood vessels",
+      "Do NOT sleep with poor neck support — invest in a proper pillow",
+      "Do NOT ignore a sudden, severe 'thunderclap' headache — seek emergency care immediately",
+      "Do NOT use screens 1 hour before bed — blue light disrupts melatonin production",
+      "Do NOT clench your jaw — a common unconscious tension trigger"
+    ],
+    "home_remedies": [
+      "Peppermint oil: Apply diluted peppermint oil to temples — proven tension headache relief",
+      "Ginger tea: Boil fresh ginger slices for 10 min — anti-inflammatory, helps migraine nausea",
+      "Cold compress: Ice pack wrapped in cloth on forehead for 15 min — numbs the pain",
+      "Lavender inhalation: Inhale lavender essential oil or add to a warm bath — calming effect",
+      "Clove paste: Crush 2-3 cloves, mix with coconut oil, apply to forehead",
+      "Cinnamon paste: Mix cinnamon powder with water, apply to forehead for 30 minutes"
+    ],
+    "dietary_guidelines": [
+      "Eat: magnesium-rich foods (almonds, spinach, avocado, dark chocolate), omega-3 fatty acids (fish, walnuts), riboflavin (eggs, lean meats, green vegetables)",
+      "Drink: at least 8 glasses of water daily, ginger tea, peppermint tea, chamomile tea",
+      "Avoid: aged cheese, processed meats, MSG, artificial sweeteners (aspartame), excessive caffeine, red wine, chocolate (for migraine sufferers)"
+    ],
+    "warning_signs": [
+      "Sudden, severe headache unlike any before (thunderclap) — possible hemorrhage",
+      "Headache with fever, stiff neck, confusion — possible meningitis",
+      "Headache after head injury — possible concussion",
+      "Headache with vision changes, speech difficulty, weakness — stroke warning signs",
+      "Progressively worsening headaches over weeks",
+      "New headaches starting after age 50",
+      "Headache that wakes you from sleep regularly",
+      "Headaches with projectile vomiting"
+    ]
+  }
+]

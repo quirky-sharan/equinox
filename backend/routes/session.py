@@ -1,8 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 from typing import List
 import uuid, httpx
 from datetime import datetime
+from io import BytesIO
 
 from ..database import get_db
 from ..models.user import User
@@ -16,25 +18,33 @@ from ..config import settings
 
 router = APIRouter(prefix="/session", tags=["session"])
 
-# Default interview tree (used when ML service is unavailable)
-DEFAULT_QUESTIONS = [
-    {"text": "How would you describe how you have been feeling overall?", "category": "general"},
-    {"text": "Where exactly do you feel discomfort — can you point to a specific area of your body?", "category": "location"},
-    {"text": "When did this first start, and has it been constant or coming and going?", "category": "onset"},
-    {"text": "On a scale from 1 to 10, how much is this affecting your daily life right now?", "category": "severity"},
-    {"text": "Have you noticed anything that makes it better or worse?", "category": "modifiers"},
-]
 
-async def call_ml(endpoint: str, payload: dict, timeout: float = 10.0) -> dict:
-    """Call ML microservice, return empty dict on failure (graceful degradation)."""
+async def call_ml(endpoint: str, payload: dict = None, method: str = "POST", timeout: float = 30.0) -> dict:
+    """Call ML microservice (RAG + Groq LLM)."""
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
-            r = await client.post(f"{settings.ML_SERVICE_URL}/ml/{endpoint}", json=payload)
+            if method == "POST":
+                r = await client.post(f"{settings.ML_SERVICE_URL}/ml/{endpoint}", json=payload)
+            else:
+                r = await client.get(f"{settings.ML_SERVICE_URL}/ml/{endpoint}", params=payload)
             r.raise_for_status()
             return r.json()
     except Exception as e:
         print(f"[ML call failed] {endpoint}: {e}")
         return {}
+
+
+async def call_ml_raw(endpoint: str, params: dict = None, timeout: float = 30.0) -> bytes:
+    """Call ML microservice and return raw bytes (for PDF)."""
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            r = await client.get(f"{settings.ML_SERVICE_URL}/ml/{endpoint}", params=params)
+            r.raise_for_status()
+            return r.content
+    except Exception as e:
+        print(f"[ML call failed] {endpoint}: {e}")
+        return None
+
 
 @router.post("/start", response_model=SessionStartResponse)
 async def start_session(
@@ -46,12 +56,20 @@ async def start_session(
     db.commit()
     db.refresh(session)
 
-    first_q = DEFAULT_QUESTIONS[0]
+    # Call the RAG pipeline with an initial greeting to get the first question
+    ml_result = await call_ml("chat", {
+        "session_id": str(session.id),
+        "message": "Hello, I need help understanding what's going on with my health."
+    })
+
+    first_question = ml_result.get("reply", "How are you feeling today? Please describe your symptoms in your own words.")
+
     return SessionStartResponse(
         session_id=session.id,
-        first_question=first_q["text"],
-        question_category=first_q["category"],
+        first_question=first_question,
+        question_category="general",
     )
+
 
 @router.post("/answer", response_model=AnswerResponse)
 async def submit_answer(
@@ -71,7 +89,7 @@ async def submit_answer(
         SessionAnswer.session_id == payload.session_id
     ).count()
 
-    # Store answer
+    # Store answer in DB
     meta = payload.behavioral_metadata.model_dump() if payload.behavioral_metadata else {}
     answer = SessionAnswer(
         session_id=payload.session_id,
@@ -84,54 +102,43 @@ async def submit_answer(
     db.add(answer)
     db.commit()
 
-    # Try ML service for next question (forward behavioral metadata)
-    ml_payload = {
+    # Call RAG pipeline — forward user's answer to the LLM
+    ml_result = await call_ml("chat", {
         "session_id": str(payload.session_id),
-        "answer_text": payload.answer_text,
-        "current_category": payload.question_category,
-        "depth": answer_count + 1,
-    }
-    ml_result = await call_ml("next-question", ml_payload)
+        "message": payload.answer_text,
+    })
 
-    # Also run intensity analysis on this answer asynchronously
-    intensity_payload = {
-        "text": payload.answer_text,
-        "behavioral_metadata": meta if meta else None,
-    }
-    intensity_result = await call_ml("analyze-intensity", intensity_payload)
+    turn_count = ml_result.get("turn_count", answer_count + 1)
+    is_final = ml_result.get("is_final", False)
+    reply = ml_result.get("reply", "Could you tell me more about your symptoms?")
+    final_data = ml_result.get("final_data")
 
-    total_questions = ml_result.get("total_questions", 8)
-    next_idx = answer_count + 1
-    interview_complete = ml_result.get("interview_complete", next_idx >= total_questions)
-
-    if not interview_complete:
-        if ml_result.get("question"):
-            next_q = ml_result["question"]
-            next_cat = ml_result.get("category", "general")
-            next_opt = ml_result.get("options", None)
-        else:
-            # Fallback
-            q = DEFAULT_QUESTIONS[min(next_idx, len(DEFAULT_QUESTIONS) - 1)] if next_idx < len(DEFAULT_QUESTIONS) else DEFAULT_QUESTIONS[-1]
-            next_q = q["text"]
-            next_cat = q["category"]
-            next_opt = None
-    else:
-        next_q = None
-        next_cat = None
-        next_opt = None
+    if is_final:
         session.status = "completed"
         session.completed_at = datetime.utcnow()
+
+        # Save diagnosis data from LLM
+        if final_data:
+            session.risk_tier = final_data.get("risk_tier", "medium")
+            session.risk_score = final_data.get("confidence_percent", 50) / 100.0
+            session.top_conditions = [
+                {"name": final_data.get("condition", "Unknown"), "confidence": final_data.get("confidence_percent", 50) / 100.0}
+            ]
         db.commit()
 
-    progress = min(((next_idx) / total_questions) * 100, 100)
+    total_questions = 8  # Approximate
+    progress = min((turn_count / total_questions) * 100, 100 if is_final else 95)
+
     return AnswerResponse(
-        next_question=next_q,
-        next_question_category=next_cat,
-        interview_complete=interview_complete,
-        current_depth=next_idx,
+        next_question=None if is_final else reply,
+        next_question_category="adaptive",
+        interview_complete=is_final,
+        current_depth=turn_count,
         progress_pct=progress,
-        options=next_opt,
+        options=None,
+        final_data=final_data,
     )
+
 
 @router.get("/result/{session_id}", response_model=RiskOutput)
 async def get_result(
@@ -150,58 +157,58 @@ async def get_result(
         SessionAnswer.session_id == session_id
     ).order_by(SessionAnswer.sequence_number).all()
 
-    all_text = " ".join([a.answer_text for a in answers])
-
-    # Collect all behavioral metadata from answers
-    all_behavioral = {}
-    for a in answers:
-        if a.behavioral_metadata:
-            for key in ["deleted_segments", "typing_latency_ms"]:
-                if key in a.behavioral_metadata:
-                    all_behavioral.setdefault(key, []).extend(a.behavioral_metadata[key])
-            for key in ["edit_count", "hedge_word_count"]:
-                if key in a.behavioral_metadata:
-                    all_behavioral[key] = all_behavioral.get(key, 0) + a.behavioral_metadata.get(key, 0)
-
-    # Try ML inference with full behavioral context
-    ml_result = await call_ml("infer", {
-        "session_id": str(session_id),
-        "combined_text": all_text,
-        "answers": [{"question": a.question_text, "answer": a.answer_text} for a in answers],
-        "behavioral_metadata": all_behavioral if all_behavioral else None,
-    }, timeout=15.0)
-
-    if ml_result.get("risk_tier"):
-        risk_tier = ml_result["risk_tier"]
-        risk_score = ml_result.get("confidence_score", 0.5)
-        top_conditions = ml_result.get("top_conditions", [])
-        reasoning = ml_result.get("reasoning_chain", [])
-        action = ml_result.get("recommended_action", "Consult a healthcare provider.")
-        patient_exp = ml_result.get("patient_explanation", "")
-        doctor_exp = ml_result.get("doctor_explanation", "")
-        trajectory = ml_result.get("trajectory_label")
-        traj_score = ml_result.get("escalation_score")
-        beh_flags = ml_result.get("behavioral_flags", [])
+    # If we already have stored results, use them
+    if session.risk_tier and session.top_conditions:
+        risk_tier = session.risk_tier
+        risk_score = session.risk_score or 0.5
+        top_conditions = session.top_conditions or []
     else:
-        # Fallback placeholder output
         risk_tier = "medium"
         risk_score = 0.5
-        top_conditions = [
-            {"name": "Assessment Pending", "confidence": 0.5, "icd10": "Z00.0"},
-        ]
-        reasoning = ["ML service unavailable — connect the AI module to get full analysis."]
-        action = "Please consult a healthcare provider for a full evaluation."
-        patient_exp = "The AI module is currently offline. We cannot provide a clinical assessment at this time."
-        doctor_exp = "ML infer endpoint unavailable. Differential diagnosis suspended."
-        trajectory = None
-        traj_score = None
-        beh_flags = []
+        top_conditions = [{"name": "Assessment Pending", "confidence": 0.5}]
 
-    # Save to session
-    session.risk_tier = risk_tier
-    session.risk_score = risk_score
-    session.top_conditions = top_conditions
-    db.commit()
+    # Try to get the final assessment from the ML session
+    ml_result = await call_ml("chat", {
+        "session_id": str(session_id),
+        "message": "Please provide your final assessment now in JSON format.",
+    })
+
+    final_data = ml_result.get("final_data")
+    if final_data:
+        risk_tier = final_data.get("risk_tier", risk_tier)
+        risk_score = final_data.get("confidence_percent", 50) / 100.0
+        top_conditions = [{"name": final_data.get("condition", "Unknown"), "confidence": risk_score}]
+        patient_exp = final_data.get("explanation_patient", "")
+        doctor_exp = final_data.get("explanation_doctor", "")
+        reasoning = final_data.get("reasoning", [])
+        recommended_action = final_data.get("see_doctor_reason", "Consult a healthcare provider.")
+        dos = final_data.get("dos", [])
+        donts = final_data.get("donts", [])
+        see_doctor = final_data.get("see_doctor", False)
+        see_doctor_urgency = final_data.get("see_doctor_urgency")
+        home_remedies = final_data.get("home_remedies", [])
+        dietary_guidelines = final_data.get("dietary_guidelines")
+        lifestyle_modifications = final_data.get("lifestyle_modifications", [])
+        warning_signs = final_data.get("warning_signs", [])
+
+        # Save updated results
+        session.risk_tier = risk_tier
+        session.risk_score = risk_score
+        session.top_conditions = top_conditions
+        db.commit()
+    else:
+        patient_exp = "The AI analysis session is processing. If this persists, please start a new assessment."
+        doctor_exp = "RAG pipeline final output not received."
+        reasoning = []
+        recommended_action = "Please consult a healthcare provider for a full evaluation."
+        dos = []
+        donts = []
+        see_doctor = True
+        see_doctor_urgency = None
+        home_remedies = []
+        dietary_guidelines = None
+        lifestyle_modifications = []
+        warning_signs = []
 
     return RiskOutput(
         session_id=session_id,
@@ -209,13 +216,39 @@ async def get_result(
         risk_score=risk_score,
         top_conditions=top_conditions,
         reasoning_chain=reasoning,
-        behavioral_flags=beh_flags,
-        recommended_action=action,
+        behavioral_flags=[],
+        recommended_action=recommended_action,
         patient_explanation=patient_exp,
         doctor_explanation=doctor_exp,
-        trajectory_label=trajectory,
-        trajectory_score=traj_score,
+        trajectory_label=None,
+        trajectory_score=None,
+        dos=dos,
+        donts=donts,
+        see_doctor=see_doctor,
+        see_doctor_urgency=see_doctor_urgency,
+        home_remedies=home_remedies,
+        dietary_guidelines=dietary_guidelines,
+        lifestyle_modifications=lifestyle_modifications,
+        warning_signs=warning_signs,
     )
+
+
+@router.get("/report/pdf/{session_id}")
+async def download_report(
+    session_id: str,
+    current_user: User = Depends(get_current_user),
+):
+    """Proxy PDF download from the ML service."""
+    pdf_bytes = await call_ml_raw("report/pdf", {"session_id": str(session_id)})
+    if not pdf_bytes:
+        raise HTTPException(status_code=500, detail="Failed to generate PDF report")
+
+    return StreamingResponse(
+        BytesIO(pdf_bytes),
+        media_type="application/pdf",
+        headers={"Content-Disposition": f"attachment; filename=meowmeow_report_{session_id[:8]}.pdf"},
+    )
+
 
 @router.get("/history", response_model=List[SessionHistoryItem])
 def get_history(
@@ -238,6 +271,7 @@ def get_history(
         ))
     return result
 
+
 @router.post("/population/report")
 def population_report(
     payload: PopulationReport,
@@ -251,6 +285,7 @@ def population_report(
     db.add(record)
     db.commit()
     return {"status": "ok"}
+
 
 @router.get("/population/summary")
 def population_summary(db: Session = Depends(get_db)):

@@ -6,7 +6,8 @@ import { sessionApi } from "../api/endpoints";
 import {
   Shield, AlertTriangle, CheckCircle, XCircle,
   TrendingUp, TrendingDown, Minus, Download, RotateCcw,
-  Activity, MessageSquare, ChevronRight, Cat, MapPin
+  Activity, MessageSquare, ChevronRight, Cat, MapPin, FileText,
+  Check, X as XIcon, Heart, Utensils, Leaf, Zap, AlertOctagon
 } from "lucide-react";
 import DoctorMapModal from "../components/DoctorMapModal";
 
@@ -239,7 +240,140 @@ export default function ResultPage() {
           </motion.div>
         )}
 
-        {/* Actions */}
+        {/* Do's and Don'ts */}
+        {((data?.dos || []).length > 0 || (data?.donts || []).length > 0) && (
+          <motion.div variants={itemVariants} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem", marginBottom: "2rem" }}>
+            {(data?.dos || []).length > 0 && (
+              <div className="card" style={{ padding: "2rem", borderTop: "4px solid var(--risk-low)" }}>
+                <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--risk-low)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
+                  <CheckCircle size={16} /> Recommended Actions
+                </h3>
+                <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
+                  {data.dos.map((item, i) => (
+                    <li key={i} style={{ fontSize: "0.95rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 10 }}>
+                      <Check size={16} color="var(--risk-low)" style={{ flexShrink: 0, marginTop: 3 }} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {(data?.donts || []).length > 0 && (
+              <div className="card" style={{ padding: "2rem", borderTop: "4px solid var(--risk-critical)" }}>
+                <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--risk-critical)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
+                  <XCircle size={16} /> Things to Avoid
+                </h3>
+                <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
+                  {data.donts.map((item, i) => (
+                    <li key={i} style={{ fontSize: "0.95rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 10 }}>
+                      <XIcon size={16} color="var(--risk-critical)" style={{ flexShrink: 0, marginTop: 3 }} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* Home Remedies */}
+        {(data?.home_remedies || []).length > 0 && (
+          <motion.div variants={itemVariants} className="card" style={{ padding: "2rem", marginBottom: "2rem", borderTop: "4px solid var(--accent-blue)" }}>
+            <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent-blue)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
+              <Heart size={16} /> Home Remedies
+            </h3>
+            <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
+              {data.home_remedies.map((item, i) => (
+                <li key={i} style={{ fontSize: "0.95rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 10, lineHeight: 1.5 }}>
+                  <Leaf size={16} color="var(--accent-blue)" style={{ flexShrink: 0, marginTop: 3 }} />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
+        {/* Dietary Guidelines */}
+        {data?.dietary_guidelines && (
+          <motion.div variants={itemVariants} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
+            {data.dietary_guidelines.eat && data.dietary_guidelines.eat.length > 0 && (
+              <div className="card" style={{ padding: "1.5rem", borderTop: "4px solid var(--risk-low)" }}>
+                <h4 style={{ fontSize: "0.8rem", textTransform: "uppercase", color: "var(--risk-low)", fontWeight: 800, marginBottom: "1rem", display: "flex", alignItems: "center", gap: 6 }}>
+                  <Utensils size={14} /> Foods to Eat
+                </h4>
+                <ul style={{ display: "flex", flexDirection: "column", gap: 8, listStyle: "none" }}>
+                  {data.dietary_guidelines.eat.map((item, i) => (
+                    <li key={i} style={{ fontSize: "0.9rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 8 }}>
+                      <Check size={14} color="var(--risk-low)" style={{ flexShrink: 0, marginTop: 2 }} /> {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {data.dietary_guidelines.drink && data.dietary_guidelines.drink.length > 0 && (
+              <div className="card" style={{ padding: "1.5rem", borderTop: "4px solid var(--accent-blue)" }}>
+                <h4 style={{ fontSize: "0.8rem", textTransform: "uppercase", color: "var(--accent-blue)", fontWeight: 800, marginBottom: "1rem", display: "flex", alignItems: "center", gap: 6 }}>
+                  <Zap size={14} /> Drinks Recommended
+                </h4>
+                <ul style={{ display: "flex", flexDirection: "column", gap: 8, listStyle: "none" }}>
+                  {data.dietary_guidelines.drink.map((item, i) => (
+                    <li key={i} style={{ fontSize: "0.9rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 8 }}>
+                      <Check size={14} color="var(--accent-blue)" style={{ flexShrink: 0, marginTop: 2 }} /> {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {data.dietary_guidelines.avoid && data.dietary_guidelines.avoid.length > 0 && (
+              <div className="card" style={{ padding: "1.5rem", borderTop: "4px solid var(--risk-high)" }}>
+                <h4 style={{ fontSize: "0.8rem", textTransform: "uppercase", color: "var(--risk-high)", fontWeight: 800, marginBottom: "1rem", display: "flex", alignItems: "center", gap: 6 }}>
+                  <XIcon size={14} /> Foods to Avoid
+                </h4>
+                <ul style={{ display: "flex", flexDirection: "column", gap: 8, listStyle: "none" }}>
+                  {data.dietary_guidelines.avoid.map((item, i) => (
+                    <li key={i} style={{ fontSize: "0.9rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 8 }}>
+                      <XIcon size={14} color="var(--risk-high)" style={{ flexShrink: 0, marginTop: 2 }} /> {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </motion.div>
+        )}
+
+        {/* Lifestyle Modifications */}
+        {(data?.lifestyle_modifications || []).length > 0 && (
+          <motion.div variants={itemVariants} className="card" style={{ padding: "2rem", marginBottom: "2rem", borderTop: "4px solid #8b5cf6" }}>
+            <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#8b5cf6", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
+              <TrendingUp size={16} /> Lifestyle Modifications
+            </h3>
+            <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
+              {data.lifestyle_modifications.map((item, i) => (
+                <li key={i} style={{ fontSize: "0.95rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 10, lineHeight: 1.5 }}>
+                  <ChevronRight size={16} color="#8b5cf6" style={{ flexShrink: 0, marginTop: 3 }} />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+
+        {/* Warning Signs */}
+        {(data?.warning_signs || []).length > 0 && (
+          <motion.div variants={itemVariants} className="card" style={{ padding: "2rem", marginBottom: "2rem", borderTop: "4px solid var(--risk-critical)", background: "rgba(239, 68, 68, 0.03)" }}>
+            <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--risk-critical)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
+              <AlertOctagon size={16} /> Warning Signs — Seek Medical Help If...
+            </h3>
+            <ul style={{ display: "flex", flexDirection: "column", gap: 10, listStyle: "none" }}>
+              {data.warning_signs.map((item, i) => (
+                <li key={i} style={{ fontSize: "0.95rem", color: "var(--risk-critical)", display: "flex", alignItems: "flex-start", gap: 10, fontWeight: 500 }}>
+                  <AlertTriangle size={16} style={{ flexShrink: 0, marginTop: 3 }} />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
         <motion.div variants={itemVariants} style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
           <motion.button 
             whileHover={{ scale: 1.05, x: 5 }} whileTap={{ scale: 0.95 }}
@@ -259,6 +393,28 @@ export default function ResultPage() {
             className="btn btn-primary" onClick={() => setIsMapModalOpen(true)} style={{ gap: 12, padding: "1rem 2rem", background: "var(--bg-subtle)", color: "var(--accent-blue)", border: "1px solid var(--border-color)", boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
           >
             <MapPin size={20} /> Contact Nearest Doctors
+          </motion.button>
+          
+          <motion.button 
+            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
+            className="btn btn-secondary" 
+            onClick={async () => {
+              try {
+                const res = await sessionApi.downloadReport(sessionId);
+                const blob = new Blob([res.data], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `meowmeow_report_${sessionId.slice(0, 8)}.pdf`;
+                a.click();
+                URL.revokeObjectURL(url);
+              } catch (e) {
+                console.error('PDF download failed:', e);
+              }
+            }}
+            style={{ gap: 12, padding: "1rem 2rem" }}
+          >
+            <FileText size={20} /> Download PDF Report
           </motion.button>
         </motion.div>
 

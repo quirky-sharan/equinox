@@ -1,0 +1,223 @@
+[
+  {
+    "id": "stomach_ache",
+    "condition": "Stomach Ache and Indigestion",
+    "icd10": "K30 / R10.9",
+    "category": "digestive",
+    "description": "Abdominal pain and indigestion (dyspepsia) causing pain, bloating, or discomfort in the upper abdomen. Most cases are not serious and resolve on their own.",
+    "symptoms": ["upper abdominal pain", "bloating", "gas", "nausea", "belching", "heartburn", "acid reflux", "feeling full quickly", "loss of appetite", "cramping"],
+    "common_causes": ["overeating or eating too quickly", "spicy, fatty, or greasy foods", "stress and anxiety", "gastritis", "acid reflux / GERD", "food intolerance (lactose, gluten)", "gastroenteritis", "peptic ulcers", "IBS", "constipation"],
+    "differential_diagnosis": ["gastritis", "peptic ulcer", "GERD", "gallstones", "pancreatitis", "appendicitis", "IBS", "food poisoning", "celiac disease"],
+    "key_questions": [
+      "Where exactly is the pain — upper, lower, left side, or right side of the abdomen?",
+      "What did you eat in the last 12-24 hours?",
+      "Is the pain sharp and sudden or a dull, constant ache?",
+      "Does the pain get worse after eating or on an empty stomach?",
+      "Do you feel bloated or gassy?",
+      "Have you had any vomiting or diarrhea?",
+      "How often do you eat spicy or oily foods?",
+      "Are you under significant stress right now?",
+      "When was your last bowel movement? Was it normal?",
+      "Do you take any painkillers (ibuprofen/aspirin) regularly?",
+      "Do you drink alcohol? How often?",
+      "Do you experience this pain frequently or is this new?"
+    ],
+    "lifestyle_factors": ["diet quality", "meal timing", "spicy food intake", "stress levels", "bowel habits", "alcohol use", "NSAID use", "eating speed"],
+    "dos": [
+      "Drink warm water or herbal tea — peppermint, ginger, or chamomile are excellent for digestion",
+      "Eat small, frequent meals instead of 2-3 large ones",
+      "Eat bland, easy-to-digest foods: rice, bananas, toast, plain yogurt, boiled potatoes",
+      "Apply a warm compress or heating pad to the abdomen for 15-20 minutes",
+      "Sit upright for at least 30 minutes after eating — gravity helps digestion",
+      "Chew food slowly and thoroughly — aim for 20-30 chews per bite",
+      "Try ginger: fresh ginger tea, ginger candy, or grated ginger with honey",
+      "Walk slowly for 10-15 minutes after meals — aids digestion",
+      "Practice deep breathing during pain episodes — reduces gut muscle spasms",
+      "Drink ajwain (carom seed) water — boil 1 tsp in water, strain and sip",
+      "Take antacids for acid reflux symptoms (Tums, Gelusil)",
+      "Eat probiotic-rich foods: yogurt, buttermilk, kefir — restores gut health"
+    ],
+    "donts": [
+      "Do NOT eat spicy, fried, or very fatty foods — they worsen indigestion significantly",
+      "Do NOT drink carbonated/fizzy drinks — they increase bloating and gas",
+      "Do NOT drink alcohol — it directly irritates the stomach lining",
+      "Do NOT smoke — nicotine increases stomach acid production",
+      "Do NOT eat large meals before bed — increases acid reflux risk dramatically",
+      "Do NOT take ibuprofen or aspirin on an empty stomach — causes gastropathy",
+      "Do NOT lie down immediately after eating — wait at least 2 hours",
+      "Do NOT drink water during meals — drink 30 min before or after meals",
+      "Do NOT eat too quickly — rushing meals causes swallowing air and bloating",
+      "Do NOT ignore persistent pain lasting more than 48 hours"
+    ],
+    "home_remedies": [
+      "Ajwain water: Boil 1 tsp carom seeds in a cup of water, add a pinch of black salt",
+      "Jeera (cumin) water: Boil 1 tsp cumin seeds in water, strain, drink warm — reduces bloating",
+      "Hing (asafoetida) paste: Mix a pinch of hing in warm water, apply around navel area",
+      "Fennel seeds: Chew half teaspoon of fennel seeds after meals — natural digestive aid",
+      "Buttermilk with roasted cumin: Excellent for acid reflux and bloating",
+      "Baking soda water: 1/2 tsp in a glass of water — instant antacid (not for regular use)"
+    ],
+    "dietary_guidelines": [
+      "Eat: plain rice, bananas, applesauce, toast, boiled potatoes, yogurt, oatmeal, steamed vegetables",
+      "Drink: warm water, ginger tea, peppermint tea, buttermilk, coconut water, fennel tea",
+      "Avoid: spicy food, fried food, citrus, tomatoes, chocolate, caffeine, alcohol, raw onions, beans (gassy)"
+    ],
+    "warning_signs": [
+      "Severe or worsening pain that doesn't improve within 24-48 hours",
+      "Blood in vomit or stool (black, tarry stool)",
+      "Unexplained weight loss",
+      "Difficulty swallowing",
+      "Pain radiating to chest, arm, or jaw (could be cardiac — call emergency)",
+      "Persistent bloating for more than 3 weeks",
+      "Fever with abdominal pain",
+      "Rigid, board-like abdomen — possible surgical emergency"
+    ]
+  },
+  {
+    "id": "nausea_vomiting",
+    "condition": "Nausea and Vomiting",
+    "icd10": "R11",
+    "category": "digestive",
+    "description": "Nausea is the sensation of needing to vomit. Vomiting is the forceful expulsion of stomach contents. Usually a protective mechanism that is self-limiting.",
+    "symptoms": ["urge to vomit", "actual vomiting", "abdominal discomfort", "sweating", "dizziness", "increased salivation", "pale skin", "rapid breathing", "weakness"],
+    "common_causes": ["gastroenteritis (stomach flu)", "food poisoning", "motion sickness", "pregnancy", "migraine", "medication side effects", "overeating", "alcohol excess", "anxiety", "inner ear problems"],
+    "differential_diagnosis": ["gastroenteritis", "food poisoning", "pregnancy", "appendicitis", "bowel obstruction", "pancreatitis", "migraine", "labyrinthitis", "gastroparesis"],
+    "key_questions": [
+      "When did the nausea/vomiting start?",
+      "How many times have you vomited today?",
+      "What does the vomit look like — food, bile (yellow/green), or blood?",
+      "What was the last thing you ate and when?",
+      "Have you been able to keep any fluids down?",
+      "Did you travel in a car/bus/boat recently?",
+      "Could you be pregnant?",
+      "Did you drink alcohol in the last 24 hours?",
+      "Are you taking any new medications?",
+      "Do you feel dizzy or is the room spinning?",
+      "Do you have diarrhea along with the vomiting?",
+      "Have others who ate the same food also gotten sick?"
+    ],
+    "lifestyle_factors": ["last meal timing", "alcohol consumption", "motion triggers", "current medications", "hydration status", "pregnancy possibility"],
+    "dos": [
+      "Sip clear fluids slowly in small amounts: water, Oral Rehydration Solution (ORS), clear broth",
+      "Try ginger in any form — ginger tea, ginger ale, ginger candy, or raw ginger slices",
+      "Eat small amounts of bland food only when nausea subsides: crackers, dry toast, plain rice",
+      "Rest in a sitting or propped-up position — lying completely flat worsens nausea",
+      "Breathe fresh air — step outside or open a window",
+      "Apply a cool, damp cloth to the forehead and back of neck",
+      "Follow the BRAT diet: Bananas, Rice, Applesauce, Toast — gentle on the stomach",
+      "For motion sickness: focus on the horizon or a fixed distant point",
+      "Sip ORS or water every 15 minutes after vomiting stops — rehydrate gradually",
+      "Try deep, slow breathing — inhale through nose for 4 seconds, exhale through mouth for 6 seconds",
+      "Smell fresh lemon or peppermint — both are clinically proven to reduce nausea",
+      "Suck on ice chips if unable to drink fluids — provides slow hydration"
+    ],
+    "donts": [
+      "Do NOT eat large meals — small portions only when nausea subsides",
+      "Do NOT consume dairy products — hard to digest when nauseous",
+      "Do NOT drink alcohol — worsens stomach irritation and dehydration",
+      "Do NOT eat spicy, fried, or greasy foods — they trigger more nausea",
+      "Do NOT lie completely flat — keep head elevated at 30 degrees minimum",
+      "Do NOT drink fluids too quickly — sip slowly, large gulps trigger vomiting",
+      "Do NOT take aspirin or ibuprofen — they irritate stomach; use paracetamol",
+      "Do NOT brush teeth immediately after vomiting — stomach acid damages enamel; rinse with water first",
+      "Do NOT ignore inability to keep fluids down for more than 12 hours",
+      "Do NOT force yourself to eat — wait until nausea passes"
+    ],
+    "home_remedies": [
+      "Ginger-lemon tea: Grate fresh ginger, add lemon juice and honey to warm water",
+      "Peppermint inhalation: Put peppermint oil on a tissue and inhale deeply",
+      "Rice water: Boil rice with extra water, strain, sip the starchy liquid — very soothing",
+      "Cumin-lemon drink: Roast cumin, grind, mix with lemon juice and water",
+      "Clove: Chew on 1-2 cloves — reduces nausea and numbs the gag reflex",
+      "Fennel seeds: Chew slowly — calms the stomach"
+    ],
+    "dietary_guidelines": [
+      "Eat: dry crackers, plain toast, plain rice, bananas, boiled potatoes, clear broth, applesauce",
+      "Drink: ORS, water (sipped slowly), ginger tea, peppermint tea, coconut water, clear broth",
+      "Avoid: dairy, fried foods, spicy foods, citrus, caffeine, alcohol, raw vegetables, strong-smelling foods"
+    ],
+    "warning_signs": [
+      "Vomiting blood or material like coffee grounds",
+      "Unable to keep any fluids down for 12-24 hours",
+      "Signs of severe dehydration: dark urine, dizziness, dry mouth, rapid heartbeat",
+      "Severe abdominal pain accompanying vomiting",
+      "Vomiting after a head injury",
+      "High fever with persistent vomiting",
+      "Vomiting with severe headache and stiff neck"
+    ]
+  },
+  {
+    "id": "sore_throat",
+    "condition": "Sore Throat (Pharyngitis)",
+    "icd10": "J02.9",
+    "category": "respiratory",
+    "description": "Pain, scratchiness, or irritation of the throat that worsens when swallowing. 80% caused by viruses, 15-20% by bacteria (strep throat).",
+    "symptoms": ["throat pain", "pain when swallowing", "scratchy throat", "swollen tonsils", "white patches on tonsils", "hoarse voice", "swollen neck glands", "mild fever", "cough", "runny nose"],
+    "common_causes": ["viral infections (cold, flu, COVID-19)", "strep throat (Group A Streptococcus)", "allergies and postnasal drip", "dry air from AC/heating", "air pollution and smoke", "GERD", "vocal strain", "mouth breathing during sleep"],
+    "differential_diagnosis": ["viral pharyngitis", "strep throat", "tonsillitis", "mononucleosis", "peritonsillar abscess", "epiglottitis", "laryngitis", "GERD-related pharyngitis"],
+    "key_questions": [
+      "When did the sore throat start?",
+      "Is the pain on one side or both sides?",
+      "Does it hurt more when you swallow food, liquids, or saliva?",
+      "Can you see any white spots or pus on your tonsils?",
+      "Do you have swollen glands in your neck?",
+      "Do you have a fever? How high?",
+      "Do you have a cough, runny nose, or sneezing along with it?",
+      "How much cold water or iced drinks do you consume?",
+      "Do you spend a lot of time in air-conditioned rooms?",
+      "Do you smoke, vape, or are around smokers?",
+      "Have you been talking/singing a lot recently?",
+      "Has anyone around you been sick with strep throat?"
+    ],
+    "lifestyle_factors": ["cold drink consumption", "vocal strain", "AC/heating exposure", "smoking status", "allergy history", "contact with sick persons"],
+    "dos": [
+      "Gargle with warm salt water (1/2 tsp salt in 1 cup warm water) 4-5 times daily",
+      "Drink warm liquids frequently: honey-lemon tea, warm water, tulsi tea, clear broths",
+      "Suck on throat lozenges or hard candy to keep throat moist",
+      "Use a humidifier to add moisture to dry indoor air",
+      "Rest your voice — speak softly and avoid shouting or whispering",
+      "Stay well-hydrated — sip fluids throughout the day even if swallowing hurts",
+      "Take paracetamol or ibuprofen for pain relief",
+      "Eat soft, soothing foods: soups, mashed potatoes, yogurt, smoothies, khichdi, dal",
+      "Take 1-2 teaspoons of raw honey — natural antibacterial and soothing properties",
+      "Drink warm turmeric milk before bed — anti-inflammatory and promotes healing",
+      "Try a saltwater + turmeric gargle — combines antiseptic and anti-inflammatory action",
+      "Steam inhalation with eucalyptus oil — soothes throat and clears congestion"
+    ],
+    "donts": [
+      "Do NOT smoke or vape — smoke severely irritates inflamed throat tissue",
+      "Do NOT drink very cold or icy beverages — they worsen irritation",
+      "Do NOT shout, sing, or whisper — all three strain the vocal cords",
+      "Do NOT eat rough or scratchy foods: chips, crackers, dry toast, nuts",
+      "Do NOT eat very spicy or acidic foods — they irritate the throat",
+      "Do NOT breathe through your mouth — use saline drops to clear nose",
+      "Do NOT take antibiotics unless prescribed by a doctor — most sore throats are viral",
+      "Do NOT ignore sore throat with high fever and swollen glands for more than 3 days",
+      "Do NOT share utensils, cups, or towels — sore throats are contagious",
+      "Do NOT drink alcohol — it dehydrates the throat lining"
+    ],
+    "home_remedies": [
+      "Mulethi (licorice) tea: Boil mulethi root in water for 10 min — soothes throat inflammation",
+      "Honey-turmeric paste: Mix 1 tsp honey with 1/4 tsp turmeric, take before bed",
+      "Warm salt-turmeric gargle: Add 1/2 tsp each of salt and turmeric to warm water",
+      "Ginger-basil tea: Boil ginger slices and tulsi leaves for 5 min, add honey",
+      "Cinnamon tea: Add a cinnamon stick to boiling water — antimicrobial properties",
+      "Apple cider vinegar gargle: 1 tbsp ACV in warm water — antibacterial"
+    ],
+    "dietary_guidelines": [
+      "Eat: soups, broths, mashed potatoes, yogurt, smoothies, warm oatmeal, ice cream/popsicles (for numbing)",
+      "Drink: warm honey-lemon water, herbal teas, warm water, chamomile tea, warm milk with turmeric",
+      "Avoid: spicy food, acidic fruits (orange, tomato), rough-textured foods, very hot liquids, alcohol, cold drinks"
+    ],
+    "warning_signs": [
+      "Sore throat lasting more than 7 days",
+      "Difficulty swallowing or breathing",
+      "High fever (above 38.3C / 101F) with sore throat",
+      "Swollen, tender lymph nodes in the neck",
+      "White patches or pus on tonsils (possible strep)",
+      "Rash accompanying sore throat",
+      "Blood in saliva or phlegm",
+      "Drooling or inability to swallow saliva (possible abscess)"
+    ]
+  }
+]

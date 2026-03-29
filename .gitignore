@@ -8,6 +8,7 @@
 *.env
 .env.*
 !.env.example
+chroma_db/
 
 # Firebase service account keys
 serviceAccountKey.json

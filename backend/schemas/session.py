@@ -32,6 +32,7 @@ class AnswerResponse(BaseModel):
     current_depth: int
     progress_pct: float
     options: Optional[List[Dict[str, str]]] = None
+    final_data: Optional[Dict[str, Any]] = None
 
 class RiskOutput(BaseModel):
     session_id: str
@@ -43,8 +44,16 @@ class RiskOutput(BaseModel):
     recommended_action: str
     patient_explanation: Optional[str] = None
     doctor_explanation: Optional[str] = None
-    trajectory_label: Optional[str]
-    trajectory_score: Optional[float]
+    trajectory_label: Optional[str] = None
+    trajectory_score: Optional[float] = None
+    dos: List[str] = []
+    donts: List[str] = []
+    see_doctor: bool = False
+    see_doctor_urgency: Optional[str] = None
+    home_remedies: List[str] = []
+    dietary_guidelines: Optional[Dict[str, Any]] = None
+    lifestyle_modifications: List[str] = []
+    warning_signs: List[str] = []
 
 class SessionHistoryItem(BaseModel):
     session_id: str

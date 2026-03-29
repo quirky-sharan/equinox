@@ -1,1 +1,1 @@
-# Meowmeow ML Pipeline
+# Meowmeow ML Service — RAG + Groq LLM Pipeline
