@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 export const useThemeStore = create(
   persist(
     (set) => ({
-      theme: "light", // 'light', 'dark', 'midnight', 'sepia'
+      theme: "dark", // 'light', 'dark', 'midnight', 'sepia'
       setTheme: (theme) => set({ theme }),
     }),
     { name: "meowmeow-theme" }

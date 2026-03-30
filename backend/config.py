@@ -1,4 +1,8 @@
 from pydantic_settings import BaseSettings
+from pathlib import Path
+
+# Resolve .env relative to this file's directory (backend/)
+_env_path = Path(__file__).resolve().parent / ".env"
 
 class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite:///./meowmeow.db"
@@ -10,8 +14,10 @@ class Settings(BaseSettings):
     FIREBASE_PROJECT_ID: str = ""
     FIREBASE_API_KEY: str = ""
     FRONTEND_URL: str = "http://localhost:5173"
+    GROQ_API_KEY: str = ""
 
     class Config:
-        env_file = ".env"
+        env_file = str(_env_path)
 
 settings = Settings()
+

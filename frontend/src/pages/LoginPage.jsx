@@ -41,6 +41,8 @@ export default function LoginPage() {
       const user = result.user;
       const idToken = await user.getIdToken();
 
+      console.log("Firebase auth successful, sending token to backend...");
+
       // Step 2: Send token to OUR backend for verification + user upsert
       const res = await authApi.googleAuth(
         idToken,
@@ -52,8 +54,20 @@ export default function LoginPage() {
       navigate("/dashboard");
     } catch (err) {
       console.error("Google auth error:", err);
-      const msg = err.response?.data?.detail || err.message || "Google sign-in failed.";
-      setError(msg);
+
+      // Handle specific Firebase errors
+      if (err.code === "auth/popup-blocked") {
+        setError("Popup was blocked by your browser. Please allow popups for this site and try again.");
+      } else if (err.code === "auth/popup-closed-by-user") {
+        setError("Sign-in popup was closed. Please try again.");
+      } else if (err.code === "auth/cancelled-popup-request") {
+        setError("Another sign-in attempt is in progress. Please wait.");
+      } else if (err.code === "auth/unauthorized-domain") {
+        setError("This domain is not authorized for Google sign-in. Please add localhost to Firebase authorized domains.");
+      } else {
+        const msg = err.response?.data?.detail || err.message || "Google sign-in failed.";
+        setError(msg);
+      }
     } finally {
       setGoogleLoading(false);
     }
@@ -81,9 +95,6 @@ export default function LoginPage() {
 
   return (
     <div className="page-center" style={{ position: "relative", overflow: "hidden" }}>
-      {/* Background decoration */}
-      <div style={{ position: "absolute", top: "-10%", right: "-10%", width: "40%", height: "40%", background: "radial-gradient(circle, rgba(14, 165, 233, 0.03) 0%, transparent 70%)", zIndex: 0 }} />
-      <div style={{ position: "absolute", bottom: "-10%", left: "-10%", width: "40%", height: "40%", background: "radial-gradient(circle, rgba(139, 92, 246, 0.03) 0%, transparent 70%)", zIndex: 0 }} />
 
       <motion.div
         variants={containerVariants}

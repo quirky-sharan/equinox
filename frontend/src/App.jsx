@@ -1,11 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuthStore } from "./store/authStore";
 import { useThemeStore } from "./store/themeStore";
 import { authApi } from "./api/endpoints";
 import Navbar from "./components/Navbar";
-import Cursor from "./components/Cursor";
+import FluidCursor from "./components/FluidCursor";
+const ParticleBackground = lazy(() => import("./components/ParticleBackground"));
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -47,7 +48,10 @@ export default function App() {
 
   return (
     <div className="app-layout">
-      <Cursor />
+      <Suspense fallback={null}>
+        <ParticleBackground />
+      </Suspense>
+      <FluidCursor />
       <Navbar />
       <AnimatePresence mode="wait">
         <motion.div

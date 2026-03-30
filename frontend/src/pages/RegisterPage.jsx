@@ -5,6 +5,9 @@ import { authApi } from "../api/endpoints";
 import { useAuthStore } from "../store/authStore";
 import { Cat, Mail, Lock, User, Eye, EyeOff, AlertCircle } from "lucide-react";
 
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../config/firebase";
+
 export default function RegisterPage() {
   const navigate = useNavigate();
   const setAuth = useAuthStore((s) => s.setAuth);
@@ -30,13 +33,32 @@ export default function RegisterPage() {
   };
 
   const handleGoogle = async () => {
-    setError(""); setGoogleLoading(true);
+    setError("");
+    setGoogleLoading(true);
     try {
-      const res = await authApi.googleAuth("demo-token", "Demo Patient", null);
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+
+      const res = await authApi.googleAuth(
+        idToken,
+        user.displayName,
+        user.photoURL
+      );
       setAuth(res.data.user, res.data.access_token);
       navigate("/dashboard");
     } catch (err) {
-      setError("Google sign-in unavailable in demo mode.");
+      console.error("Google auth error:", err);
+      if (err.code === "auth/popup-blocked") {
+        setError("Popup was blocked by your browser. Please allow popups for this site and try again.");
+      } else if (err.code === "auth/popup-closed-by-user") {
+        setError("Sign-in popup was closed. Please try again.");
+      } else if (err.code === "auth/unauthorized-domain") {
+        setError("This domain is not authorized for Google sign-in. Please add localhost to Firebase authorized domains.");
+      } else {
+        const msg = err.response?.data?.detail || err.message || "Google sign-in failed.";
+        setError(msg);
+      }
     } finally { setGoogleLoading(false); }
   };
 
@@ -65,8 +87,6 @@ export default function RegisterPage() {
 
   return (
     <div className="page-center" style={{ position: "relative", overflow: "hidden" }}>
-      <div style={{ position: "absolute", top: "-10%", right: "-10%", width: "40%", height: "40%", background: "radial-gradient(circle, rgba(14, 165, 233, 0.03) 0%, transparent 70%)", zIndex: 0 }} />
-      <div style={{ position: "absolute", bottom: "-10%", left: "-10%", width: "40%", height: "40%", background: "radial-gradient(circle, rgba(139, 92, 246, 0.03) 0%, transparent 70%)", zIndex: 0 }} />
 
       <motion.div
         variants={containerVariants}

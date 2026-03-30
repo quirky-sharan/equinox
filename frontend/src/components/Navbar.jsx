@@ -88,7 +88,14 @@ export default function Navbar() {
       )}
 
       {!token && (
-        <div className="navbar-actions">
+        <div className="navbar-actions" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <button 
+            onClick={cycleTheme} 
+            title={`Theme: ${theme}`}
+            style={{ background: "transparent", border: "1px solid var(--border-color)", borderRadius: "50%", padding: 6, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", color: "var(--text-secondary)" }}
+          >
+            {getThemeIcon()}
+          </button>
           <Link to="/login" className="btn btn-secondary btn-sm">Sign In</Link>
           <Link to="/register" className="btn btn-primary btn-sm">Get Started</Link>
         </div>

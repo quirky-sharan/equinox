@@ -128,29 +128,6 @@ export default function LandingPage() {
   return (
     <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh", overflow: "hidden", position: "relative" }}>
 
-      
-      {/* Global animated ambient lighting (GSAP/Three JS vibe) */}
-      <motion.div 
-        animate={{ 
-          x: ["-20vw", "20vw", "-10vw", "-20vw"],
-          y: ["-10vh", "30vh", "-20vh", "-10vh"],
-          scale: [1, 1.2, 0.8, 1],
-          opacity: [0.3, 0.5, 0.3]
-        }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        style={{ position: "fixed", top: "20%", left: "30%", width: "40vw", height: "40vw", background: "radial-gradient(circle, var(--accent-blue) 0%, transparent 60%)", filter: "blur(100px)", zIndex: 0, opacity: 0.4, pointerEvents: "none" }}
-      />
-      <motion.div 
-        animate={{ 
-          x: ["20vw", "-20vw", "10vw", "20vw"],
-          y: ["30vh", "-10vh", "40vh", "30vh"],
-          scale: [0.8, 1.3, 1, 0.8],
-          opacity: [0.2, 0.4, 0.2]
-        }}
-        transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-        style={{ position: "fixed", top: "50%", right: "10%", width: "35vw", height: "35vw", background: "radial-gradient(circle, #8b5cf6 0%, transparent 60%)", filter: "blur(120px)", zIndex: 0, opacity: 0.3, pointerEvents: "none" }}
-      />
-      
       {/* Hero Section */}
       <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "4rem 2rem", perspective: 1000 }}>
         
