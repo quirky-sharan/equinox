@@ -1,10 +1,10 @@
 ```
-███╗   ███╗███████╗ ██████╗ ██╗    ██╗███╗   ███╗███████╗ ██████╗ ██╗    ██╗
-████╗ ████║██╔════╝██╔═══██╗██║    ██║████╗ ████║██╔════╝██╔═══██╗██║    ██║
-██╔████╔██║█████╗  ██║   ██║██║ █╗ ██║██╔████╔██║█████╗  ██║   ██║██║ █╗ ██║
-██║╚██╔╝██║██╔══╝  ██║   ██║██║███╗██║██║╚██╔╝██║██╔══╝  ██║   ██║██║███╗██║
-██║ ╚═╝ ██║███████╗╚██████╔╝╚███╔███╔╝██║ ╚═╝ ██║███████╗╚██████╔╝╚███╔███╔╝
-╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝ ╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝
+                                  ███╗   ███╗███████╗ ██████╗ ██╗    ██╗███╗   ███╗███████╗ ██████╗ ██╗    ██╗
+                                  ████╗ ████║██╔════╝██╔═══██╗██║    ██║████╗ ████║██╔════╝██╔═══██╗██║    ██║
+                                  ██╔████╔██║█████╗  ██║   ██║██║ █╗ ██║██╔████╔██║█████╗  ██║   ██║██║ █╗ ██║
+                                  ██║╚██╔╝██║██╔══╝  ██║   ██║██║███╗██║██║╚██╔╝██║██╔══╝  ██║   ██║██║███╗██║
+                                  ██║ ╚═╝ ██║███████╗╚██████╔╝╚███╔███╔╝██║ ╚═╝ ██║███████╗╚██████╔╝╚███╔███╔╝
+                                  ╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝ ╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝
 ```
 
 <div align="center">
@@ -292,11 +292,11 @@ start_all.bat
 This single script boots all three services in parallel:
 
 ```
-┌─────────────────────────────────────────────────┐
-│  ML Inference Server  →  http://localhost:8001  │
-│  FastAPI Backend      →  http://localhost:8000  │
-│  React Frontend       →  http://localhost:5173  │
-└─────────────────────────────────────────────────┘
+                    ┌─────────────────────────────────────────────────┐
+                    │  ML Inference Server  →  http://localhost:8001  │
+                    │  FastAPI Backend      →  http://localhost:8000  │
+                    │  React Frontend       →  http://localhost:5173  │
+                    └─────────────────────────────────────────────────┘
 ```
 
 > **Note:** First run will download model weights and build the ChromaDB vector store. This may take a few minutes depending on your internet connection.
@@ -362,10 +362,10 @@ Meowmeow is an AI-assisted research tool built for educational and informational
 <div align="center">
 
 ```
-╔══════════════════════════════════════════════════════════╗
-║     Built with obsessive attention to clinical accuracy  ║
-║                  — Team Meowmeow, 2024 —                 ║
-╚══════════════════════════════════════════════════════════╝
+                    ╔══════════════════════════════════════════════════════════╗
+                    ║     Built with obsessive attention to clinical accuracy  ║
+                    ║                  — Team Meowmeow, 2026 —                 ║
+                    ╚══════════════════════════════════════════════════════════╝
 ```
 
 [![Repo](https://img.shields.io/badge/GitHub-quirky--sharan%2Fieee__internal__hack-181717?style=flat-square&logo=github)](https://github.com/quirky-sharan/ieee_internal_hack)
