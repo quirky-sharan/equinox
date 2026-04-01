@@ -19,7 +19,7 @@ from ..config import settings
 router = APIRouter(prefix="/session", tags=["session"])
 
 
-async def call_ml(endpoint: str, payload: dict = None, method: str = "POST", timeout: float = 30.0) -> dict:
+async def call_ml(endpoint: str, payload: dict = None, method: str = "POST", timeout: float = 90.0) -> dict:
     """Call ML microservice (RAG + Groq LLM)."""
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
