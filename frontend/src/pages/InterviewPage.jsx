@@ -5,20 +5,7 @@ import { sessionApi } from "../api/endpoints";
 import { useBehavioralCapture } from "../hooks/useBehavioralCapture";
 import { Mic, MicOff, Send, Volume2, VolumeX, Cat } from "lucide-react";
 
-const TTS_RATE = 0.88;
-
-function speakText(text, enabled) {
-  if (!enabled || !window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
-  utt.rate = TTS_RATE;
-  const voices = window.speechSynthesis.getVoices();
-  const preferred = voices.find((v) => v.lang.startsWith("en") && v.name.toLowerCase().includes("female"))
-    || voices.find((v) => v.lang === "en-GB")
-    || voices.find((v) => v.lang.startsWith("en"));
-  if (preferred) utt.voice = preferred;
-  window.speechSynthesis.speak(utt);
-}
+const ML_URL = import.meta.env.VITE_ML_URL || "http://localhost:8001";
 
 export default function InterviewPage() {
   const navigate = useNavigate();
@@ -40,6 +27,31 @@ export default function InterviewPage() {
   const behavCapture = useBehavioralCapture();
   const recognitionRef = useRef(null);
   const textareaRef = useRef(null);
+  const currentAudioRef = useRef(null);
+
+  const playVoice = useCallback(async (text, enabled) => {
+    if (!enabled) return;
+    if (currentAudioRef.current) {
+      currentAudioRef.current.pause();
+      currentAudioRef.current = null;
+    }
+    try {
+      const res = await fetch(`${ML_URL}/ml/speak`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text })
+      });
+      if (!res.ok) throw new Error("Voice synthesis failed");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+      currentAudioRef.current = audio;
+      audio.play();
+      audio.onended = () => URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Neural TTS Error:", err);
+    }
+  }, []);
 
   // Start session on mount
   useEffect(() => {
@@ -50,7 +62,7 @@ export default function InterviewPage() {
         setCurrentQuestion(res.data.first_question);
         setCurrentCategory(res.data.question_category);
         setTimeout(() => {
-          speakText(res.data.first_question, ttsEnabled);
+          playVoice(res.data.first_question, ttsEnabled);
         }, 600);
       } catch (e) {
         setError("Could not connect to server. Please ensure the backend is running.");
@@ -65,9 +77,9 @@ export default function InterviewPage() {
   useEffect(() => {
     if (currentQuestion && currentQuestion !== prevQuestion.current) {
       prevQuestion.current = currentQuestion;
-      setTimeout(() => speakText(currentQuestion, ttsEnabled), 700);
+      setTimeout(() => playVoice(currentQuestion, ttsEnabled), 700);
     }
-  }, [currentQuestion, ttsEnabled]);
+  }, [currentQuestion, ttsEnabled, playVoice]);
 
   const handleSubmit = useCallback(async () => {
     if (!answer.trim() || answer.trim().length < 3 || submitting) return;
@@ -204,7 +216,10 @@ export default function InterviewPage() {
               <div style={{ fontSize: "0.85rem", fontWeight: 700, fontVariantNumeric: "tabular-nums" }}>{depth + 1} of 12</div>
             </div>
             <button
-              onClick={() => { setTtsEnabled(!ttsEnabled); window.speechSynthesis?.cancel(); }}
+              onClick={() => { 
+                setTtsEnabled(!ttsEnabled); 
+                if (currentAudioRef.current) currentAudioRef.current.pause(); 
+              }}
               className="btn"
               title={ttsEnabled ? "Mute Voice Assistance" : "Enable Voice Assistance"}
               style={{ 

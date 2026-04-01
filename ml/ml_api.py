@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel
 from typing import Optional
+import edge_tts
 
 from .groq_client import process_message
 from . import session_manager
@@ -40,6 +41,9 @@ class ChatResponse(BaseModel):
     turn_count: int
     is_final: bool
     final_data: Optional[dict] = None
+
+class SpeakRequest(BaseModel):
+    text: str
 
 
 # ─── Endpoints ─────────────────────────────────────────────────────────────────
@@ -77,6 +81,29 @@ def api_chat(req: ChatRequest):
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Chat processing failed: {str(e)}")
+
+from fastapi.responses import StreamingResponse
+
+@app.post("/ml/speak")
+async def api_speak(req: SpeakRequest):
+    """
+    Generate TTS audio using Edge TTS for a completely free, hyper-realistic voice.
+    Returns HTTP audio stream containing MP3 frames.
+    """
+    try:
+        voice = "en-US-AriaNeural"
+        communicate = edge_tts.Communicate(req.text, voice, rate="+5%")
+
+        async def audio_generator():
+            async for chunk in communicate.stream():
+                if chunk["type"] == "audio":
+                    yield chunk["data"]
+
+        return StreamingResponse(audio_generator(), media_type="audio/mpeg")
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail="Voice synthesis failed")
 
 
 @app.get("/ml/report/pdf")
