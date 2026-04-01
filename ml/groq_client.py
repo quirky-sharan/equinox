@@ -37,7 +37,7 @@ def call_groq(system_prompt: str, messages: list) -> str:
         full_messages = [{"role": "system", "content": system_prompt}] + messages
 
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="llama-3.1-8b-instant",
             messages=full_messages,
             temperature=0.7,
             max_tokens=4096,
@@ -45,6 +45,9 @@ def call_groq(system_prompt: str, messages: list) -> str:
         )
         return response.choices[0].message.content
     except Exception as e:
+        import traceback
+        with open("groq_error.log", "a") as f:
+            f.write(f"[Groq API Error] {e}\n{traceback.format_exc()}\n")
         print(f"[Groq API Error] {e}")
         return "I'm sorry, I'm having trouble connecting right now. Could you please try again in a moment?"
 

@@ -53,7 +53,7 @@ def root():
     return {
         "service": "Meowmeow ML Service (RAG + Groq)",
         "version": "2.0.0",
-        "model": "llama-3.3-70b-versatile",
+        "model": "llama-3.1-8b-instant",
         "endpoints": ["/ml/chat", "/ml/report/pdf"],
     }
 
