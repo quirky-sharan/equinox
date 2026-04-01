@@ -21,8 +21,8 @@ export default function FluidCursor() {
     const onMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
       if (dotRef.current) {
-        // Direct DOM manipulation for zero-latency 6px dot tracking
-        dotRef.current.style.transform = `translate3d(${e.clientX - 3}px, ${e.clientY - 3}px, 0)`;
+        // Direct DOM manipulation for zero-latency tracking
+        dotRef.current.style.transform = `translate3d(${e.clientX - 6}px, ${e.clientY - 6}px, 0)`;
       }
     };
     const onDown = () => setIsClicked(true);
@@ -89,17 +89,18 @@ export default function FluidCursor() {
         }}
       />
 
-      {/* Zero-latency core cursor dot */}
+      {/* Zero-latency core cursor star */}
       <div
         ref={dotRef}
         style={{
           position: "fixed",
           top: 0,
           left: 0,
-          width: 6,
-          height: 6,
-          borderRadius: "50%",
-          backgroundColor: "var(--accent-blue)",
+          width: 12,
+          height: 12,
+          backgroundColor: "#fef08a",
+          clipPath: "polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)",
+          filter: "drop-shadow(0 0 8px rgba(253, 224, 71, 0.9))",
           pointerEvents: "none",
           zIndex: 10000,
           willChange: "transform",
