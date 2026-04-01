@@ -123,10 +123,13 @@ export default function InterviewPage() {
     }
   }, [answer, submitting, sessionId, currentQuestion, currentCategory, behavCapture, navigate]);
 
-  // Keyboard shortcut: Ctrl+Enter to submit
+  // Keyboard shortcut: Enter to submit, Shift+Enter for new line
   const handleKeyDown = useCallback((e) => {
     behavCapture.onKeyDown(e);
-    if ((e.ctrlKey || e.metaKey) && e.key === "Enter") handleSubmit();
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault(); // Prevent default new line insertion
+      handleSubmit();
+    }
   }, [behavCapture, handleSubmit]);
 
   // Speech recognition
@@ -323,17 +326,29 @@ export default function InterviewPage() {
 
           <textarea
             ref={textareaRef}
-            className="form-input"
             placeholder="Describe your symptoms in detail…"
             value={answer}
             onChange={(e) => { setAnswer(e.target.value); behavCapture.onChange(e); }}
             onKeyDown={handleKeyDown}
             onBeforeInput={behavCapture.onBeforeInput}
-            rows={5}
+            rows={4}
             style={{ 
-              resize: "none", marginBottom: "1.5rem", fontSize: "1.1rem", lineHeight: 1.6, 
-              background: "transparent", border: "none", borderBottom: "1px solid var(--border-color)", 
-              borderRadius: 0, paddingLeft: 0, paddingRight: 0 
+              width: "100%", resize: "none", marginBottom: "1.5rem", 
+              fontSize: "1.1rem", lineHeight: 1.6, 
+              color: "white", outline: "none",
+              background: "rgba(255, 255, 255, 0.03)", 
+              border: "1px solid rgba(255, 255, 255, 0.1)", 
+              borderRadius: "16px", padding: "1.25rem",
+              boxShadow: "inset 0 4px 6px -1px rgba(0, 0, 0, 0.1), inset 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+              transition: "border-color 0.2s, background 0.2s"
+            }}
+            onFocus={(e) => {
+              e.target.style.borderColor = "var(--accent-blue)";
+              e.target.style.background = "rgba(14, 165, 233, 0.05)";
+            }}
+            onBlur={(e) => {
+              e.target.style.borderColor = "rgba(255, 255, 255, 0.1)";
+              e.target.style.background = "rgba(255, 255, 255, 0.03)";
             }}
             autoFocus
           />
