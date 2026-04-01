@@ -30,11 +30,11 @@ export default function Footer() {
             <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.6, maxWidth: 300 }}>
               Pioneering the future of clinical intelligence. High-fidelity probabilistic health assessments driven by advanced AI.
             </p>
-            <div style={{ display: "flex", gap: "1rem", marginTop: "0.5rem" }}>
-              <a href="https://github.com" target="_blank" rel="noreferrer" style={{ color: "var(--text-muted)", transition: "color 0.2s" }}><Code size={20} /></a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" style={{ color: "var(--text-muted)", transition: "color 0.2s" }}><Camera size={20} /></a>
-              <a href="https://twitter.com" target="_blank" rel="noreferrer" style={{ color: "var(--text-muted)", transition: "color 0.2s" }}><MessageSquare size={20} /></a>
-              <a href="mailto:contact@meowmeow.health" style={{ color: "var(--text-muted)", transition: "color 0.2s" }}><Mail size={20} /></a>
+            <div style={{ display: "flex", gap: "1rem", borderTop: "1px solid transparent", paddingTop: "0.5rem", marginTop: "0.5rem" }}>
+              <a href="https://github.com" target="_blank" rel="noreferrer" className="hover-shift" style={{ color: "var(--text-muted)" }}><Code size={20} /></a>
+              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover-shift" style={{ color: "var(--text-muted)" }}><Camera size={20} /></a>
+              <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover-shift" style={{ color: "var(--text-muted)" }}><MessageSquare size={20} /></a>
+              <a href="mailto:contact@meowmeow.health" className="hover-shift" style={{ color: "var(--text-muted)" }}><Mail size={20} /></a>
             </div>
 
           </div>
@@ -43,10 +43,10 @@ export default function Footer() {
           <div>
             <h4 style={{ fontWeight: 700, marginBottom: "1.5rem", color: "var(--text-primary)" }}>Platform</h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              <li><Link to="/login" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", transition: "color 0.2s" }}>Sign In</Link></li>
-              <li><Link to="/register" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", transition: "color 0.2s" }}>Create Account</Link></li>
-              <li><Link to="#vision" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", transition: "color 0.2s" }}>Our Vision</Link></li>
-              <li><Link to="#founders" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem", transition: "color 0.2s" }}>Founders</Link></li>
+              <li><Link to="/login" className="hover-shift" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem" }}>Sign In</Link></li>
+              <li><Link to="/register" className="hover-shift" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem" }}>Create Account</Link></li>
+              <li><Link to="#vision" className="hover-shift" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem" }}>Our Vision</Link></li>
+              <li><Link to="#founders" className="hover-shift" style={{ color: "var(--text-secondary)", textDecoration: "none", fontSize: "0.9rem" }}>Founders</Link></li>
             </ul>
           </div>
 
@@ -54,10 +54,10 @@ export default function Footer() {
           <div>
             <h4 style={{ fontWeight: 700, marginBottom: "1.5rem", color: "var(--text-primary)" }}>Legal & Terms</h4>
             <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              <li><span style={{ color: "var(--text-secondary)", fontSize: "0.9rem", cursor: "pointer" }}>Privacy Policy</span></li>
-              <li><span style={{ color: "var(--text-secondary)", fontSize: "0.9rem", cursor: "pointer" }}>Terms of Service</span></li>
-              <li><span style={{ color: "var(--text-secondary)", fontSize: "0.9rem", cursor: "pointer" }}>Medical Disclaimer</span></li>
-              <li><span style={{ color: "var(--text-secondary)", fontSize: "0.9rem", cursor: "pointer" }}>HIPAA Notice</span></li>
+              <li><span className="hover-shift" style={{ color: "var(--text-secondary)", fontSize: "0.9rem", cursor: "pointer" }}>Privacy Policy</span></li>
+              <li><span className="hover-shift" style={{ color: "var(--text-secondary)", fontSize: "0.9rem", cursor: "pointer" }}>Terms of Service</span></li>
+              <li><span className="hover-shift" style={{ color: "var(--text-secondary)", fontSize: "0.9rem", cursor: "pointer" }}>Medical Disclaimer</span></li>
+              <li><span className="hover-shift" style={{ color: "var(--text-secondary)", fontSize: "0.9rem", cursor: "pointer" }}>HIPAA Notice</span></li>
             </ul>
           </div>
 

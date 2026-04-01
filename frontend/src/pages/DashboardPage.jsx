@@ -1,10 +1,53 @@
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
 import { useQuery } from "@tanstack/react-query";
 import { sessionApi } from "../api/endpoints";
 import { Cat, Activity, Clock, TrendingUp, ChevronRight, Shield, Zap, Eye } from "lucide-react";
 import { format } from "date-fns";
+import { useEffect, useRef } from "react";
+
+function AnimatedCounter({ value, duration = 2.5 }) {
+  const ref = useRef(null);
+  const motionValue = useMotionValue(0);
+  const rounded = useTransform(motionValue, (latest) => Math.round(latest));
+
+  useEffect(() => {
+    const controls = animate(motionValue, value, { duration, ease: "easeOut" });
+    return controls.stop;
+  }, [value, duration]);
+
+  useEffect(() => {
+    return rounded.on("change", (v) => { if (ref.current) ref.current.textContent = v; });
+  }, [rounded]);
+
+  return <span ref={ref}>{value}</span>;
+}
+
+function SpotlightCard({ children, style, className = "", delay = 0 }) {
+  const ref = useRef(null);
+  
+  const handleMouseMove = (e) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    ref.current.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+    ref.current.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
+  };
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      className={`spotlight-card ${className}`}
+      style={{ padding: "1.5rem", ...style }}
+    >
+      {children}
+    </motion.div>
+  );
+}
 
 const RISK_COLORS = { low: "var(--risk-low)", medium: "var(--risk-medium)", high: "var(--risk-high)", critical: "var(--risk-critical)" };
 
@@ -89,20 +132,19 @@ export default function DashboardPage() {
         {history.length > 0 && (
           <div className="grid-3" style={{ marginBottom: "2.5rem" }}>
             {[
-              { label: "Total Assessments", value: history.length, icon: Activity },
+              { label: "Total Assessments", value: history.length, isCounter: true, icon: Activity },
               { label: "Last Risk Tier", value: lastSession?.risk_tier?.toUpperCase() || "—", icon: Shield,
                 color: RISK_COLORS[lastSession?.risk_tier] },
               { label: "Last Visit", value: lastSession?.created_at ? format(new Date(lastSession.created_at), "MMM d, yyyy") : "—", icon: Clock },
             ].map((stat, i) => (
-              <motion.div key={i} className="card" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-                style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: 8 }}>
+              <SpotlightCard key={i} delay={i * 0.15} style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-secondary)", fontSize: "0.8rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
                   <stat.icon size={14} /> {stat.label}
                 </div>
                 <div style={{ fontSize: "1.5rem", fontWeight: 800, color: stat.color || "var(--text-primary)", fontFamily: "'Plus Jakarta Sans',sans-serif" }}>
-                  {stat.value}
+                  {stat.isCounter ? <AnimatedCounter value={stat.value} /> : stat.value}
                 </div>
-              </motion.div>
+              </SpotlightCard>
             ))}
           </div>
         )}
@@ -130,18 +172,17 @@ export default function DashboardPage() {
           </h2>
           <div className="grid-3">
             {features.map((f, i) => (
-              <motion.div 
+              <SpotlightCard 
                 key={i} 
-                className="card" 
-                whileHover={{ y: -5, boxShadow: "var(--shadow-lg)" }}
+                delay={0.3 + i * 0.1}
                 style={{ padding: "2rem", background: "var(--glass-bg)", backdropFilter: "blur(10px)" }}
               >
-                <div style={{ display: "inline-flex", padding: 12, borderRadius: "16px", background: "var(--bg-subtle)", marginBottom: 20 }}>
-                  <f.icon size={20} color="var(--text-primary)" strokeWidth={1.5} />
+                <div style={{ display: "inline-flex", padding: 12, borderRadius: "16px", background: "rgba(14, 165, 233, 0.1)", marginBottom: 20, border: "1px solid rgba(14,165,233,0.15)" }}>
+                  <f.icon size={20} color="var(--accent-blue)" strokeWidth={1.5} />
                 </div>
-                <div style={{ fontWeight: 700, marginBottom: 8, fontSize: "1rem", letterSpacing: "-0.01em" }}>{f.title}</div>
-                <div style={{ color: "var(--text-secondary)", fontSize: "0.85rem", lineHeight: 1.6 }}>{f.desc}</div>
-              </motion.div>
+                <div style={{ fontWeight: 800, marginBottom: 8, fontSize: "1.1rem", letterSpacing: "-0.02em" }}>{f.title}</div>
+                <div style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: 1.6 }}>{f.desc}</div>
+              </SpotlightCard>
             ))}
           </div>
         </motion.div>

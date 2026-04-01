@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionTemplate } from "framer-motion";
-import { ChevronRight, Shield, Activity, TrendingUp, Cpu, Cat } from "lucide-react";
+import { ChevronRight, Shield, Activity, TrendingUp, Cpu, Cat, Star } from "lucide-react";
 
 // 3D Tilt Card Component for Vision Section
 function TiltCard({ children }) {
@@ -29,6 +29,9 @@ function TiltCard({ children }) {
     const mouseY = e.clientY - rect.top;
     x.set(mouseX / width - 0.5);
     y.set(mouseY / height - 0.5);
+
+    ref.current.style.setProperty("--mouse-x", `${mouseX}px`);
+    ref.current.style.setProperty("--mouse-y", `${mouseY}px`);
   };
   
   const handleMouseLeave = () => {
@@ -51,7 +54,7 @@ function TiltCard({ children }) {
         perspective: 1000,
         position: "relative",
       }}
-      className="card"
+      className="spotlight-card"
     >
       {/* Interactive Glow */}
       <motion.div
@@ -126,10 +129,10 @@ export default function LandingPage() {
   const parallaxStats = useTransform(smoothProgress, [0.4, 0.8], ["0%", "-50%"]);
 
   return (
-    <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh", overflow: "hidden", position: "relative" }}>
+    <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh", position: "relative", paddingBottom: "1px" }}>
 
       {/* Hero Section */}
-      <section style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "4rem 2rem", perspective: 1000 }}>
+      <section className="sticky-stack" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "4rem 2rem", perspective: 1000, background: "var(--bg-base)", zIndex: 10 }}>
         
         {/* Parallax Background Elements specific to Hero */}
         <motion.div style={{ scale: scaleHeroBg, y: yBackground1, position: "absolute", top: "10%", left: "5%", width: 200, height: 200, border: "1px solid var(--border-color)", borderRadius: "50%", opacity: 0.2, zIndex: 0 }} />
@@ -147,7 +150,7 @@ export default function LandingPage() {
             <Activity size={16} /> Inference Engine V2 Now Live
           </motion.div>
           
-          <h1 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(3.5rem, 9vw, 8rem)", fontWeight: 900, lineHeight: 1.1, letterSpacing: "-0.05em", color: "var(--text-primary)", marginBottom: "2rem", textShadow: "0 20px 40px rgba(0,0,0,0.1)" }}>
+          <h1 className="hover-stretch" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(3.5rem, 9vw, 8rem)", fontWeight: 900, lineHeight: 1.1, letterSpacing: "-0.05em", color: "var(--text-primary)", marginBottom: "2rem", textShadow: "0 20px 40px rgba(0,0,0,0.1)", display: "block" }}>
             <SplitText text="The future of" delayOffset={0} /> <br/>
             <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>
               <SplitText text="clinical intelligence." delayOffset={0.4} />
@@ -196,7 +199,7 @@ export default function LandingPage() {
       </section>
 
       {/* Vision & Capabilities */}
-      <section id="vision" style={{ padding: "12rem 2rem", position: "relative", zIndex: 2 }}>
+      <section id="vision" className="sticky-stack" style={{ padding: "12rem 2rem", position: "relative", zIndex: 20, background: "var(--bg-base)" }}>
         <div style={{ maxWidth: 1300, margin: "0 auto" }}>
           
           <motion.div 
@@ -206,30 +209,99 @@ export default function LandingPage() {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             style={{ textAlign: "center", marginBottom: "8rem" }}
           >
-            <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(2.5rem, 5vw, 4.5rem)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: "2rem", color: "var(--text-primary)", lineHeight: 1.1 }}>
+            <h2 className="hover-stretch" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(2.5rem, 5vw, 4.5rem)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: "2rem", color: "var(--text-primary)", lineHeight: 1.1, display: "block" }}>
               Diagnostic superiority.<br/>
-              <span style={{ color: "transparent", WebkitTextStroke: "1px var(--text-muted)" }}>Engineered for scale.</span>
+              <span style={{ color: "transparent", WebkitTextStroke: "1px var(--text-muted)", transition: "color 0.4s" }}>Engineered for scale.</span>
             </h2>
             <p style={{ fontSize: "1.25rem", color: "var(--text-secondary)", maxWidth: 800, margin: "0 auto", lineHeight: 1.7, fontWeight: 300 }}>
               While traditional symptom checkers rely on rigid decision trees, Meowmeow actively learns. Our multidimensional tensor architecture detects nuances in typing speed, hesitation, and word choice simultaneously.
             </p>
           </motion.div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(350px, 1fr))", gap: "3rem" }}>
-            {[
-              { icon: Cpu, title: "Bayesian Reasoning", desc: "Our engine recalibrates probabilities in real-time. Each symptom entered dynamically shifts the differential landscape across 14,000+ clinical conditions." },
-              { icon: TrendingUp, title: "Temporal Context", desc: "We track the velocity of symptom progression autonomously, instantly flagging rapid deteriorations before they reach critical thresholds." },
-              { icon: Shield, title: "Clinical Audit Trail", desc: "Every inference is backed by a fully transparent, step-by-step reasoning chain bridging the gap between \"black box\" AI and physician trust." }
-            ].map((feat, i) => (
-              <TiltCard key={i}>
-                <div style={{ width: 80, height: 80, borderRadius: "24px", background: "var(--bg-card)", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "2rem", boxShadow: "0 20px 40px rgba(0,0,0,0.05)" }}>
-                  <feat.icon size={36} color="var(--accent-blue)" strokeWidth={1.5} />
+          <div className="bento-grid">
+            <div className="bento-span-2" style={{ gridColumn: "span 2" }}>
+              <TiltCard>
+                <div style={{ textAlign: "left", width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div style={{ width: 64, height: 64, borderRadius: "20px", background: "rgba(14, 165, 233, 0.1)", border: "1px solid rgba(14, 165, 233, 0.2)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "2rem", zIndex: 10 }}>
+                    <Cpu size={32} color="var(--accent-blue)" strokeWidth={1.5} />
+                  </div>
+                  <div style={{ zIndex: 10 }}>
+                    <h3 style={{ fontSize: "2.2rem", fontWeight: 800, marginBottom: "1rem", color: "var(--text-primary)", letterSpacing: "-0.03em" }}>Bayesian Reasoning</h3>
+                    <p style={{ color: "var(--text-secondary)", lineHeight: 1.7, fontSize: "1.1rem", fontWeight: 300, maxWidth: "500px" }}>Our engine recalibrates probabilities in real-time. Each symptom entered dynamically shifts the differential landscape across 14,000+ conditions with unprecedented accuracy.</p>
+                  </div>
                 </div>
-                <h3 style={{ fontSize: "1.5rem", fontWeight: 800, marginBottom: "1rem", color: "var(--text-primary)", letterSpacing: "-0.02em" }}>{feat.title}</h3>
-                <p style={{ color: "var(--text-secondary)", lineHeight: 1.7, fontSize: "1.05rem", fontWeight: 300 }}>{feat.desc}</p>
               </TiltCard>
-            ))}
+            </div>
+            
+            <div style={{ gridColumn: "span 1" }}>
+              <TiltCard>
+                <div style={{ textAlign: "left", width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div style={{ width: 64, height: 64, borderRadius: "20px", background: "rgba(249, 115, 22, 0.1)", border: "1px solid rgba(249, 115, 22, 0.2)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10 }}>
+                    <TrendingUp size={32} color="var(--risk-high)" strokeWidth={1.5} />
+                  </div>
+                  <div style={{ zIndex: 10 }}>
+                    <h3 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "0.75rem", color: "var(--text-primary)", letterSpacing: "-0.03em" }}>Temporal Maps</h3>
+                    <p style={{ color: "var(--text-secondary)", lineHeight: 1.6, fontSize: "1rem", fontWeight: 300 }}>Tracking symptom velocity autonomousy to flag rapid escalations.</p>
+                  </div>
+                </div>
+              </TiltCard>
+            </div>
+
+            <div style={{ gridColumn: "span 1" }}>
+              <TiltCard>
+                <div style={{ textAlign: "left", width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div style={{ width: 64, height: 64, borderRadius: "20px", background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.2)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 10 }}>
+                    <Activity size={32} color="var(--risk-low)" strokeWidth={1.5} />
+                  </div>
+                  <div style={{ zIndex: 10 }}>
+                    <h3 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: "0.75rem", color: "var(--text-primary)", letterSpacing: "-0.03em" }}>Deep Learning</h3>
+                    <p style={{ color: "var(--text-secondary)", lineHeight: 1.6, fontSize: "1rem", fontWeight: 300 }}>Continuously trained on the latest global literature.</p>
+                  </div>
+                </div>
+              </TiltCard>
+            </div>
+
+            <div className="bento-span-2" style={{ gridColumn: "span 2" }}>
+              <TiltCard>
+                <div style={{ textAlign: "left", width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div style={{ width: 64, height: 64, borderRadius: "20px", background: "rgba(139, 92, 246, 0.1)", border: "1px solid rgba(139, 92, 246, 0.2)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "2rem", zIndex: 10 }}>
+                    <Shield size={32} color="#8b5cf6" strokeWidth={1.5} />
+                  </div>
+                  <div style={{ zIndex: 10 }}>
+                    <h3 style={{ fontSize: "2.2rem", fontWeight: 800, marginBottom: "1rem", color: "var(--text-primary)", letterSpacing: "-0.03em" }}>Transparent Audit Trails</h3>
+                    <p style={{ color: "var(--text-secondary)", lineHeight: 1.7, fontSize: "1.1rem", fontWeight: 300, maxWidth: "500px" }}>Every single inference is backed by a fully transparent, step-by-step reasoning chain bridging the gap between "black box" AI and physician trust.</p>
+                  </div>
+                </div>
+              </TiltCard>
+            </div>
           </div>
+        </div>
+      </section>
+
+      {/* Infinite Testimonials Marquee */}
+      <section className="sticky-stack" style={{ padding: "6rem 0", overflow: "hidden", position: "relative", background: "var(--bg-base)", zIndex: 30 }}>
+        <div style={{ position: "absolute", top: 0, left: 0, width: "15%", height: "100%", background: "linear-gradient(to right, var(--bg-base), transparent)", zIndex: 2, pointerEvents: "none" }} />
+        <div style={{ position: "absolute", top: 0, right: 0, width: "15%", height: "100%", background: "linear-gradient(to left, var(--bg-base), transparent)", zIndex: 2, pointerEvents: "none" }} />
+        
+        <div style={{ display: "flex", gap: "2rem", width: "max-content", animation: "marquee 40s linear infinite" }} className="hover-pause">
+          {[
+            { quote: "Meowmeow’s inference engine correctly flagged a rare autoimmune panel before our seniors did.", author: "Dr. Sarah Jenkins, Diagnostician" },
+            { quote: "It’s not just an AI. The reasoning audit trail makes it a true peer in the emergency room.", author: "Chief of Medicine, St. Jude" },
+            { quote: "Reduced our false-negative discharge rate by 14% perfectly matching our risk threshold.", author: "Director of Clinical Informatics" },
+            { quote: "The closest thing to a scalable house MD we’ve ever deployed.", author: "HealthTech Vanguard Magazine" },
+            { quote: "Meowmeow’s inference engine correctly flagged a rare autoimmune panel before our seniors did.", author: "Dr. Sarah Jenkins, Diagnostician" },
+            { quote: "It’s not just an AI. The reasoning audit trail makes it a true peer in the emergency room.", author: "Chief of Medicine, St. Jude" },
+            { quote: "Reduced our false-negative discharge rate by 14% perfectly matching our risk threshold.", author: "Director of Clinical Informatics" },
+            { quote: "The closest thing to a scalable house MD we’ve ever deployed.", author: "HealthTech Vanguard Magazine" }
+          ].map((t, i) => (
+            <div key={i} className="spotlight-card" style={{ width: 450, padding: "2.5rem", display: "flex", flexDirection: "column", gap: 20 }}>
+              <div style={{ display: "flex", gap: 4, zIndex: 10 }}>
+                {[1,2,3,4,5].map(star => <Star key={star} size={16} fill="var(--accent-blue)" color="var(--accent-blue)" />)}
+              </div>
+              <p style={{ fontSize: "1.1rem", color: "var(--text-primary)", fontWeight: 500, lineHeight: 1.6, zIndex: 10 }}>"{t.quote}"</p>
+              <div style={{ marginTop: "auto", fontSize: "0.85rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: 700, zIndex: 10 }}>{t.author}</div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -257,7 +329,7 @@ export default function LandingPage() {
       </section>
 
       {/* Founders Section with glass masks and scaling image placeholders */}
-      <section id="founders" style={{ padding: "12rem 2rem", position: "relative", zIndex: 1, background: "var(--bg-base)" }}>
+      <section id="founders" className="sticky-stack" style={{ padding: "12rem 2rem", position: "relative", zIndex: 40, background: "var(--bg-base)", borderTop: "1px solid var(--border-color)" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <motion.div 
             initial={{ opacity: 0, y: 60 }}
@@ -266,7 +338,7 @@ export default function LandingPage() {
             transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
             style={{ textAlign: "center", marginBottom: "8rem" }}
           >
-            <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(2.5rem, 5vw, 4.5rem)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: "2rem", color: "var(--text-primary)" }}>
+            <h2 className="hover-stretch" style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(2.5rem, 5vw, 4.5rem)", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: "2rem", color: "var(--text-primary)", display: "block" }}>
               The architects of perception.
             </h2>
             <p style={{ fontSize: "1.25rem", color: "var(--text-secondary)", maxWidth: 700, margin: "0 auto", lineHeight: 1.7, fontWeight: 300 }}>
@@ -343,7 +415,7 @@ export default function LandingPage() {
       </section>
 
       {/* Massive CTA Section */}
-      <section style={{ padding: "15rem 2rem", position: "relative", textAlign: "center", borderTop: "1px solid var(--border-color)", background: "var(--bg-card)" }}>
+      <section className="sticky-stack" style={{ padding: "15rem 2rem", position: "relative", textAlign: "center", borderTop: "1px solid var(--border-color)", background: "var(--bg-card)", zIndex: 50 }}>
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
