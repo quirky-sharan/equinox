@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cat, BarChart2, Clock, Moon, Sun, Monitor, Coffee, LogOut, Stethoscope } from "lucide-react";
+import { Cat, BarChart2, Clock, Moon, Sun, Monitor, Coffee, LogOut, Stethoscope, Mail } from "lucide-react";
 import { useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import { useThemeStore } from "../store/themeStore";
@@ -63,6 +63,9 @@ export default function Navbar() {
             <Link to="/find-doctors" className={`nav-link ${isActive("/find-doctors")}`}>
               <Stethoscope size={14} style={{ display: "inline", marginRight: 4 }} />Find Doctors
             </Link>
+            <Link to="/contact" className={`nav-link ${isActive("/contact")}`}>
+              <Mail size={14} style={{ display: "inline", marginRight: 4 }} />Contact Us
+            </Link>
             <button 
               onClick={cycleTheme} 
               title={`Theme: ${theme}`}
@@ -92,6 +95,9 @@ export default function Navbar() {
 
       {!token && (
         <div className="navbar-actions" style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <Link to="/contact" className={`nav-link ${isActive("/contact")}`} style={{ marginRight: 10 }}>
+            <Mail size={14} style={{ display: "inline", marginRight: 4 }} />Contact Us
+          </Link>
           <button 
             onClick={cycleTheme} 
             title={`Theme: ${theme}`}
