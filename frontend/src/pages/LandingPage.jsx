@@ -172,7 +172,7 @@ export default function LandingPage() {
             transition={{ duration: 1, delay: 1.8 }}
             style={{ display: "flex", gap: "1.5rem", justifyContent: "center", flexWrap: "wrap" }}
           >
-            <Link to="/register" className="btn btn-primary btn-lg" style={{ position: "relative", overflow: "hidden", padding: "1.25rem 3rem", fontSize: "1.1rem", borderRadius: "100px", boxShadow: "0 20px 40px rgba(14, 165, 233, 0.2)" }}>
+            <Link to="/register" className="btn btn-primary btn-lg" style={{ position: "relative", overflow: "hidden", padding: "1.25rem 3rem", fontSize: "1.1rem", borderRadius: "100px", boxShadow: "0 20px 40px rgba(14, 165, 233, 0.2)", flex: "1 1 auto", maxWidth: 280, textAlign: "center" }}>
               <motion.div 
                 animate={{ x: ["-100%", "200%"] }} 
                 transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: 1 }}
@@ -180,7 +180,7 @@ export default function LandingPage() {
               />
               Start Assessment <ChevronRight size={20} />
             </Link>
-            <Link to="/login" className="btn btn-secondary btn-lg" style={{ padding: "1.25rem 3rem", fontSize: "1.1rem", borderRadius: "100px", background: "rgba(255,255,255,0.03)", backdropFilter: "blur(10px)" }}>
+            <Link to="/login" className="btn btn-secondary btn-lg" style={{ padding: "1.25rem 3rem", fontSize: "1.1rem", borderRadius: "100px", background: "rgba(255,255,255,0.03)", backdropFilter: "blur(10px)", flex: "1 1 auto", maxWidth: 280, textAlign: "center" }}>
               Clinical Sign In
             </Link>
           </motion.div>
@@ -346,7 +346,7 @@ export default function LandingPage() {
             </p>
           </motion.div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(400px, 1fr))", gap: "4rem", alignItems: "start" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "4rem", alignItems: "start" }}>
             
             {/* Founder 1 */}
             <motion.div 

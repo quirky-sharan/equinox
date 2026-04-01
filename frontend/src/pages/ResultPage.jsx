@@ -135,7 +135,7 @@ export default function ResultPage() {
           <div style={{ fontSize: "0.8rem", letterSpacing: "0.2em", fontWeight: 800, color: risk.color, marginBottom: 12, textTransform: "uppercase" }}>
             Validated Result
           </div>
-          <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "4rem", fontWeight: 900, color: "var(--text-primary)", letterSpacing: "-0.05em", lineHeight: 0.9, marginBottom: "1rem" }}>
+          <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(2rem, 8vw, 4rem)", fontWeight: 900, color: "var(--text-primary)", letterSpacing: "-0.05em", lineHeight: 0.9, marginBottom: "1rem" }}>
             {risk.label.split(" ")[0]}<br />
             <span style={{ color: risk.color }}>{risk.label.split(" ").slice(1).join(" ") || "RISK"}</span>
           </h1>

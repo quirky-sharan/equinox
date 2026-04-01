@@ -69,7 +69,18 @@ const DISTANCE_RANGES = [
   { label: "Within 5 km", max: 5 },
 ];
 
+function useIsMobile() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
+  return isMobile;
+}
+
 export default function FindDoctorsPage() {
+  const isMobile = useIsMobile();
   const [searchQuery, setSearchQuery] = useState("");
   const [specialty, setSpecialty] = useState("All Specialties");
   const [priceRange, setPriceRange] = useState(0);
@@ -286,10 +297,29 @@ export default function FindDoctorsPage() {
   };
 
   return (
-    <div style={{ display: "flex", height: "calc(100vh - 80px)", width: "100%", overflow: "hidden", position: "relative" }}>
+    <div style={{ 
+      display: "flex", 
+      flexDirection: isMobile ? "column" : "row",
+      height: isMobile ? "auto" : "calc(100vh - 80px)", 
+      minHeight: isMobile ? "auto" : undefined,
+      width: "100%", 
+      overflow: isMobile ? "visible" : "hidden", 
+      position: "relative" 
+    }}>
         
       {/* Sidebar List area */}
-      <div style={{ width: "45%", minWidth: 400, maxWidth: 500, background: "var(--bg-base)", display: "flex", flexDirection: "column", borderRight: "1px solid var(--border-color)", zIndex: 10 }}>
+      <div style={{ 
+        width: isMobile ? "100%" : "45%", 
+        minWidth: isMobile ? "unset" : 400, 
+        maxWidth: isMobile ? "unset" : 500, 
+        height: isMobile ? "auto" : "100%",
+        background: "var(--bg-base)", 
+        display: "flex", 
+        flexDirection: "column", 
+        borderRight: isMobile ? "none" : "1px solid var(--border-color)",
+        borderBottom: isMobile ? "1px solid var(--border-color)" : "none",
+        zIndex: 10 
+      }}>
         
         {/* Header & Controls Content */}
         <div style={{ padding: "1.5rem", borderBottom: "1px solid var(--border-color)", background: "var(--bg-card)" }}>
@@ -368,7 +398,7 @@ export default function FindDoctorsPage() {
         </div>
 
         {/* Doctor List */}
-        <div style={{ flex: 1, overflowY: "auto", padding: "1rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+        <div style={{ flex: 1, overflowY: "auto", maxHeight: isMobile ? "50vh" : "none", padding: "1rem", display: "flex", flexDirection: "column", gap: "0.75rem" }}>
             {filteredDoctors.length === 0 ? (
                 <div style={{ padding: "3rem 1rem", textAlign: "center", color: "var(--text-muted)" }}>
                     <AlertTriangle size={32} style={{ marginBottom: 10, opacity: 0.5 }} />
@@ -418,7 +448,7 @@ export default function FindDoctorsPage() {
       </div>
 
       {/* Map Area */}
-      <div style={{ flex: 1, position: "relative", background: "#09090b" }}>
+      <div style={{ flex: 1, position: "relative", background: "#09090b", height: isMobile ? "400px" : "100%" }}>
         {mapError && (
             <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--risk-critical)", background: "rgba(0,0,0,0.8)", zIndex: 1000, padding: 20, textAlign: "center" }}>
                 {mapError}

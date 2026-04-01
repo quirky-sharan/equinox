@@ -63,20 +63,20 @@ export default function ProfilePage() {
         
         {/* Header Profile Card */}
         <motion.div variants={itemVariants} className="card" style={{ padding: "2rem", marginBottom: "3rem", display: "flex", alignItems: "center", gap: "1.5rem", flexWrap: "wrap", border: "none", background: "var(--bg-subtle)" }}>
-          <div style={{ width: 72, height: 72, borderRadius: "50%", background: "var(--bg-base)", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", fontSize: "1.5rem", fontWeight: 800, color: "var(--text-primary)" }}>
+          <div style={{ width: 72, height: 72, borderRadius: "50%", background: "var(--bg-base)", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", fontSize: "1.5rem", fontWeight: 800, color: "var(--text-primary)", flexShrink: 0 }}>
             {user?.photo_url 
               ? <img src={user.photo_url} alt="Profile" style={{ width: "100%", height: "100%", objectFit: "cover" }} referrerPolicy="no-referrer" />
               : initials}
           </div>
-          <div>
-            <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "2rem", fontWeight: 800, margin: 0, color: "var(--text-primary)", letterSpacing: "-0.04em" }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(1.5rem, 5vw, 2rem)", fontWeight: 800, margin: 0, color: "var(--text-primary)", letterSpacing: "-0.04em", overflow: "hidden", textOverflow: "ellipsis" }}>
               {user?.full_name || "Patient Profile"}
             </h1>
-            <p style={{ color: "var(--text-secondary)", marginTop: 6, display: "flex", alignItems: "center", gap: 8, fontSize: "0.95rem" }}>
+            <p style={{ color: "var(--text-secondary)", marginTop: 6, display: "flex", alignItems: "center", gap: 8, fontSize: "0.95rem", flexWrap: "wrap" }}>
               <User size={16} /> {user?.email}
             </p>
           </div>
-          <div style={{ marginLeft: "auto", display: "flex", gap: "1rem" }}>
+          <div style={{ display: "flex", gap: "1rem" }}>
              <div style={{ textAlign: "right" }}>
                 <p style={{ fontSize: "0.75rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", margin: 0 }}>Account Status</p>
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "var(--risk-low)", fontSize: "0.85rem", fontWeight: 600, marginTop: 4 }}>

@@ -48,12 +48,14 @@ export default function App() {
 
   const location = useLocation();
 
+  const isTouchDevice = !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
   return (
     <div className="app-layout">
       <Suspense fallback={null}>
         <ParticleBackground />
       </Suspense>
-      <FluidCursor />
+      {!isTouchDevice && <FluidCursor />}
       <Navbar />
       <AnimatePresence mode="wait" initial={false}>
         <motion.div

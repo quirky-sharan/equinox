@@ -92,11 +92,11 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="page-container" style={{ position: "relative" }}>
+    <div className="page-container" style={{ position: "relative", overflow: "hidden" }}>
       <motion.div 
         animate={{ y: [0, -20, 0] }} 
         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-        style={{ position: "absolute", top: "10%", right: "-5%", width: 300, height: 300, background: "radial-gradient(circle, rgba(14, 165, 233, 0.03) 0%, transparent 70%)", borderRadius: "50%", zIndex: -1 }} 
+        style={{ position: "absolute", top: "10%", right: "-5%", width: "min(300px, 50vw)", height: "min(300px, 50vw)", background: "radial-gradient(circle, rgba(14, 165, 233, 0.03) 0%, transparent 70%)", borderRadius: "50%", zIndex: -1, pointerEvents: "none" }} 
       />
 
       <motion.div 
