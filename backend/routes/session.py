@@ -257,7 +257,7 @@ def get_history(
 ):
     sessions = db.query(SessionModel).filter(
         SessionModel.user_id == current_user.id
-    ).order_by(SessionModel.created_at.desc()).limit(20).all()
+    ).order_by(SessionModel.created_at.desc()).all()
 
     result = []
     for s in sessions:
