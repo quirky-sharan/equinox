@@ -4,6 +4,7 @@ import useFluidCursor from "../hooks/useFluidCursor";
 
 export default function FluidCursor() {
   const canvasRef = useRef(null);
+  const dotRef = useRef(null);
   const initialized = useRef(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
@@ -17,7 +18,13 @@ export default function FluidCursor() {
       });
     }
 
-    const onMove = (e) => setMousePosition({ x: e.clientX, y: e.clientY });
+    const onMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+      if (dotRef.current) {
+        // Direct DOM manipulation for zero-latency 6px dot tracking
+        dotRef.current.style.transform = `translate3d(${e.clientX - 3}px, ${e.clientY - 3}px, 0)`;
+      }
+    };
     const onDown = () => setIsClicked(true);
     const onUp = () => setIsClicked(false);
     const onOver = (e) => {
@@ -77,8 +84,25 @@ export default function FluidCursor() {
           borderRadius: "50%",
           backgroundColor: "#fff",
           pointerEvents: "none",
-          zIndex: 9999,
+          zIndex: 9998,
           mixBlendMode: isHovering ? "exclusion" : "difference",
+        }}
+      />
+
+      {/* Zero-latency core cursor dot */}
+      <div
+        ref={dotRef}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: 6,
+          height: 6,
+          borderRadius: "50%",
+          backgroundColor: "var(--accent-blue)",
+          pointerEvents: "none",
+          zIndex: 10000,
+          willChange: "transform",
         }}
       />
     </>

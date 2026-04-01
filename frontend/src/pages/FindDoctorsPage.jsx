@@ -99,8 +99,8 @@ export default function FindDoctorsPage() {
     const generateCoordinates = (lat, lng) => {
       // Create random coordinates for each doctor based on their distance property
       const mapped = DOCTORS_BASE.map((doc, idx) => {
-        // pseudo-random angle based on index so it's stable during re-renders
-        const angle = (idx * 0.5) * Math.PI * 2; 
+        // Scatter dots randomly in 360 degrees using a pseudo-random seed based on doctor ID
+        const angle = Math.abs(Math.sin(doc.id * 88.88)) * Math.PI * 2; 
         const latOffset = (doc.distance / 111) * Math.cos(angle);
         const lngOffset = (doc.distance / (111 * Math.cos(lat * Math.PI / 180))) * Math.sin(angle);
         
@@ -114,43 +114,61 @@ export default function FindDoctorsPage() {
       return mapped;
     };
 
-    const initMapAndFetch = async (lat, lng) => {
+    const initMapAndFetch = () => {
       if (!mapRef.current || mapInstance) return;
-      setUserLocation({ lat, lng });
 
-      // Initialize Leaflet Map
+      // Start exactly at VIT Vellore so the initial load doesn't look generic
       const L = window.L;
       const map = L.map(mapRef.current, {
         zoomControl: true,
         attributionControl: false
-      }).setView([lat, lng], 13);
+      }).setView([12.9692, 79.1559], 13);
 
-      // Add Geoapify Dark Matter Tiles
       L.tileLayer(`https://maps.geoapify.com/v1/tile/dark-matter/{z}/{x}/{y}.png?apiKey=${apiKey}`, {
         maxZoom: 20,
       }).addTo(map);
 
-      // Custom User Marker
-      const userIcon = L.divIcon({
-        className: 'custom-user-marker',
-        html: `<div style="width: 16px; height: 16px; background-color: #0ea5e9; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(14,165,233,0.8);"></div>`,
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
-      });
-
-      L.marker([lat, lng], { icon: userIcon }).addTo(map).bindPopup("Your Location");
-
-      // Layer group for doctor markers so we can clear/update them
       const layerGroup = L.layerGroup().addTo(map);
       setMarkersLayer(layerGroup);
       setMapInstance(map);
 
-      generateCoordinates(lat, lng);
+      // Immediately generate fake doctors around VIT Vellore so the map isn't empty while waiting
+      generateCoordinates(12.9692, 79.1559);
+
+      // Helper to fly to precise location once permission is resolved
+      const updateToRealLocation = (lat, lng) => {
+        setUserLocation({ lat, lng });
+        map.flyTo([lat, lng], 13, { animate: true, duration: 2.5 });
+        
+        const userIcon = L.divIcon({
+          className: 'custom-user-marker',
+          html: `<div style="width: 16px; height: 16px; background-color: #0ea5e9; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(14,165,233,0.8);"></div>`,
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
+        });
+        L.marker([lat, lng], { icon: userIcon }).addTo(map).bindPopup("Your Location");
+        
+        generateCoordinates(lat, lng);
+      };
+
+      // Request location dynamically
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => updateToRealLocation(pos.coords.latitude, pos.coords.longitude),
+          (err) => {
+            console.warn("Geolocation denied. Defaulting location.");
+            updateToRealLocation(12.9692, 79.1559); // VIT Vellore default
+          },
+          { timeout: 8000 }
+        );
+      } else {
+        updateToRealLocation(12.9692, 79.1559); 
+      }
     };
 
     const loadLeaflet = () => {
       if (window.L) {
-        getLocationAndInit();
+        initMapAndFetch();
         return;
       }
 
@@ -162,23 +180,9 @@ export default function FindDoctorsPage() {
       script = document.createElement("script");
       script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
       script.async = true;
-      script.onload = getLocationAndInit;
+      script.onload = initMapAndFetch;
       script.onerror = () => setMapError("Failed to load map engine.");
       document.head.appendChild(script);
-    };
-
-    const getLocationAndInit = () => {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => initMapAndFetch(position.coords.latitude, position.coords.longitude),
-          () => {
-            console.warn("Geolocation denied. Defaulting location.");
-            initMapAndFetch(28.6139, 77.2090); // Default to New Delhi
-          }
-        );
-      } else {
-        initMapAndFetch(28.6139, 77.2090);
-      }
     };
 
     loadLeaflet();

@@ -85,6 +85,7 @@ export default function InterviewPage() {
     if (!textToSubmit || textToSubmit.length < 3 || submitting) return;
     setSubmitting(true);
     setError("");
+    setAnswer(""); // Instantly clear text box for immediate user feedback
 
     try {
       const meta = behavCapture.getMetadata();
@@ -111,13 +112,13 @@ export default function InterviewPage() {
         setCurrentQuestion(res.data.next_question);
         setCurrentCategory(res.data.next_question_category);
         setCurrentOptions(res.data.options || null);
-        setAnswer("");
         setTranscript("");
         setQuestionVisible(true);
         textareaRef.current?.focus();
       }, 400);
     } catch (e) {
       setError("Network issue: Unable to connect to the medical AI server. Please check your connection and try again.");
+      setAnswer(textToSubmit); // Restore text so they can try again
     } finally {
       setSubmitting(false);
     }
