@@ -92,7 +92,7 @@ async def api_speak(req: SpeakRequest):
     """
     try:
         voice = "en-US-AriaNeural"
-        communicate = edge_tts.Communicate(req.text, voice, rate="+5%")
+        communicate = edge_tts.Communicate(req.text, voice, rate="+20%")
 
         async def audio_generator():
             async for chunk in communicate.stream():

@@ -77,7 +77,7 @@ export default function App() {
           </Routes>
         </motion.div>
       </AnimatePresence>
-      <Footer />
+      {!["/interview", "/find-doctors"].includes(location.pathname) && <Footer />}
     </div>
   );
 }

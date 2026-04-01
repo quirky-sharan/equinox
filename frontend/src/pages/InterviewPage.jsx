@@ -59,11 +59,8 @@ export default function InterviewPage() {
       try {
         const res = await sessionApi.startSession();
         setSessionId(res.data.session_id);
-        setCurrentQuestion(res.data.first_question);
         setCurrentCategory(res.data.question_category);
-        setTimeout(() => {
-          playVoice(res.data.first_question, ttsEnabled);
-        }, 600);
+        setCurrentQuestion(res.data.first_question);
       } catch (e) {
         setError("Could not connect to server. Please ensure the backend is running.");
       } finally {
@@ -81,8 +78,11 @@ export default function InterviewPage() {
     }
   }, [currentQuestion, ttsEnabled, playVoice]);
 
-  const handleSubmit = useCallback(async () => {
-    if (!answer.trim() || answer.trim().length < 3 || submitting) return;
+  const handleSubmit = useCallback(async (overrideAnswer = null) => {
+    // Determine the actual answer text to submit
+    const textToSubmit = typeof overrideAnswer === "string" ? overrideAnswer : answer.trim();
+
+    if (!textToSubmit || textToSubmit.length < 3 || submitting) return;
     setSubmitting(true);
     setError("");
 
@@ -92,7 +92,7 @@ export default function InterviewPage() {
         session_id: sessionId,
         question_text: currentQuestion,
         question_category: currentCategory,
-        answer_text: answer.trim(),
+        answer_text: textToSubmit,
         behavioral_metadata: meta,
       });
 
@@ -117,7 +117,7 @@ export default function InterviewPage() {
         textareaRef.current?.focus();
       }, 400);
     } catch (e) {
-      setError("Failed to submit answer. Please try again.");
+      setError("Network issue: Unable to connect to the medical AI server. Please check your connection and try again.");
     } finally {
       setSubmitting(false);
     }
@@ -126,6 +126,10 @@ export default function InterviewPage() {
   // Keyboard shortcut: Enter to submit, Shift+Enter for new line
   const handleKeyDown = useCallback((e) => {
     behavCapture.onKeyDown(e);
+    
+    // Ignore synthetic Enter events from mobile autocomplete / IME composition
+    if (e.nativeEvent.isComposing || e.keyCode === 229) return;
+
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault(); // Prevent default new line insertion
       handleSubmit();
@@ -360,7 +364,7 @@ export default function InterviewPage() {
                   key={i}
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => { setAnswer(opt.label); setTimeout(handleSubmit, 200); }}
+                  onClick={() => { setAnswer(opt.label); handleSubmit(opt.label); }}
                   style={{
                     padding: "10px 20px", borderRadius: "var(--radius-md)", border: "1px solid var(--border-color)",
                     background: answer === opt.label ? "var(--accent-base)" : "var(--bg-card)",
@@ -442,8 +446,8 @@ export default function InterviewPage() {
 
 
         {error && (
-          <div style={{ textAlign: "center", color: "#f87171", fontSize: "0.85rem", padding: "8px 16px", background: "rgba(239,68,68,0.08)", borderRadius: "var(--radius-md)", border: "1px solid rgba(239,68,68,0.2)" }}>
-            {error}
+          <div style={{ textAlign: "center", color: "#f87171", fontSize: "0.95rem", padding: "12px 16px", background: "rgba(239,68,68,0.15)", borderRadius: "var(--radius-md)", border: "1px solid rgba(239,68,68,0.4)" }}>
+            ⚠️ {error}
           </div>
         )}
 
