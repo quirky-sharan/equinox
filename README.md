@@ -9,13 +9,23 @@
 
 <div align="center">
 
-**Symptom Analysis & Intelligent Risk Assessment — Powered by RAG + NLP**
+*Symptom Analysis & Intelligent Risk Assessment — Powered by RAG + NLP*
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-ieee--internal--hack.vercel.app-6366f1?style=for-the-badge&logo=vercel&logoColor=white)](https://ieee-internal-hack.vercel.app/)
+### 🌐 [ieee-internal-hack.vercel.app](https://ieee-internal-hack.vercel.app/)
+
+> *Try the live platform — no install required.*
+
+<br/>
+
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Open%20App-6366f1?style=for-the-badge&logo=vercel&logoColor=white)](https://ieee-internal-hack.vercel.app/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
+
+<br/>
+
+---
 
 </div>
 
@@ -27,7 +37,18 @@
 
 **Meowmeow** is a production-grade Medical AI platform built for intelligent symptom triage and health risk assessment. It accepts raw, unstructured user input — the way you'd actually describe pain to a doctor — and runs it through a multi-stage AI pipeline that returns a **risk severity score**, a ranked list of **possible conditions**, **actionable next steps**, and **adaptive follow-up questions** to narrow the clinical picture.
 
-This is not a chatbot wrapper. Under the hood, Meowmeow runs a purpose-built **Retrieval-Augmented Generation (RAG)** pipeline over curated medical knowledge, combined with a specialized **NLP inference layer** for clinical entity extraction. Every response is grounded in retrieved medical context — not hallucinated.
+This is not a chatbot wrapper. Under the hood, Meowmeow runs a purpose-built **Retrieval-Augmented Generation (RAG)** pipeline over curated medical knowledge, combined with a specialized **NLP inference layer** for clinical entity extraction. Every response is grounded in retrieved medical context — not hallucinated. Not guessed. Not interpolated.
+
+```
+  User types:  "I've had a splitting headache behind my eyes for 3 days,
+                light makes it worse, and I feel nauseous."
+                      │
+                      ▼
+  Meowmeow:    ┌─ Risk Level     →  HIGH
+               ├─ Likely Causes  →  Migraine (primary), elevated ICP (rule out)
+               ├─ Next Steps     →  Hydrate, avoid screens, seek GP if persists >24h
+               └─ Follow-up      →  "Any fever or stiff neck alongside this?"
+```
 
 > ⚕️ **Disclaimer:** Meowmeow is a research and educational tool. It is not a substitute for professional medical diagnosis or treatment.
 
@@ -299,15 +320,11 @@ This single script boots all three services in parallel:
 
 <table>
   <tr>
-    <td align="center">
-      <b>Sharan Soni</b><br/>
+    <td align="center" width="50%">
+      <a href="https://github.com/quirky-sharan"><b>Sharan Soni</b></a><br/>
       <sub>AI/ML · RAG Pipeline · System Architecture · Frontend</sub>
     </td>
-  </tr>
-</table>
-<table>
-  <tr>
-    <td align="center">
+    <td align="center" width="50%">
       <b>Devatman Pal</b><br/>
       <sub>Frontend · Backend · Database Management</sub>
     </td>
@@ -345,10 +362,14 @@ Meowmeow is an AI-assisted research tool built for educational and informational
 <div align="center">
 
 ```
-Built with obsessive attention to clinical accuracy.
+╔══════════════════════════════════════════════════════════╗
+║     Built with obsessive attention to clinical accuracy  ║
+║                  — Team Meowmeow, 2024 —                 ║
+╚══════════════════════════════════════════════════════════╝
 ```
 
 [![Repo](https://img.shields.io/badge/GitHub-quirky--sharan%2Fieee__internal__hack-181717?style=flat-square&logo=github)](https://github.com/quirky-sharan/ieee_internal_hack)
-[![Demo](https://img.shields.io/badge/Live-ieee--internal--hack.vercel.app-6366f1?style=flat-square&logo=vercel)](https://ieee-internal-hack.vercel.app/)
+[![Demo](https://img.shields.io/badge/Live%20Demo-ieee--internal--hack.vercel.app-6366f1?style=flat-square&logo=vercel)](https://ieee-internal-hack.vercel.app/)
+[![Made with ❤️](https://img.shields.io/badge/Made%20with-%E2%9D%A4%EF%B8%8F-red?style=flat-square)](https://github.com/quirky-sharan/ieee_internal_hack)
 
 </div>
