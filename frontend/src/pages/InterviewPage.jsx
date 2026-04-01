@@ -280,24 +280,55 @@ export default function InterviewPage() {
           {/* Question Hub */}
           <div style={{ minHeight: "120px", display: "flex", alignItems: "center", justifyContent: "center" }}>
             <AnimatePresence mode="wait">
-              {questionVisible && (
+              {submitting ? (
                 <motion.div
-                  key={currentQuestion}
-                  initial={{ opacity: 0, filter: "blur(10px)", y: 10 }}
-                  animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                  exit={{ opacity: 0, filter: "blur(10px)", y: -10 }}
-                  transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  key="thinking"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.4 }}
+                  style={{ textAlign: "center", minHeight: "20vh", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: "1rem" }}
+                >
+                  <motion.div 
+                    animate={{ scale: [1, 1.1, 1], opacity: [0.5, 1, 0.5] }} 
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <Cat size={48} color="var(--accent-blue)" />
+                  </motion.div>
+                  <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2.2rem)", fontWeight: 800, color: "var(--accent-blue)", margin: 0 }}>
+                    ClinicalMind is thinking...
+                  </h2>
+                  <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>Analyzing your symptoms securely</p>
+                </motion.div>
+              ) : questionVisible && (
+                <motion.div
+                  key="question"
+                  initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+                  animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, y: -30, filter: "blur(10px)" }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   style={{ textAlign: "center" }}
                 >
-                  <h2 style={{
-                    fontFamily: "'Plus Jakarta Sans', sans-serif",
-                    fontSize: "clamp(1.5rem, 4vw, 2.2rem)",
-                    fontWeight: 800,
-                    lineHeight: 1.3,
-                    letterSpacing: "-0.04em",
-                    color: "var(--text-primary)",
-                    maxWidth: 640,
-                    margin: "0 auto",
+                  <motion.div 
+                    initial={{ scale: 0 }} 
+                    animate={{ scale: 1 }} 
+                    transition={{ type: "spring", stiffness: 300, damping: 20, delay: 0.2 }}
+                    style={{ 
+                      display: "inline-flex", alignItems: "center", gap: 8,
+                      background: "rgba(14, 165, 233, 0.1)", color: "var(--accent-blue)",
+                      padding: "6px 14px", borderRadius: "100px", fontSize: "0.85rem",
+                      fontWeight: 700, letterSpacing: "0.05em", marginBottom: 24,
+                      border: "1px solid rgba(14, 165, 233, 0.2)"
+                    }}>
+                    <Cat size={14} /> AI Clinical Engine
+                  </motion.div>
+                  
+                  <h2 style={{ 
+                    fontSize: "clamp(1.8rem, 4vw, 2.8rem)", fontWeight: 800, 
+                    lineHeight: 1.2, letterSpacing: "-0.02em",
+                    background: "linear-gradient(to right, #ffffff, #a5b4fc)",
+                    WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+                    maxWidth: "900px", margin: "0 auto",
                   }}>
                     {currentQuestion}
                   </h2>

@@ -29,9 +29,15 @@ async def call_ml(endpoint: str, payload: dict = None, method: str = "POST", tim
                 r = await client.get(f"{settings.ML_SERVICE_URL}/ml/{endpoint}", params=payload)
             r.raise_for_status()
             return r.json()
+    except httpx.HTTPStatusError as e:
+        print(f"[ML HTTP Error] {endpoint}: {e.response.text}")
+        raise HTTPException(status_code=500, detail=f"AI Engine Error: {e.response.text}")
+    except httpx.RequestError as e:
+        print(f"[ML Connection Error] {endpoint}: {e}")
+        raise HTTPException(status_code=503, detail="AI Engine is offline or starting up. Please try again.")
     except Exception as e:
-        print(f"[ML call failed] {endpoint}: {e}")
-        return {}
+        print(f"[ML Unknown Error] {endpoint}: {e}")
+        raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
 
 async def call_ml_raw(endpoint: str, params: dict = None, timeout: float = 30.0) -> bytes:
