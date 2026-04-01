@@ -16,6 +16,7 @@ import HistoryPage from "./pages/HistoryPage";
 import PopulationPage from "./pages/PopulationPage";
 import ProfilePage from "./pages/ProfilePage";
 import LandingPage from "./pages/LandingPage";
+import FindDoctorsPage from "./pages/FindDoctorsPage";
 import Footer from "./components/Footer";
 
 function PrivateRoute({ children }) {
@@ -72,6 +73,7 @@ export default function App() {
             <Route path="/history" element={<PrivateRoute><HistoryPage /></PrivateRoute>} />
             <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
             <Route path="/population" element={<PopulationPage />} />
+            <Route path="/find-doctors" element={<PrivateRoute><FindDoctorsPage /></PrivateRoute>} />
           </Routes>
         </motion.div>
       </AnimatePresence>

@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cat, BarChart2, Clock, Moon, Sun, Monitor, Coffee, LogOut } from "lucide-react";
+import { Cat, BarChart2, Clock, Moon, Sun, Monitor, Coffee, LogOut, Stethoscope } from "lucide-react";
 import { useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import { useThemeStore } from "../store/themeStore";
@@ -59,6 +59,9 @@ export default function Navbar() {
             </Link>
             <Link to="/population" className={`nav-link ${isActive("/population")}`}>
               <BarChart2 size={14} style={{ display: "inline", marginRight: 4 }} />Population
+            </Link>
+            <Link to="/find-doctors" className={`nav-link ${isActive("/find-doctors")}`}>
+              <Stethoscope size={14} style={{ display: "inline", marginRight: 4 }} />Find Doctors
             </Link>
             <button 
               onClick={cycleTheme} 

@@ -9,7 +9,6 @@ import {
   Activity, MessageSquare, ChevronRight, Cat, MapPin, FileText,
   Check, X as XIcon, Heart, Utensils, Leaf, Zap, AlertOctagon
 } from "lucide-react";
-import DoctorMapModal from "../components/DoctorMapModal";
 
 const RISK_CONFIG = {
   low:      { color: "var(--risk-low)",      bg: "rgba(16,185,129,0.08)",  border: "rgba(16,185,129,0.25)",  icon: CheckCircle,   label: "LOW RISK" },
@@ -29,7 +28,6 @@ export default function ResultPage() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
   const [viewMode, setViewMode] = useState("patient");
-  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["result", sessionId],
@@ -390,7 +388,7 @@ export default function ResultPage() {
           
           <motion.button 
             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            className="btn btn-primary" onClick={() => setIsMapModalOpen(true)} style={{ gap: 12, padding: "1rem 2rem", background: "var(--bg-subtle)", color: "var(--accent-blue)", border: "1px solid var(--border-color)", boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
+            className="btn btn-primary" onClick={() => navigate("/find-doctors")} style={{ gap: 12, padding: "1rem 2rem", background: "var(--bg-subtle)", color: "var(--accent-blue)", border: "1px solid var(--border-color)", boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
           >
             <MapPin size={20} /> Contact Nearest Doctors
           </motion.button>
@@ -424,9 +422,6 @@ export default function ResultPage() {
         </motion.div>
       </motion.div>
 
-      <AnimatePresence>
-        {isMapModalOpen && <DoctorMapModal onClose={() => setIsMapModalOpen(false)} />}
-      </AnimatePresence>
     </div>
   );
 }
