@@ -300,8 +300,16 @@ This single script boots all three services in parallel:
 <table>
   <tr>
     <td align="center">
-      <b>quirky-sharan</b><br/>
-      <sub>AI/ML · RAG Pipeline · System Architecture</sub>
+      <b>Sharan Soni</b><br/>
+      <sub>AI/ML · RAG Pipeline · System Architecture · Frontend</sub>
+    </td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td align="center">
+      <b>Devatman Pal</b><br/>
+      <sub>Frontend · Backend · Database Management</sub>
     </td>
   </tr>
 </table>
