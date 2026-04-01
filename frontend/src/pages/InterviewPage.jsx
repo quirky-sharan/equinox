@@ -205,11 +205,19 @@ export default function InterviewPage() {
             </div>
             <button
               onClick={() => { setTtsEnabled(!ttsEnabled); window.speechSynthesis?.cancel(); }}
-              className="avatar-btn"
+              className="btn"
               title={ttsEnabled ? "Mute Voice Assistance" : "Enable Voice Assistance"}
-              style={{ width: 40, height: 40, background: "var(--bg-card)" }}
+              style={{ 
+                height: 40, padding: "0 16px", borderRadius: "100px", cursor: "pointer",
+                background: ttsEnabled ? "rgba(14, 165, 233, 0.1)" : "var(--bg-card)",
+                border: `1px solid ${ttsEnabled ? "var(--accent-blue)" : "var(--border-color)"}`,
+                color: ttsEnabled ? "var(--accent-blue)" : "var(--text-muted)",
+                display: "flex", alignItems: "center", gap: 8,
+                fontWeight: 700, fontSize: "0.8rem", transition: "all 0.2s"
+              }}
             >
               {ttsEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+              {ttsEnabled ? "Voice ON" : "Voice OFF"}
             </button>
           </div>
         </motion.div>
@@ -339,15 +347,23 @@ export default function InterviewPage() {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "1.5rem", flexWrap: "wrap" }}>
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className={`btn ${listening ? "btn-primary" : "btn-secondary"} btn-icon`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="btn"
                 onClick={toggleListening}
-                style={{ width: 44, height: 44, background: listening ? "#ef4444" : "var(--bg-subtle)" }}
-                animate={listening ? { scale: [1, 1.1, 1] } : {}}
+                style={{ 
+                  height: 48, padding: "0 24px", borderRadius: "100px", cursor: "pointer",
+                  background: listening ? "#ef4444" : "var(--accent-blue)", 
+                  color: "#fff", border: "none",
+                  display: "flex", alignItems: "center", gap: 10,
+                  fontWeight: 800, fontSize: "0.95rem",
+                  boxShadow: listening ? "0 0 20px rgba(239, 68, 68, 0.5)" : "0 10px 20px rgba(14, 165, 233, 0.3)"
+                }}
+                animate={listening ? { scale: [1, 1.05, 1] } : {}}
                 transition={{ repeat: Infinity, duration: 2 }}
               >
-                {listening ? <MicOff size={18} color="#fff" /> : <Mic size={18} />}
+                {listening ? <MicOff size={20} color="#fff" /> : <Mic size={20} color="#fff" />}
+                {listening ? "Stop Recording" : "Tap to Speak"}
               </motion.button>
               
               <AnimatePresence>
