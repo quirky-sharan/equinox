@@ -25,7 +25,7 @@ load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"))
 @dataclass
 class GroqConfig:
     model: str               = "llama-3.3-70b-versatile"
-    temperature: float       = 0.1
+    temperature: float       = 0.07      
     top_p: float             = 0.9
     max_tokens_chat: int     = 512    # keep conversational turns tight
     max_tokens_final: int    = 2048   # final JSON needs room
@@ -171,21 +171,21 @@ def call_groq(system_prompt: str, messages: list, is_final_turn: bool = False) -
 
 # ── RAG pipeline entry point ──────────────────────────────────────────────────
 
-def process_message(session_id: str, user_message: str) -> dict:
+def process_message(session_id: str, user_message: str, profile_context: str | None = None) -> dict:
     """
     Full RAG pipeline:
       1. Store user message
       2. Retrieve guideline chunks (count scales with query length)
-      3. Build system prompt with RAG context
+      3. Build system prompt with RAG context + user profile
       4. Trim history to context window limit
       5. Detect final-turn heuristic
       6. Call Groq with retry + backoff
       7. Store assistant reply
-      8. Extract final JSON if present
+      8. Extract structured JSON (answer + highlights) from every response
       9. Audit log
 
     Returns:
-        {"reply": str, "turn_count": int, "is_final": bool, "final_data": dict | None}
+        {"reply": str, "turn_count": int, "is_final": bool, "final_data": dict | None, "highlights": list}
     """
     session_manager.add_message(session_id, "user", user_message)
 
@@ -193,7 +193,7 @@ def process_message(session_id: str, user_message: str) -> dict:
     n_results = _get_n_results(combined_text)
     chunks = retrieve(combined_text, n_results=n_results)
 
-    system_prompt = build_prompt(chunks)
+    system_prompt = build_prompt(chunks, profile_context=profile_context)
 
     raw_history = session_manager.get_history(session_id)
     history = _trim_history(raw_history)
@@ -201,21 +201,33 @@ def process_message(session_id: str, user_message: str) -> dict:
     turn_count = session_manager.get_turn_count(session_id)
     is_final_turn = turn_count >= CONFIG.final_turn_threshold
 
-    reply = call_groq(system_prompt, history, is_final_turn=is_final_turn)
-    session_manager.add_message(session_id, "assistant", reply)
+    raw_reply = call_groq(system_prompt, history, is_final_turn=is_final_turn)
+    session_manager.add_message(session_id, "assistant", raw_reply)
 
+    # Parse structured JSON from every response
     is_final = False
     final_data = None
-    parsed = _extract_json(reply)
-    if parsed and parsed.get("is_final") is True:
-        is_final = True
-        final_data = parsed
+    highlights = []
+    reply_text = raw_reply  # fallback: return raw text if JSON parsing fails
+
+    parsed = _extract_json(raw_reply)
+    if parsed:
+        # Extract the conversational answer text
+        if "answer" in parsed:
+            reply_text = parsed["answer"]
+        # Extract personalized highlights
+        highlights = parsed.get("highlights", [])
+        # Check for final assessment
+        if parsed.get("is_final") is True:
+            is_final = True
+            final_data = parsed
 
     _log_audit(session_id=session_id, turn=turn_count, chunks_used=n_results, is_final=is_final)
 
     return {
-        "reply":      reply,
+        "reply":      reply_text,
         "turn_count": turn_count,
         "is_final":   is_final,
         "final_data": final_data,
+        "highlights": highlights,
     }

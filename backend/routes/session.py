@@ -6,6 +6,8 @@ import uuid, httpx
 from datetime import datetime
 from io import BytesIO
 
+import json
+
 from ..database import get_db
 from ..models.user import User
 from ..models.session import Session as SessionModel, SessionAnswer, SymptomVector, PopulationAggregate
@@ -17,6 +19,45 @@ from ..auth import get_current_user
 from ..config import settings
 
 router = APIRouter(prefix="/session", tags=["session"])
+
+
+# ── Profile Fetch Utility ─────────────────────────────────────────────────────
+
+_PROFILE_FIELDS = [
+    ("age", "Age"),
+    ("sex", "Sex"),
+    ("weight", "Weight"),
+    ("height", "Height"),
+    ("blood_group", "Blood Group"),
+    ("allergies", "Known Allergies"),
+    ("medical_conditions", "Pre-existing Medical Conditions"),
+    ("habits", "Lifestyle & Habits"),
+    ("family_history", "Hereditary / Family Medical History"),
+]
+
+def _build_profile_context(user: User) -> str:
+    """Dynamically build a profile context string from all non-null user fields."""
+    lines = []
+    for attr, label in _PROFILE_FIELDS:
+        value = getattr(user, attr, None)
+        if value is None or (isinstance(value, str) and value.strip() == ""):
+            continue
+        # Try to parse JSON habits into readable text
+        if attr == "habits" and isinstance(value, str):
+            try:
+                habits = json.loads(value)
+                parts = []
+                for k, v in habits.items():
+                    if v and str(v).strip():
+                        parts.append(f"{k.replace('_', ' ').title()}: {v}")
+                if parts:
+                    value = "; ".join(parts)
+                else:
+                    continue
+            except (json.JSONDecodeError, AttributeError):
+                pass  # use raw value as-is
+        lines.append(f"- **{label}**: {value}")
+    return "\n".join(lines) if lines else ""
 
 
 async def call_ml(endpoint: str, payload: dict = None, method: str = "POST", timeout: float = 90.0) -> dict:
@@ -62,18 +103,24 @@ async def start_session(
     db.commit()
     db.refresh(session)
 
+    # Build profile context from user's stored health data
+    profile_context = _build_profile_context(current_user)
+
     # Call the RAG pipeline with an initial greeting to get the first question
     ml_result = await call_ml("chat", {
         "session_id": str(session.id),
-        "message": "Hello, I need help understanding what's going on with my health."
+        "message": "Hello, I need help understanding what's going on with my health.",
+        "profile_context": profile_context or None,
     })
 
     first_question = ml_result.get("reply", "How are you feeling today? Please describe your symptoms in your own words.")
+    highlights = ml_result.get("highlights", [])
 
     return SessionStartResponse(
         session_id=session.id,
         first_question=first_question,
         question_category="general",
+        highlights=highlights,
     )
 
 
@@ -108,16 +155,21 @@ async def submit_answer(
     db.add(answer)
     db.commit()
 
+    # Build profile context from user's stored health data
+    profile_context = _build_profile_context(current_user)
+
     # Call RAG pipeline — forward user's answer to the LLM
     ml_result = await call_ml("chat", {
         "session_id": str(payload.session_id),
         "message": payload.answer_text,
+        "profile_context": profile_context or None,
     })
 
     turn_count = ml_result.get("turn_count", answer_count + 1)
     is_final = ml_result.get("is_final", False)
     reply = ml_result.get("reply", "Could you tell me more about your symptoms?")
     final_data = ml_result.get("final_data")
+    highlights = ml_result.get("highlights", [])
 
     if is_final:
         session.status = "completed"
@@ -143,6 +195,7 @@ async def submit_answer(
         progress_pct=progress,
         options=None,
         final_data=final_data,
+        highlights=highlights,
     )
 
 

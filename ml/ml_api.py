@@ -38,12 +38,14 @@ app.add_middleware(
 class ChatRequest(BaseModel):
     session_id: str
     message: str
+    profile_context: str | None = None
 
 class ChatResponse(BaseModel):
     reply: str
     turn_count: int
     is_final: bool
     final_data: Optional[dict] = None
+    highlights: Optional[list] = None
 
 class SpeakRequest(BaseModel):
     text: str
@@ -148,12 +150,13 @@ def api_chat(req: ChatRequest):
     Returns LLM reply + conversation metadata.
     """
     try:
-        result = process_message(req.session_id, req.message)
+        result = process_message(req.session_id, req.message, profile_context=req.profile_context)
         return ChatResponse(
             reply=result["reply"],
             turn_count=result["turn_count"],
             is_final=result["is_final"],
             final_data=result.get("final_data"),
+            highlights=result.get("highlights", []),
         )
     except Exception as e:
         traceback.print_exc()

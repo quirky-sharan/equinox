@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { sessionApi } from "../api/endpoints";
 import { useBehavioralCapture } from "../hooks/useBehavioralCapture";
 import { Mic, MicOff, Send, Volume2, VolumeX, Cat } from "lucide-react";
+import PersonalizedAlerts from "../components/PersonalizedAlerts";
 
 const ML_URL = import.meta.env.VITE_ML_URL || "http://localhost:8001";
 
@@ -23,6 +24,7 @@ export default function InterviewPage() {
   const [error, setError] = useState("");
   const [questionVisible, setQuestionVisible] = useState(true);
   const [currentOptions, setCurrentOptions] = useState(null);
+  const [highlights, setHighlights] = useState([]);
 
   const behavCapture = useBehavioralCapture();
   const recognitionRef = useRef(null);
@@ -61,6 +63,9 @@ export default function InterviewPage() {
         setSessionId(res.data.session_id);
         setCurrentCategory(res.data.question_category);
         setCurrentQuestion(res.data.first_question);
+        if (res.data.highlights && res.data.highlights.length > 0) {
+          setHighlights(res.data.highlights);
+        }
       } catch (e) {
         setError("Could not connect to server. Please ensure the backend is running.");
       } finally {
@@ -100,6 +105,13 @@ export default function InterviewPage() {
       setProgress(res.data.progress_pct);
       setDepth(res.data.current_depth);
       behavCapture.reset();
+
+      // Update personalized highlights
+      if (res.data.highlights && res.data.highlights.length > 0) {
+        setHighlights(res.data.highlights);
+      } else {
+        setHighlights([]);
+      }
 
       if (res.data.interview_complete) {
         navigate(`/result/${sessionId}`);
@@ -261,6 +273,13 @@ export default function InterviewPage() {
         {/* Main Content Area */}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "2.5rem", justifyContent: "center", minHeight: "400px" }}>
           
+          {/* Personalized Alerts — shown above question when profile conflicts exist */}
+          <AnimatePresence>
+            {highlights.length > 0 && !submitting && (
+              <PersonalizedAlerts highlights={highlights} />
+            )}
+          </AnimatePresence>
+
           {/* Category Signal */}
           <div style={{ display: "flex", justifyContent: "center" }}>
             <motion.span 
