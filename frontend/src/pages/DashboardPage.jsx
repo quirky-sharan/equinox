@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { useAuthStore } from "../store/authStore";
+import { useSessionStore } from "../store/sessionStore";
 import { useQuery } from "@tanstack/react-query";
 import { sessionApi } from "../api/endpoints";
 import { Cat, Activity, Clock, TrendingUp, ChevronRight, Shield, Zap, Eye } from "lucide-react";
@@ -58,6 +59,12 @@ export default function DashboardPage() {
 
   const history = historyData || [];
   const lastSession = history[0];
+
+  // Preload next session to ensure instant start when "Begin Assessment" is clicked
+  useEffect(() => {
+    useSessionStore.getState().preloadSession().catch(() => {});
+  }, []);
+
   const greeting = () => {
     const h = new Date().getHours();
     if (h < 12) return "Good morning";

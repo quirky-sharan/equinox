@@ -7,6 +7,7 @@ import { Mic, MicOff, Send, Volume2, VolumeX, Cat } from "lucide-react";
 import PersonalizedAlerts from "../components/PersonalizedAlerts";
 import WellnessNudge from "../components/WellnessNudge";
 import { detectCrisis, isCrisisTriggered } from "../utils/crisisDetector";
+import { useSessionStore } from "../store/sessionStore";
 
 const ML_URL = import.meta.env.VITE_ML_URL || "http://localhost:8001";
 
@@ -65,19 +66,22 @@ export default function InterviewPage() {
     }
   }, []);
 
-  // Start session on mount
+  // Consume preloaded session or start a new one on mount
   useEffect(() => {
     (async () => {
       try {
-        const res = await sessionApi.startSession();
-        setSessionId(res.data.session_id);
-        setCurrentCategory(res.data.question_category);
-        setCurrentQuestion(res.data.first_question);
-        if (res.data.highlights && res.data.highlights.length > 0) {
-          setHighlights(res.data.highlights);
+        // This will instantly return if already preloaded, passing through
+        const data = await useSessionStore.getState().preloadSession();
+        useSessionStore.getState().consumeSession(); // clear it so we don't reuse it next time
+        
+        setSessionId(data.session_id);
+        setCurrentCategory(data.question_category);
+        setCurrentQuestion(data.first_question);
+        if (data.highlights && data.highlights.length > 0) {
+          setHighlights(data.highlights);
         }
-        if (res.data.mental_state) {
-          setMentalState(res.data.mental_state);
+        if (data.mental_state) {
+          setMentalState(data.mental_state);
         }
       } catch (e) {
         setError("Could not connect to server. Please ensure the backend is running.");
