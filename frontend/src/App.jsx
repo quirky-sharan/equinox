@@ -1,4 +1,4 @@
-import { useEffect, lazy, Suspense } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuthStore } from "./store/authStore";
@@ -6,7 +6,8 @@ import { useThemeStore } from "./store/themeStore";
 import { authApi } from "./api/endpoints";
 import Navbar from "./components/Navbar";
 import FluidCursor from "./components/FluidCursor";
-const ParticleBackground = lazy(() => import("./components/ParticleBackground"));
+import ParticleBackground from "./components/ParticleBackground";
+import SplashScreen from "./components/SplashScreen";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -33,6 +34,11 @@ function PublicRoute({ children }) {
 export default function App() {
   const { token, setUser, logout } = useAuthStore();
   const { theme } = useThemeStore();
+  const [appReady, setAppReady] = useState(false);
+
+  const handleSplashFinished = useCallback(() => {
+    setAppReady(true);
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
@@ -50,11 +56,14 @@ export default function App() {
 
   const isTouchDevice = !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
+  // Show splash screen until all assets are preloaded
+  if (!appReady) {
+    return <SplashScreen onFinished={handleSplashFinished} />;
+  }
+
   return (
     <div className="app-layout">
-      <Suspense fallback={null}>
-        <ParticleBackground />
-      </Suspense>
+      <ParticleBackground />
       {!isTouchDevice && <FluidCursor />}
       <Navbar />
       <AnimatePresence mode="wait" initial={false}>

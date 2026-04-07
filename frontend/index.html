@@ -6,9 +6,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Meowmeow — Intelligent Symptom Analysis & Risk Assessment Platform. AI-powered clinical interview engine." />
     <title>Meowmeow — Intelligent Health Assessment</title>
+    <!-- Preload critical fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" />
+    <style>
+      /* Inline critical CSS for instant splash screen */
+      body { margin: 0; background: #050507; }
+      #root-loader {
+        position: fixed; inset: 0; z-index: 99998;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 1.5rem; background: #050507;
+      }
+      .rl-icon {
+        width: 60px; height: 60px;
+        border: 1px solid rgba(14, 165, 233, 0.3);
+        border-top-color: #0ea5e9;
+        border-radius: 50%;
+        animation: rl-spin 1.5s linear infinite;
+      }
+      .rl-text {
+        font-family: -apple-system, sans-serif;
+        font-size: 0.75rem; color: #52525b;
+        letter-spacing: 0.1em; text-transform: uppercase;
+      }
+      @keyframes rl-spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Shown instantly while JS bundles download -->
+      <div id="root-loader">
+        <div class="rl-icon"></div>
+        <div class="rl-text">Loading Meowmeow…</div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
