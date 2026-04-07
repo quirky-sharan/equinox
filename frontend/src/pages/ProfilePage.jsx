@@ -40,9 +40,21 @@ export default function ProfilePage() {
     blood_group: user?.blood_group || "",
     allergies: user?.allergies || "",
     medical_conditions: user?.medical_conditions || "",
-    habits: user?.habits || "",
+    medical_conditions: user?.medical_conditions || "",
     family_history: user?.family_history || "",
   });
+
+  // Parse existing habits JSON if possible, else fallback to 'extra' text
+  const defaultHabits = { smoking: "", alcohol: "", exercise: "", diet: "", extra: "" };
+  let initialHabits = { ...defaultHabits };
+  if (user?.habits) {
+    try {
+      initialHabits = JSON.parse(user?.habits);
+    } catch (e) {
+      initialHabits.extra = user?.habits;
+    }
+  }
+  const [habitsForm, setHabitsForm] = useState(initialHabits);
 
   const history = historyData || [];
   const initials = user?.full_name
@@ -65,6 +77,7 @@ export default function ProfilePage() {
       const payload = {
         ...healthForm,
         age: healthForm.age ? parseInt(healthForm.age) : null,
+        habits: JSON.stringify(habitsForm)
       };
       const res = await authApi.updateMe(payload);
       setAuth(res.data, token);
@@ -89,14 +102,25 @@ export default function ProfilePage() {
       blood_group: user?.blood_group || "",
       allergies: user?.allergies || "",
       medical_conditions: user?.medical_conditions || "",
-      habits: user?.habits || "",
       family_history: user?.family_history || "",
     });
+    let initialHabits = { smoking: "", alcohol: "", exercise: "", diet: "", extra: "" };
+    if (user?.habits) {
+      try {
+        initialHabits = JSON.parse(user?.habits);
+      } catch (e) {
+        initialHabits.extra = user?.habits;
+      }
+    }
+    setHabitsForm(initialHabits);
     setEditing(false);
   };
 
   const updateField = (field, value) =>
     setHealthForm((prev) => ({ ...prev, [field]: value }));
+
+  const updateHabit = (field, value) =>
+    setHabitsForm((prev) => ({ ...prev, [field]: value }));
 
   /* ── Inline helpers ── */
   const FieldLabel = ({ icon: Icon, color, children }) => (
@@ -560,21 +584,91 @@ export default function ProfilePage() {
                 title="Lifestyle & Habits"
                 subtitle="Daily habits directly influence your diagnostic risk profile"
               />
-              <div className="form-group" style={{ marginBottom: 0 }}>
-                <FieldLabel icon={Coffee} color="var(--risk-medium)">
-                  Describe Your Daily Habits & Lifestyle
-                </FieldLabel>
-                <textarea
-                  className="form-input"
-                  rows={6}
-                  placeholder={`Tell us about your daily lifestyle — this helps us calibrate risk assessment:\n\n• Smoking: Never / Occasionally / Daily (how many?)\n• Alcohol: Never / Socially / Regularly\n• Exercise: Sedentary / Light / Moderate / Active\n• Sleep: Avg hours per night, quality\n• Diet: Vegetarian / Non-veg / Vegan, any restrictions\n• Caffeine: Cups of coffee/tea per day\n• Screen time: Avg hours per day\n• Stress level: Low / Moderate / High\n• Any medications you take regularly`}
-                  value={healthForm.habits}
-                  onChange={(e) => updateField("habits", e.target.value)}
-                  disabled={!editing}
-                  style={{ resize: "vertical", lineHeight: 1.6 }}
-                />
+              <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <FieldLabel>Smoking</FieldLabel>
+                    <select
+                      className="form-input"
+                      value={habitsForm.smoking}
+                      onChange={(e) => updateHabit("smoking", e.target.value)}
+                      disabled={!editing}
+                      style={{ cursor: editing ? "pointer" : "default" }}
+                    >
+                      <option value="">Select...</option>
+                      <option value="Never">Never</option>
+                      <option value="Occasionally">Occasionally</option>
+                      <option value="Daily">Daily</option>
+                    </select>
+                  </div>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <FieldLabel>Alcohol</FieldLabel>
+                    <select
+                      className="form-input"
+                      value={habitsForm.alcohol}
+                      onChange={(e) => updateHabit("alcohol", e.target.value)}
+                      disabled={!editing}
+                      style={{ cursor: editing ? "pointer" : "default" }}
+                    >
+                      <option value="">Select...</option>
+                      <option value="Never">Never</option>
+                      <option value="Socially">Socially</option>
+                      <option value="Regularly">Regularly</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <FieldLabel>Exercise</FieldLabel>
+                    <select
+                      className="form-input"
+                      value={habitsForm.exercise}
+                      onChange={(e) => updateHabit("exercise", e.target.value)}
+                      disabled={!editing}
+                      style={{ cursor: editing ? "pointer" : "default" }}
+                    >
+                      <option value="">Select...</option>
+                      <option value="Sedentary">Sedentary</option>
+                      <option value="Light">Light</option>
+                      <option value="Moderate">Moderate</option>
+                      <option value="Active">Active</option>
+                    </select>
+                  </div>
+                  <div className="form-group" style={{ marginBottom: 0 }}>
+                    <FieldLabel>Diet</FieldLabel>
+                    <select
+                      className="form-input"
+                      value={habitsForm.diet}
+                      onChange={(e) => updateHabit("diet", e.target.value)}
+                      disabled={!editing}
+                      style={{ cursor: editing ? "pointer" : "default" }}
+                    >
+                      <option value="">Select...</option>
+                      <option value="Vegetarian">Vegetarian</option>
+                      <option value="Non-Vegetarian">Non-Vegetarian</option>
+                      <option value="Vegan">Vegan</option>
+                      <option value="Other">Other</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-group" style={{ marginBottom: 0, marginTop: "0.5rem" }}>
+                  <FieldLabel icon={Info} color="var(--text-muted)">
+                    Anything extra? (e.g., Caffeine, Sleep, Medications)
+                  </FieldLabel>
+                  <textarea
+                    className="form-input"
+                    rows={3}
+                    placeholder="e.g. I drink 4 cups of coffee daily, sleep 5 hours a night on average, and take Vitamin D supplements."
+                    value={habitsForm.extra}
+                    onChange={(e) => updateHabit("extra", e.target.value)}
+                    disabled={!editing}
+                    style={{ resize: "vertical", lineHeight: 1.6 }}
+                  />
+                </div>
               </div>
-              {!editing && !healthForm.habits && (
+              {!editing && (!habitsForm.smoking && !habitsForm.extra) && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
