@@ -31,6 +31,8 @@ class UserOut(BaseModel):
     blood_group: Optional[str] = None
     allergies: Optional[str] = None
     medical_conditions: Optional[str] = None
+    habits: Optional[str] = None
+    family_history: Optional[str] = None
     created_at: datetime
 
     class Config:
@@ -51,3 +53,5 @@ class UserUpdate(BaseModel):
     blood_group: Optional[str] = None
     allergies: Optional[str] = None
     medical_conditions: Optional[str] = None
+    habits: Optional[str] = None
+    family_history: Optional[str] = None

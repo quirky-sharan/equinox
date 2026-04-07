@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, Boolean, Integer
+from sqlalchemy import Column, String, DateTime, Boolean, Integer, Text
 from sqlalchemy.sql import func
 import uuid
 from ..database import Base
@@ -22,6 +22,8 @@ class User(Base):
     blood_group = Column(String, nullable=True)
     allergies = Column(String, nullable=True)
     medical_conditions = Column(String, nullable=True)
+    habits = Column(Text, nullable=True)           # smoking, alcohol, exercise, diet, sleep patterns
+    family_history = Column(Text, nullable=True)   # hereditary conditions, family medical history
     
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
