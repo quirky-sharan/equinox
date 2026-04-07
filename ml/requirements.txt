@@ -1,9 +1,5 @@
-# CPU-only PyTorch — Render free tier has NO GPU
-# Install torch first from CPU index to avoid downloading 1.3GB of CUDA libs
---extra-index-url https://download.pytorch.org/whl/cpu
-torch
-torchvision
-
+# NOTE: torch is installed separately in the build command (CPU-only)
+# Do NOT add torch or torchvision here — they'll pull the 1.3GB CUDA version
 chromadb>=1.0.0
 sentence-transformers>=3.0.0
 groq>=0.4.0
