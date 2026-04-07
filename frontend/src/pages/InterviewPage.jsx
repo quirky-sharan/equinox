@@ -256,7 +256,7 @@ export default function InterviewPage() {
         style={{ position: "absolute", top: "20%", left: "50%", x: "-50%", width: "80%", height: "60%", background: "radial-gradient(circle, var(--accent-blue) 0%, transparent 70%)", zIndex: 0, pointerEvents: "none" }}
       />
 
-      <div style={{ width: "100%", maxWidth: 740, margin: "0 auto", display: "flex", flexDirection: "column", gap: "2rem", zIndex: 1 }}>
+      <div style={{ width: "100%", maxWidth: 740, margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.25rem", zIndex: 1 }}>
 
         {/* Top Navigation / Status */}
         <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -311,7 +311,7 @@ export default function InterviewPage() {
         </div>
 
         {/* Main Content Area */}
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "2.5rem", justifyContent: "center", minHeight: "400px" }}>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "1.5rem", justifyContent: "center", minHeight: "180px" }}>
           
           {/* Personalized Alerts — shown above question when profile conflicts exist */}
           <AnimatePresence>
@@ -408,7 +408,7 @@ export default function InterviewPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="card"
-          style={{ padding: "2rem", background: "var(--glass-bg)", backdropFilter: "blur(20px)", border: "1px solid var(--border-color)", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.1)" }}
+          style={{ padding: "1.25rem 1.5rem", background: "var(--glass-bg)", backdropFilter: "blur(20px)", border: "1px solid var(--border-color)", boxShadow: "0 25px 50px -12px rgba(0,0,0,0.1)" }}
         >
           {transcript && (
             <motion.div 
@@ -440,10 +440,10 @@ export default function InterviewPage() {
             }}
             onKeyDown={handleKeyDown}
             onBeforeInput={behavCapture.onBeforeInput}
-            rows={4}
+            rows={3}
             style={{ 
-              width: "100%", resize: "none", marginBottom: "1.5rem", 
-              fontSize: "1.1rem", lineHeight: 1.6, 
+              width: "100%", resize: "none", marginBottom: "0.75rem", 
+              fontSize: "1.05rem", lineHeight: 1.6, 
               color: "white", outline: "none",
               background: "rgba(255, 255, 255, 0.03)", 
               border: "1px solid rgba(255, 255, 255, 0.1)", 
