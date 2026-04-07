@@ -115,12 +115,14 @@ async def start_session(
 
     first_question = ml_result.get("reply", "How are you feeling today? Please describe your symptoms in your own words.")
     highlights = ml_result.get("highlights", [])
+    mental_state = ml_result.get("mental_state")
 
     return SessionStartResponse(
         session_id=session.id,
         first_question=first_question,
         question_category="general",
         highlights=highlights,
+        mental_state=mental_state,
     )
 
 
@@ -170,6 +172,7 @@ async def submit_answer(
     reply = ml_result.get("reply", "Could you tell me more about your symptoms?")
     final_data = ml_result.get("final_data")
     highlights = ml_result.get("highlights", [])
+    mental_state = ml_result.get("mental_state")
 
     if is_final:
         session.status = "completed"
@@ -196,6 +199,7 @@ async def submit_answer(
         options=None,
         final_data=final_data,
         highlights=highlights,
+        mental_state=mental_state,
     )
 
 

@@ -208,6 +208,7 @@ def process_message(session_id: str, user_message: str, profile_context: str | N
     is_final = False
     final_data = None
     highlights = []
+    mental_state = None
     reply_text = raw_reply  # fallback: return raw text if JSON parsing fails
 
     parsed = _extract_json(raw_reply)
@@ -217,6 +218,8 @@ def process_message(session_id: str, user_message: str, profile_context: str | N
             reply_text = parsed["answer"]
         # Extract personalized highlights
         highlights = parsed.get("highlights", [])
+        # Extract mental state / emotional tone
+        mental_state = parsed.get("mental_state", None)
         # Check for final assessment
         if parsed.get("is_final") is True:
             is_final = True
@@ -225,9 +228,10 @@ def process_message(session_id: str, user_message: str, profile_context: str | N
     _log_audit(session_id=session_id, turn=turn_count, chunks_used=n_results, is_final=is_final)
 
     return {
-        "reply":      reply_text,
-        "turn_count": turn_count,
-        "is_final":   is_final,
-        "final_data": final_data,
-        "highlights": highlights,
+        "reply":        reply_text,
+        "turn_count":   turn_count,
+        "is_final":     is_final,
+        "final_data":   final_data,
+        "highlights":   highlights,
+        "mental_state": mental_state,
     }

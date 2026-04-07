@@ -771,6 +771,208 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* =========================================
+   SUPPORT PAGE (Crisis)
+   ========================================= */
+
+.support-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+}
+
+.support-content {
+  max-width: 640px;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.support-heart {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(147, 130, 220, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a78bfa;
+}
+
+.support-headline {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  background: linear-gradient(135deg, #e0e7ff, #c4b5fd, #a78bfa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.support-subtext {
+  font-size: 1.05rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  max-width: 520px;
+}
+
+.support-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.support-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  text-decoration: none;
+  text-align: left;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  background: none;
+  width: 100%;
+  font-family: inherit;
+}
+
+.support-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.support-card-call {
+  background: rgba(167, 139, 250, 0.06);
+  border-color: rgba(167, 139, 250, 0.2);
+}
+.support-card-call .support-card-icon {
+  background: rgba(167, 139, 250, 0.15);
+  color: #a78bfa;
+}
+
+.support-card-text {
+  background: rgba(96, 165, 250, 0.06);
+  border-color: rgba(96, 165, 250, 0.2);
+}
+.support-card-text .support-card-icon {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60a5fa;
+}
+
+.support-card-back {
+  background: rgba(148, 163, 184, 0.06);
+  border-color: rgba(148, 163, 184, 0.15);
+}
+.support-card-back .support-card-icon {
+  background: rgba(148, 163, 184, 0.10);
+  color: #94a3b8;
+}
+
+.support-card-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.support-card-body h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px;
+}
+
+.support-card-body p {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+
+.support-card-cta {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-blue);
+  letter-spacing: 0.02em;
+}
+
+.support-footer {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+}
+
+/* =========================================
+   WELLNESS NUDGE
+   ========================================= */
+
+.wellness-nudge {
+  width: 100%;
+  max-width: 740px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  background: rgba(167, 139, 250, 0.05);
+  border: 1px solid rgba(167, 139, 250, 0.12);
+  border-left: 4px solid #a78bfa;
+}
+
+.wellness-nudge-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(167, 139, 250, 0.12);
+  color: #a78bfa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.wellness-nudge-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.wellness-nudge-text {
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: #ddd6fe;
+  margin: 0 0 6px;
+}
+
+.wellness-nudge-link {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: #a78bfa;
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.wellness-nudge-link:hover {
+  text-decoration: underline;
+  color: #c4b5fd;
+}
+
+/* =========================================
    RESPONSIVE MEDIA QUERIES
    ========================================= */
 

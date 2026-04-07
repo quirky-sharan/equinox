@@ -46,6 +46,7 @@ class ChatResponse(BaseModel):
     is_final: bool
     final_data: Optional[dict] = None
     highlights: Optional[list] = None
+    mental_state: Optional[dict] = None
 
 class SpeakRequest(BaseModel):
     text: str
@@ -157,6 +158,7 @@ def api_chat(req: ChatRequest):
             is_final=result["is_final"],
             final_data=result.get("final_data"),
             highlights=result.get("highlights", []),
+            mental_state=result.get("mental_state"),
         )
     except Exception as e:
         traceback.print_exc()

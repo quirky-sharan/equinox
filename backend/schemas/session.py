@@ -10,6 +10,7 @@ class SessionStartResponse(BaseModel):
     first_question: str
     question_category: str
     highlights: Optional[List[Dict[str, Any]]] = None
+    mental_state: Optional[Dict[str, Any]] = None
 
 class BehavioralMetadata(BaseModel):
     deleted_segments: List[str] = []
@@ -35,6 +36,7 @@ class AnswerResponse(BaseModel):
     options: Optional[List[Dict[str, str]]] = None
     final_data: Optional[Dict[str, Any]] = None
     highlights: Optional[List[Dict[str, Any]]] = None
+    mental_state: Optional[Dict[str, Any]] = None
 
 class RiskOutput(BaseModel):
     session_id: str

@@ -5,6 +5,8 @@ import { sessionApi } from "../api/endpoints";
 import { useBehavioralCapture } from "../hooks/useBehavioralCapture";
 import { Mic, MicOff, Send, Volume2, VolumeX, Cat } from "lucide-react";
 import PersonalizedAlerts from "../components/PersonalizedAlerts";
+import WellnessNudge from "../components/WellnessNudge";
+import { detectCrisis, isCrisisTriggered } from "../utils/crisisDetector";
 
 const ML_URL = import.meta.env.VITE_ML_URL || "http://localhost:8001";
 
@@ -25,6 +27,14 @@ export default function InterviewPage() {
   const [questionVisible, setQuestionVisible] = useState(true);
   const [currentOptions, setCurrentOptions] = useState(null);
   const [highlights, setHighlights] = useState([]);
+  const [mentalState, setMentalState] = useState(null);
+
+  // Check for crisis flag on mount — redirect immediately if already triggered
+  useEffect(() => {
+    if (isCrisisTriggered()) {
+      navigate("/support", { replace: true });
+    }
+  }, [navigate]);
 
   const behavCapture = useBehavioralCapture();
   const recognitionRef = useRef(null);
@@ -65,6 +75,9 @@ export default function InterviewPage() {
         setCurrentQuestion(res.data.first_question);
         if (res.data.highlights && res.data.highlights.length > 0) {
           setHighlights(res.data.highlights);
+        }
+        if (res.data.mental_state) {
+          setMentalState(res.data.mental_state);
         }
       } catch (e) {
         setError("Could not connect to server. Please ensure the backend is running.");
@@ -111,6 +124,15 @@ export default function InterviewPage() {
         setHighlights(res.data.highlights);
       } else {
         setHighlights([]);
+      }
+
+      // Update mental state for WellnessNudge
+      if (res.data.final_data?.mental_state) {
+        setMentalState(res.data.final_data.mental_state);
+      } else if (res.data.mental_state) {
+        setMentalState(res.data.mental_state);
+      } else {
+        setMentalState(null);
       }
 
       if (res.data.interview_complete) {
@@ -280,6 +302,11 @@ export default function InterviewPage() {
             )}
           </AnimatePresence>
 
+          {/* Wellness Nudge — subtle distress-aware card, no animation, grounding */}
+          {mentalState && mentalState.distress_detected && !submitting && (
+            <WellnessNudge mentalState={mentalState} />
+          )}
+
           {/* Category Signal */}
           <div style={{ display: "flex", justifyContent: "center" }}>
             <motion.span 
@@ -383,7 +410,16 @@ export default function InterviewPage() {
             ref={textareaRef}
             placeholder="Describe your symptoms in detail…"
             value={answer}
-            onChange={(e) => { setAnswer(e.target.value); behavCapture.onChange(e); }}
+            onChange={(e) => {
+              const val = e.target.value;
+              // Crisis detection — fires on every keystroke, even if erased
+              if (detectCrisis(val)) {
+                navigate("/support", { replace: true });
+                return;
+              }
+              setAnswer(val);
+              behavCapture.onChange(e);
+            }}
             onKeyDown={handleKeyDown}
             onBeforeInput={behavCapture.onBeforeInput}
             rows={4}

@@ -19,6 +19,7 @@ import ProfilePage from "./pages/ProfilePage";
 import LandingPage from "./pages/LandingPage";
 import FindDoctorsPage from "./pages/FindDoctorsPage";
 import ContactPage from "./pages/ContactPage";
+import SupportPage from "./pages/SupportPage";
 import Footer from "./components/Footer";
 
 function PrivateRoute({ children }) {
@@ -87,10 +88,11 @@ export default function App() {
             <Route path="/population" element={<PopulationPage />} />
             <Route path="/find-doctors" element={<PrivateRoute><FindDoctorsPage /></PrivateRoute>} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/support" element={<SupportPage />} />
           </Routes>
         </motion.div>
       </AnimatePresence>
-      {!["/interview", "/find-doctors"].includes(location.pathname) && <Footer />}
+      {!["/interview", "/find-doctors", "/support"].includes(location.pathname) && <Footer />}
     </div>
   );
 }
