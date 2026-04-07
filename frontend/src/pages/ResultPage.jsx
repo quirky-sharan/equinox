@@ -423,7 +423,7 @@ export default function ResultPage() {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `meowmeow_report_${sessionId.slice(0, 8)}.pdf`;
+                a.download = `pulse_report_${sessionId.slice(0, 8)}.pdf`;
                 a.click();
                 URL.revokeObjectURL(url);
               } catch (e) {
@@ -438,7 +438,7 @@ export default function ResultPage() {
 
         {/* Disclaimer */}
         <motion.div variants={itemVariants} style={{ marginTop: "4rem", padding: "2rem", borderTop: "1px solid var(--border-color)", fontSize: "0.85rem", color: "var(--text-muted)", lineHeight: 1.6, textAlign: "center" }}>
-          Meowmeow is a high-fidelity informational probabilistic engine. Always consult a qualified clinical professional for final diagnostics.
+          Pulse is a high-fidelity informational probabilistic engine. Always consult a qualified clinical professional for final diagnostics.
         </motion.div>
       </motion.div>
 

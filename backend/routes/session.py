@@ -309,7 +309,7 @@ async def download_report(
     return StreamingResponse(
         BytesIO(pdf_bytes),
         media_type="application/pdf",
-        headers={"Content-Disposition": f"attachment; filename=meowmeow_report_{session_id[:8]}.pdf"},
+        headers={"Content-Disposition": f"attachment; filename=pulse_report_{session_id[:8]}.pdf"},
     )
 
 

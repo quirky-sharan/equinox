@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionTemplate } from "framer-motion";
 import { ChevronRight, Shield, Activity, TrendingUp, Cpu, Cat, Star } from "lucide-react";
@@ -128,8 +129,44 @@ export default function LandingPage() {
   const yBackground2 = useTransform(smoothProgress, [0, 1], [0, -400]);
   const parallaxStats = useTransform(smoothProgress, [0.4, 0.8], ["0%", "-50%"]);
 
+  // 3D Doctor Popup Logic (Mid-page)
+  const doctorPopupY = useTransform(smoothProgress, 
+    [0.35, 0.45, 0.55, 0.65], 
+    ["180%", "0%", "0%", "180%"]
+  );
+  const doctorOpacity = useTransform(smoothProgress, 
+    [0.35, 0.42, 0.58, 0.65], 
+    [0, 1, 1, 0]
+  );
+  // Continuous hand waving waggle while visible in the middle
+  const doctorRotate = useTransform(scrollYProgress, 
+    [0.4, 0.42, 0.45, 0.48, 0.51, 0.54, 0.57, 0.6], 
+    [0, -12, 12, -12, 12, -12, 12, 0]
+  );
+
   return (
     <div style={{ backgroundColor: "var(--bg-base)", minHeight: "100vh", position: "relative", paddingBottom: "1px" }}>
+
+      {/* 3D Doctor Scroll Popup */}
+      {createPortal(
+        <motion.div
+          style={{
+            position: "fixed",
+            bottom: "-10px",
+            right: "5%",
+            y: doctorPopupY,
+            opacity: doctorOpacity,
+            width: "clamp(240px, 20vw, 350px)",
+            height: "clamp(240px, 20vw, 350px)",
+            zIndex: 9999,
+            pointerEvents: "none",
+            mixBlendMode: "screen", // Removes the pure black background
+          }}
+        >
+          <img src="/3d_doctor.png" alt="3D Doctor" style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.1)" }} />
+        </motion.div>,
+        document.body
+      )}
 
       {/* Hero Section */}
       <section className="sticky-stack" style={{ position: "relative", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "4rem 2rem", perspective: 1000, background: "var(--bg-base)", zIndex: 10 }}>
@@ -163,7 +200,7 @@ export default function LandingPage() {
             transition={{ duration: 1, delay: 1.5 }}
             style={{ fontSize: "clamp(1rem, 2vw, 1.4rem)", color: "var(--text-secondary)", maxWidth: 700, margin: "0 auto 4rem", lineHeight: 1.6, fontWeight: 300 }}
           >
-            Meowmeow transcends conventional diagnostics. Using Bayesian probabilistic inference and sub-conscious behavioral capture to map your clinical trajectory.
+            Pulse transcends conventional diagnostics. Using Bayesian probabilistic inference and sub-conscious behavioral capture to map your clinical trajectory.
           </motion.p>
           
           <motion.div 
@@ -214,7 +251,7 @@ export default function LandingPage() {
               <span style={{ color: "transparent", WebkitTextStroke: "1px var(--text-muted)", transition: "color 0.4s" }}>Engineered for scale.</span>
             </h2>
             <p style={{ fontSize: "1.25rem", color: "var(--text-secondary)", maxWidth: 800, margin: "0 auto", lineHeight: 1.7, fontWeight: 300 }}>
-              While traditional symptom checkers rely on rigid decision trees, Meowmeow actively learns. Our multidimensional tensor architecture detects nuances in typing speed, hesitation, and word choice simultaneously.
+              While traditional symptom checkers rely on rigid decision trees, Pulse actively learns. Our multidimensional tensor architecture detects nuances in typing speed, hesitation, and word choice simultaneously.
             </p>
           </motion.div>
 
@@ -285,11 +322,11 @@ export default function LandingPage() {
         
         <div style={{ display: "flex", gap: "2rem", width: "max-content", animation: "marquee 40s linear infinite" }} className="hover-pause">
           {[
-            { quote: "Meowmeow’s inference engine correctly flagged a rare autoimmune panel before our seniors did.", author: "Dr. Sarah Jenkins, Diagnostician" },
+            { quote: "Pulse’s inference engine correctly flagged a rare autoimmune panel before our seniors did.", author: "Dr. Sarah Jenkins, Diagnostician" },
             { quote: "It’s not just an AI. The reasoning audit trail makes it a true peer in the emergency room.", author: "Chief of Medicine, St. Jude" },
             { quote: "Reduced our false-negative discharge rate by 14% perfectly matching our risk threshold.", author: "Director of Clinical Informatics" },
             { quote: "The closest thing to a scalable house MD we’ve ever deployed.", author: "HealthTech Vanguard Magazine" },
-            { quote: "Meowmeow’s inference engine correctly flagged a rare autoimmune panel before our seniors did.", author: "Dr. Sarah Jenkins, Diagnostician" },
+            { quote: "Pulse’s inference engine correctly flagged a rare autoimmune panel before our seniors did.", author: "Dr. Sarah Jenkins, Diagnostician" },
             { quote: "It’s not just an AI. The reasoning audit trail makes it a true peer in the emergency room.", author: "Chief of Medicine, St. Jude" },
             { quote: "Reduced our false-negative discharge rate by 14% perfectly matching our risk threshold.", author: "Director of Clinical Informatics" },
             { quote: "The closest thing to a scalable house MD we’ve ever deployed.", author: "HealthTech Vanguard Magazine" }

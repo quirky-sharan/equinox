@@ -61,7 +61,7 @@ export default function Navbar() {
           <motion.div whileHover={{ rotate: 10, scale: 1.1 }} style={{ marginRight: 8 }}>
             <Cat size={24} style={{ fill: "var(--text-primary)" }} strokeWidth={1.5} />
           </motion.div>
-          <span style={{ fontWeight: 800, letterSpacing: "-0.05em" }}>Meowmeow</span>
+          <span style={{ fontWeight: 800, letterSpacing: "-0.05em" }}>Pulse</span>
         </Link>
 
         {/* Desktop Nav */}

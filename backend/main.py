@@ -10,7 +10,7 @@ from .config import settings
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
-    title="Meowmeow API",
+    title="Pulse API",
     description="Intelligent Symptom Analysis & Risk Assessment Platform",
     version="1.0.0",
 )
@@ -28,7 +28,7 @@ app.include_router(session_router, prefix="/api")
 
 @app.get("/")
 def root():
-    return {"status": "Meowmeow API running", "version": "1.0.0"}
+    return {"status": "Pulse API running", "version": "1.0.0"}
 
 @app.get("/health")
 def health():

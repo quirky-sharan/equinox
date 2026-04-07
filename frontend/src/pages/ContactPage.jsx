@@ -35,7 +35,7 @@ export default function ContactPage() {
             We're Here To Help.
           </h1>
           <p style={{ fontSize: "1.1rem", color: "var(--text-secondary)", maxWidth: 600, margin: "0 auto" }}>
-            Have questions about the Meowmeow Clinical AI? Need technical support? Or just want to say hi? Reach out to us directly.
+            Have questions about the Pulse Clinical AI? Need technical support? Or just want to say hi? Reach out to us directly.
           </p>
         </motion.div>
 

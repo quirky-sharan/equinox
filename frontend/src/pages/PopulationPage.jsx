@@ -54,7 +54,7 @@ export default function PopulationPage() {
             </h1>
           </div>
           <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem", maxWidth: 600, lineHeight: 1.6 }}>
-            Anonymized, high-fidelity symptom trends aggregated across the Meowmeow network.
+            Anonymized, high-fidelity symptom trends aggregated across the Pulse network.
           </p>
         </div>
 

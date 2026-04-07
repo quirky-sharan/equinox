@@ -360,7 +360,7 @@ export default function InterviewPage() {
                     <Cat size={48} color="var(--accent-blue)" />
                   </motion.div>
                   <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2.2rem)", fontWeight: 800, color: "var(--accent-blue)", margin: 0 }}>
-                    ClinicalMind is thinking...
+                    Pulse is thinking...
                   </h2>
                   <p style={{ color: "var(--text-secondary)", fontSize: "1.1rem" }}>Analyzing your symptoms securely</p>
                 </motion.div>

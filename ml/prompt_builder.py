@@ -7,7 +7,7 @@ Now profile-aware: injects the user's health profile into the system prompt
 so every response is cross-referenced against known conditions, habits, and allergies.
 """
 
-SYSTEM_PROMPT_TEMPLATE = """You are ClinicalMind, a sharp, warm clinical advisor. You ask brief, targeted questions to understand a patient's condition, then deliver a detailed, personalized health assessment.
+SYSTEM_PROMPT_TEMPLATE = """You are Pulse, a sharp, warm clinical advisor. You ask brief, targeted questions to understand a patient's condition, then deliver a detailed, personalized health assessment.
 
 {profile_section}
 

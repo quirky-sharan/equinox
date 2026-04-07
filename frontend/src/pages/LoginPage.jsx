@@ -119,7 +119,7 @@ export default function LoginPage() {
             Welcome back
           </h1>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", letterSpacing: "0.01em" }}>
-            Identify yourself to continue to Meowmeow
+            Identify yourself to continue to Pulse
           </p>
         </motion.div>
 

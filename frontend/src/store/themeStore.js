@@ -7,6 +7,6 @@ export const useThemeStore = create(
       theme: "dark", // 'light', 'dark', 'midnight', 'sepia'
       setTheme: (theme) => set({ theme }),
     }),
-    { name: "meowmeow-theme" }
+    { name: "pulse-theme" }
   )
 );

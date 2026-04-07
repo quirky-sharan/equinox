@@ -209,7 +209,7 @@ export default function SplashScreen({ onFinished }) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
           >
-            meowmeow
+            pulse
           </motion.h1>
 
           {/* Subtitle */}

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { motion, useMotionValue, useTransform, animate, useScroll, useSpring } from "framer-motion";
+import { createPortal } from "react-dom";
 import { useAuthStore } from "../store/authStore";
 import { useSessionStore } from "../store/sessionStore";
 import { useQuery } from "@tanstack/react-query";
@@ -60,6 +61,37 @@ export default function DashboardPage() {
   const history = historyData || [];
   const lastSession = history[0];
 
+  // Golden Star Scroll Animation Setup
+  const capabilitiesRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: capabilitiesRef,
+    offset: ["start end", "end start"]
+  });
+
+  // 3D Doctor Popup Logic (Mid-page)
+  const { scrollYProgress: globalScroll } = useScroll();
+  const doctorPopupY = useTransform(globalScroll, 
+    [0.15, 0.35, 0.65, 0.85], // Adjusted for the shorter Dashboard height
+    ["180%", "0%", "0%", "180%"]
+  );
+  const doctorOpacity = useTransform(globalScroll, 
+    [0.15, 0.25, 0.75, 0.85], 
+    [0, 1, 1, 0]
+  );
+
+  // Base progress mapped to diagonal movement
+  const starX = useTransform(scrollYProgress, [0, 1], ["-10%", "110%"]);
+  const starY = useTransform(scrollYProgress, [0, 1], ["-10%", "110%"]);
+  
+  // Spring layers to construct a fluid glowing trail
+  const trailX1 = useSpring(starX, { stiffness: 100, damping: 20 });
+  const trailY1 = useSpring(starY, { stiffness: 100, damping: 20 });
+  
+  const trailX2 = useSpring(starX, { stiffness: 50, damping: 20 });
+  const trailY2 = useSpring(starY, { stiffness: 50, damping: 20 });
+
+  const starOpacity = useTransform(scrollYProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0]);
+
   // Preload next session to ensure instant start when "Begin Assessment" is clicked
   useEffect(() => {
     useSessionStore.getState().preloadSession().catch(() => {});
@@ -100,6 +132,27 @@ export default function DashboardPage() {
 
   return (
     <div className="page-container" style={{ position: "relative", overflow: "hidden" }}>
+      
+      {/* 3D Doctor Scroll Popup */}
+      {createPortal(
+        <motion.div
+          style={{
+            position: "fixed",
+            bottom: "-10px",
+            right: "5%",
+            y: doctorPopupY,
+            opacity: doctorOpacity,
+            width: "clamp(240px, 20vw, 350px)",
+            height: "clamp(240px, 20vw, 350px)",
+            zIndex: 9999,
+            pointerEvents: "none",
+            mixBlendMode: "screen", // Removes the pure black background
+          }}
+        >
+          <img src="/3d_doctor.png" alt="3D Doctor" style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.1)" }} />
+        </motion.div>,
+        document.body
+      )}
       <motion.div 
         animate={{ y: [0, -20, 0] }} 
         transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
@@ -121,7 +174,7 @@ export default function DashboardPage() {
             <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>intelligence.</span>
           </h1>
           <p style={{ color: "var(--text-secondary)", maxWidth: 540, fontSize: "1.15rem", marginBottom: "3.5rem", lineHeight: 1.7 }}>
-            Meowmeow transforms conversational data into high-fidelity clinical signals, providing a nuanced perspective on your systemic health.
+            Pulse transforms conversational data into high-fidelity clinical signals, providing a nuanced perspective on your systemic health.
           </p>
           <motion.button
             className="btn btn-primary btn-lg"
@@ -177,13 +230,82 @@ export default function DashboardPage() {
           <h2 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "1.25rem", fontWeight: 700, marginBottom: "1.5rem", color: "var(--text-secondary)", letterSpacing: "0.02em" }}>
             Platform Capabilities
           </h2>
-          <div className="grid-3">
-            {features.map((f, i) => (
-              <SpotlightCard 
-                key={i} 
-                delay={0.3 + i * 0.1}
-                style={{ padding: "2rem", background: "var(--glass-bg)", backdropFilter: "blur(10px)" }}
+          <div ref={capabilitiesRef} style={{ position: "relative", zIndex: 1, padding: "2rem 0" }}>
+            
+            {/* The Golden Star & Trail (Z-Index 0) - Behind the glass capabilities */}
+            <motion.div
+              style={{
+                position: "absolute",
+                top: 0, left: 0, right: 0, bottom: 0,
+                overflow: "visible",
+                pointerEvents: "none",
+                zIndex: 0,
+                opacity: starOpacity,
+              }}
+            >
+              {/* Massive ambient glow/spotlight attached to the main star position */}
+              <motion.div
+                style={{
+                  position: "absolute",
+                  left: starX, top: starY,
+                  width: "1px", height: "1px",
+                  boxShadow: "0 0 400px 200px rgba(255, 183, 3, 0.18)",
+                  borderRadius: "50%",
+                }}
+              />
+              
+              {/* Trail 2 (furthest back) */}
+              <motion.div
+                style={{
+                  position: "absolute",
+                  left: trailX2, top: trailY2,
+                  width: 12, height: 12,
+                  background: "#ffb703",
+                  boxShadow: "0 0 30px 10px rgba(255, 183, 3, 0.4)",
+                  borderRadius: "50%",
+                  transform: "translate(-50%, -50%)",
+                  filter: "blur(2px)",
+                }}
+              />
+
+              {/* Trail 1 */}
+              <motion.div
+                style={{
+                  position: "absolute",
+                  left: trailX1, top: trailY1,
+                  width: 16, height: 16,
+                  background: "#ffd166",
+                  boxShadow: "0 0 20px 8px rgba(255, 209, 102, 0.6)",
+                  borderRadius: "50%",
+                  transform: "translate(-50%, -50%)",
+                  filter: "blur(1px)",
+                }}
+              />
+
+              {/* Core Main Star */}
+              <motion.div
+                style={{
+                  position: "absolute",
+                  left: starX, top: starY,
+                  width: 24, height: 24,
+                  background: "#fff9e6",
+                  boxShadow: "0 0 60px 15px rgba(255, 255, 255, 0.8), 0 0 100px 30px rgba(255, 183, 3, 0.8)",
+                  borderRadius: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
               >
+                  <div style={{ position: 'absolute', top: '50%', left: '50%', width: '150%', height: '2px', background: 'linear-gradient(90deg, transparent, #ffe066, transparent)', transform: 'translate(-50%, -50%)', opacity: 0.9 }} />
+                  <div style={{ position: 'absolute', top: '50%', left: '50%', width: '2px', height: '150%', background: 'linear-gradient(180deg, transparent, #ffe066, transparent)', transform: 'translate(-50%, -50%)', opacity: 0.9 }} />
+              </motion.div>
+            </motion.div>
+
+            <div className="grid-3" style={{ position: "relative", zIndex: 10 }}>
+              {features.map((f, i) => (
+                <SpotlightCard 
+                  key={i} 
+                  delay={0.3 + i * 0.1}
+                  style={{ padding: "2rem", background: "var(--glass-bg)", backdropFilter: "blur(12px)", border: "1px solid rgba(255, 255, 255, 0.05)" }}
+                >
                 <div style={{ display: "inline-flex", padding: 12, borderRadius: "16px", background: "rgba(14, 165, 233, 0.1)", marginBottom: 20, border: "1px solid rgba(14,165,233,0.15)" }}>
                   <f.icon size={20} color="var(--accent-blue)" strokeWidth={1.5} />
                 </div>
@@ -191,12 +313,13 @@ export default function DashboardPage() {
                 <div style={{ color: "var(--text-secondary)", fontSize: "0.95rem", lineHeight: 1.6 }}>{f.desc}</div>
               </SpotlightCard>
             ))}
+            </div>
           </div>
         </motion.div>
 
         {/* Disclaimer */}
         <div style={{ marginTop: "4rem", padding: "1.25rem", borderTop: "1px solid var(--border-color)", fontSize: "0.8rem", color: "var(--text-muted)", lineHeight: 1.6, textAlign: "center" }}>
-          Meowmeow is an informational probabilistic engine. Always consult a qualified healthcare provider for final medical diagnostics.
+          Pulse is an informational probabilistic engine. Always consult a qualified healthcare provider for final medical diagnostics.
         </div>
       </motion.div>
     </div>
