@@ -16,6 +16,7 @@ const CRISIS_PHRASES = [
   "i want to kill myself",
   "i wanna kill myself",
   "kill myself",
+  "killing myself",
   "end my life",
   "end it all",
   "i don't want to live",
@@ -47,16 +48,22 @@ const CRISIS_PHRASES = [
   "self harm",
   "self-harm",
 
-  // Shorthand / slang
-  "kms",
-  "kys",
-  "suicidal",
+  // Single keywords and common typos (relies on word boundaries if <= 5 chars)
+  "die",
+  "dying",
+  "dead",
   "suicide",
   "suicid",
+  "suiciding",
+  "cuicide",
+  "cuiciding",
+  "kms",
+  "kys",
   "unalive myself",
   "unalive me",
   "want to unalive",
   "wanna unalive",
+  "unalive",
 ];
 
 // Build a single regex from all phrases — word-boundary aware where possible

@@ -37,6 +37,13 @@ export default function InterviewPage() {
     }
   }, [navigate]);
 
+  // Reactive Crisis Check: Eagerly catch voice-to-text or programmatic updates
+  useEffect(() => {
+    if (detectCrisis(answer) || detectCrisis(transcript)) {
+      navigate("/support", { replace: true });
+    }
+  }, [answer, transcript, navigate]);
+
   const behavCapture = useBehavioralCapture();
   const recognitionRef = useRef(null);
   const textareaRef = useRef(null);
@@ -105,6 +112,13 @@ export default function InterviewPage() {
     const textToSubmit = typeof overrideAnswer === "string" ? overrideAnswer : answer.trim();
 
     if (!textToSubmit || textToSubmit.length < 3 || submitting) return;
+
+    // Hard fallback crisis check before sending to avoid LLM refusal leaks
+    if (detectCrisis(textToSubmit)) {
+      navigate("/support", { replace: true });
+      return;
+    }
+
     setSubmitting(true);
     setError("");
     setAnswer(""); // Instantly clear text box for immediate user feedback
