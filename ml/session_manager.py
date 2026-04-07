@@ -47,3 +47,8 @@ def get_combined_text(session_id: str) -> str:
     """Get all user messages concatenated as a single string."""
     history = _sessions.get(session_id, [])
     return " ".join(msg["content"] for msg in history if msg["role"] == "user")
+
+
+def active_session_count() -> int:
+    """Return the number of currently active sessions in memory."""
+    return len(_sessions)
