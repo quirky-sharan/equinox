@@ -193,11 +193,10 @@ def api_report_pdf(session_id: str = Query(..., description="Session ID to gener
             condition=final_data.get("condition", "Unknown"),
             confidence=final_data.get("confidence_percent", 50),
             risk_tier=final_data.get("risk_tier", "medium"),
-            explanation=final_data.get("explanation_patient", ""),
-            dos=final_data.get("dos", []),
-            donts=final_data.get("donts", []),
-            see_doctor=final_data.get("see_doctor", False),
-            see_doctor_reason=final_data.get("see_doctor_reason", ""),
+            explanation_doctor=final_data.get("explanation_doctor", "No detailed clinical summary provided."),
+            warning_signs=final_data.get("warning_signs", []),
+            urgency=final_data.get("see_doctor_urgency", "routine"),
+            specialist=final_data.get("see_doctor_reason", "General Physician"),
             reasoning=final_data.get("reasoning", []),
         )
 

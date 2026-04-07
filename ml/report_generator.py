@@ -1,5 +1,5 @@
 """
-PDF Report Generator — Creates a clinical summary PDF using ReportLab.
+PDF Report Generator — Creates a clinical summary PDF aimed at healthcare professionals using ReportLab.
 """
 from io import BytesIO
 from datetime import datetime
@@ -8,23 +8,21 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 from reportlab.lib.colors import HexColor
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, HRFlowable
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, HRFlowable
 from reportlab.lib.enums import TA_CENTER, TA_LEFT
-
 
 def generate_report(
     condition: str,
     confidence: int,
     risk_tier: str,
-    explanation: str,
-    dos: list[str],
-    donts: list[str],
-    see_doctor: bool,
-    see_doctor_reason: str = "",
-    reasoning: list[str] = None,
+    explanation_doctor: str,
+    warning_signs: list[str],
+    urgency: str,
+    specialist: str,
+    reasoning: list[str],
 ) -> bytes:
     """
-    Generate a one-page clinical summary PDF.
+    Generate a one-page doctor-centric clinical handover PDF.
 
     Returns:
         PDF as bytes, ready to serve as a download.
@@ -45,9 +43,9 @@ def generate_report(
     title_style = ParagraphStyle(
         "CustomTitle",
         parent=styles["Title"],
-        fontSize=22,
+        fontSize=18,
         textColor=HexColor("#0f172a"),
-        spaceAfter=4,
+        spaceAfter=2,
     )
     subtitle_style = ParagraphStyle(
         "Subtitle",
@@ -55,34 +53,41 @@ def generate_report(
         fontSize=10,
         textColor=HexColor("#64748b"),
         alignment=TA_CENTER,
-        spaceAfter=16,
+        spaceAfter=12,
     )
     heading_style = ParagraphStyle(
         "CustomHeading",
         parent=styles["Heading2"],
-        fontSize=13,
+        fontSize=12,
         textColor=HexColor("#1e293b"),
         spaceBefore=14,
-        spaceAfter=6,
+        spaceAfter=4,
+        fontName="Helvetica-Bold",
+        borderPadding=(0, 0, 4, 0),
+        borderColor=HexColor("#e2e8f0"),
+        borderWidth=0.5,
     )
     body_style = ParagraphStyle(
         "Body",
         parent=styles["Normal"],
-        fontSize=10,
-        leading=15,
+        fontSize=9.5,
+        leading=14,
         textColor=HexColor("#334155"),
     )
-    do_style = ParagraphStyle(
-        "DoItem",
+    list_style = ParagraphStyle(
+        "ListItem",
         parent=body_style,
         leftIndent=12,
-        bulletColor=HexColor("#10b981"),
+        bulletColor=HexColor("#3b82f6"),
+        spaceAfter=2,
     )
-    dont_style = ParagraphStyle(
-        "DontItem",
+    alert_style = ParagraphStyle(
+        "AlertItem",
         parent=body_style,
         leftIndent=12,
         bulletColor=HexColor("#ef4444"),
+        textColor=HexColor("#991b1b"),
+        spaceAfter=2,
     )
     disclaimer_style = ParagraphStyle(
         "Disclaimer",
@@ -92,66 +97,70 @@ def generate_report(
         alignment=TA_CENTER,
         spaceBefore=20,
     )
+    badge_style = ParagraphStyle(
+        "Badge",
+        parent=styles["Normal"],
+        fontSize=10,
+        fontName="Helvetica-Bold",
+        spaceAfter=8,
+    )
 
     elements = []
 
     # Header
-    elements.append(Paragraph("Meowmeow — Clinical Summary", title_style))
+    elements.append(Paragraph("CLINICAL AI HANDOVER REPORT", title_style))
     elements.append(Paragraph(
         f"Generated on {datetime.now().strftime('%B %d, %Y at %I:%M %p')}",
         subtitle_style,
     ))
-    elements.append(HRFlowable(width="100%", thickness=1, color=HexColor("#e2e8f0")))
     elements.append(Spacer(1, 10))
 
-    # Condition + Confidence
+    # Triage & Primary Hypothesis
     risk_colors = {
         "low": "#10b981", "medium": "#f59e0b",
         "high": "#f97316", "critical": "#ef4444"
     }
     risk_color = risk_colors.get(risk_tier, "#64748b")
 
-    elements.append(Paragraph(f"Detected Condition", heading_style))
+    elements.append(Paragraph("Primary Diagnostic Hypothesis", heading_style))
     elements.append(Paragraph(
-        f'<font size="16" color="{risk_color}"><b>{condition}</b></font>'
-        f'&nbsp;&nbsp;<font size="10" color="#64748b">({confidence}% confidence — {risk_tier.upper()} risk)</font>',
-        body_style,
+        f'<font size="14" color="{risk_color}"><b>{condition}</b></font>'
+        f'&nbsp;&nbsp;<font size="10" color="#64748b">(AI Confidence: {confidence}% | Triage Tier: {risk_tier.upper()})</font>',
+        badge_style,
     ))
-    elements.append(Spacer(1, 6))
-    elements.append(Paragraph(explanation, body_style))
+    elements.append(Paragraph(
+        f"<b>Suggested Urgency:</b> {urgency.title() if urgency else 'Routine Evaluation'}<br/>"
+        f"<b>Recommended Referral/Specialist:</b> {specialist if specialist else 'General Practice / PCP'}",
+        body_style
+    ))
+    elements.append(Spacer(1, 8))
 
-    # Do's
-    elements.append(Paragraph("✅ Recommended Actions (Do's)", heading_style))
-    for item in dos:
-        elements.append(Paragraph(f"• {item}", do_style))
+    # Clinical Summary (Doctor-centric explanation, differentials, workup)
+    elements.append(Paragraph("Clinical Summary & Workup Recommendations", heading_style))
+    elements.append(Paragraph(explanation_doctor.replace("\n", "<br/>"), body_style))
+    elements.append(Spacer(1, 8))
 
-    # Don'ts
-    elements.append(Paragraph("❌ Things to Avoid (Don'ts)", heading_style))
-    for item in donts:
-        elements.append(Paragraph(f"• {item}", dont_style))
+    # Red Flags / Warning Signs
+    if warning_signs:
+        elements.append(Paragraph("Red Flags / Warning Signs Indicated", heading_style))
+        for item in warning_signs:
+            elements.append(Paragraph(f"• {item}", alert_style))
+        elements.append(Spacer(1, 8))
 
-    # Doctor recommendation
-    if see_doctor:
-        elements.append(Paragraph("⚠️ Doctor Recommendation", heading_style))
-        elements.append(Paragraph(
-            f'<font color="#ef4444"><b>Professional medical attention is recommended.</b></font><br/>'
-            f'{see_doctor_reason}',
-            body_style,
-        ))
-
-    # Reasoning chain
+    # Reasoning Chain
     if reasoning:
-        elements.append(Paragraph("🧠 Clinical Reasoning", heading_style))
+        elements.append(Paragraph("AI Clinical Reasoning Chain", heading_style))
         for i, step in enumerate(reasoning, 1):
-            elements.append(Paragraph(f"{i}. {step}", body_style))
+            elements.append(Paragraph(f"{i}. {step}", list_style))
+        elements.append(Spacer(1, 8))
 
-    # Disclaimer
+    # Footer Disclaimer
     elements.append(Spacer(1, 20))
     elements.append(HRFlowable(width="100%", thickness=0.5, color=HexColor("#e2e8f0")))
     elements.append(Paragraph(
-        "⚕️ This report is generated by Meowmeow AI Health Advisor and is for informational purposes only. "
-        "It is NOT a medical diagnosis. Always consult a qualified healthcare professional for medical advice. "
-        "Do not use this report as a substitute for professional medical judgment.",
+        "⚕️ This report contains preliminary findings generated by the Meowmeow AI clinical engine via patient interview. "
+        "It is designed to assist healthcare professionals by summarizing patient symptomatology, aggregating clinical probabilities, "
+        "and suggesting differentials. It is NOT a substitute for professional medical judgment, physical examination, or diagnostic testing.",
         disclaimer_style,
     ))
 
