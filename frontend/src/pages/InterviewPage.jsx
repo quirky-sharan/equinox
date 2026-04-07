@@ -145,16 +145,16 @@ export default function InterviewPage() {
       }
 
       // Update mental state for WellnessNudge
+      let finalMentalState = null;
       if (res.data.final_data?.mental_state) {
-        setMentalState(res.data.final_data.mental_state);
+        finalMentalState = res.data.final_data.mental_state;
       } else if (res.data.mental_state) {
-        setMentalState(res.data.mental_state);
-      } else {
-        setMentalState(null);
+        finalMentalState = res.data.mental_state;
       }
+      setMentalState(finalMentalState);
 
       if (res.data.interview_complete) {
-        navigate(`/result/${sessionId}`);
+        navigate(`/result/${sessionId}`, { state: { mentalState: finalMentalState } });
         return;
       }
 

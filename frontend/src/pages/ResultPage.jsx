@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,6 +9,7 @@ import {
   Activity, MessageSquare, ChevronRight, Cat, MapPin, FileText,
   Check, X as XIcon, Heart, Utensils, Leaf, Zap, AlertOctagon
 } from "lucide-react";
+import WellnessNudge from "../components/WellnessNudge";
 
 const RISK_CONFIG = {
   low:      { color: "var(--risk-low)",      bg: "rgba(16,185,129,0.08)",  border: "rgba(16,185,129,0.25)",  icon: CheckCircle,   label: "LOW RISK" },
@@ -27,7 +28,9 @@ const TRAJECTORY_CONFIG = {
 export default function ResultPage() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [viewMode, setViewMode] = useState("patient");
+  const mentalState = location.state?.mentalState;
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["result", sessionId],
@@ -234,6 +237,23 @@ export default function ResultPage() {
                   <div style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>{step}</div>
                 </div>
               ))}
+            </div>
+          </motion.div>
+        )}
+
+        {/* Mental Health Support (Ephemeral, passed via state) */}
+        {viewMode === "patient" && mentalState?.distress_detected && (
+          <motion.div variants={itemVariants} style={{ marginBottom: "2rem" }}>
+            <div className="card" style={{ padding: "2rem", borderTop: "4px solid #a78bfa", background: "rgba(167, 139, 250, 0.03)" }}>
+              <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#a78bfa", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
+                <Heart size={16} /> Mental Wellness Support
+              </h3>
+              <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", lineHeight: 1.6, marginBottom: "1.5rem" }}>
+                {mentalState.wellness_nudge || "We noticed you might be going through a tough time. Remember that your mental wellbeing is just as important as your physical health."}
+              </p>
+              <a href="https://icallhelpline.org" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ color: "#a78bfa", borderColor: "rgba(167, 139, 250, 0.4)" }}>
+                Find a counselor or helpline →
+              </a>
             </div>
           </motion.div>
         )}
