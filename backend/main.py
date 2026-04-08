@@ -7,6 +7,7 @@ from .routes.session import router as session_router
 from .routes.memory import router as memory_router
 from .routes.feedback import router as feedback_router
 from .routes.admin import router as admin_router
+from .routes.appointments import router as appointments_router
 from .config import settings
 
 # Create all tables
@@ -31,6 +32,7 @@ app.include_router(session_router, prefix="/api")
 app.include_router(memory_router, prefix="/api")
 app.include_router(feedback_router, prefix="/api")
 app.include_router(admin_router, prefix="/api")
+app.include_router(appointments_router, prefix="/api")
 
 @app.get("/")
 def root():

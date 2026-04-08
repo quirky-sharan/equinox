@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     FIREBASE_API_KEY: str = ""
     FRONTEND_URL: str = "http://localhost:5173"
     GROQ_API_KEY: str = ""
+    VAPI_API_KEY: str = ""
+    VAPI_PHONE_NUMBER_ID: str = ""
 
     class Config:
         env_file = str(_env_path)
