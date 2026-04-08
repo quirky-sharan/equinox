@@ -1,31 +1,152 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { sessionApi } from "../api/endpoints";
 import {
   Shield, AlertTriangle, CheckCircle, XCircle,
-  TrendingUp, TrendingDown, Minus, Download, RotateCcw,
-  Activity, MessageSquare, ChevronRight, Cat, MapPin, FileText,
-  Check, X as XIcon, Heart, Utensils, Leaf, Zap, AlertOctagon
+  TrendingUp, TrendingDown, Minus, Activity, MessageSquare,
+  ChevronRight, MapPin, FileText, Check, X as XIcon,
+  Heart, Utensils, Leaf, Zap, AlertOctagon, ArrowRight,
 } from "lucide-react";
 import WellnessNudge from "../components/WellnessNudge";
 import FeedbackModal from "../components/FeedbackModal";
 import api from "../api/client";
+
+/* ─── Config maps ───────────────────────────────────────────────── */
 const RISK_CONFIG = {
-  low:      { color: "var(--risk-low)",      bg: "rgba(16,185,129,0.08)",  border: "rgba(16,185,129,0.25)",  icon: CheckCircle,   label: "LOW RISK" },
-  medium:   { color: "var(--risk-medium)",   bg: "rgba(245,158,11,0.08)",   border: "rgba(245,158,11,0.25)",   icon: AlertTriangle, label: "MEDIUM RISK" },
-  high:     { color: "var(--risk-high)",     bg: "rgba(249,115,22,0.08)",   border: "rgba(249,115,22,0.25)",   icon: AlertTriangle, label: "HIGH RISK" },
-  critical: { color: "var(--risk-critical)", bg: "rgba(239,68,68,0.08)",    border: "rgba(239,68,68,0.25)",    icon: XCircle,       label: "CRITICAL" },
+  low: { color: "var(--risk-low)", icon: CheckCircle, label: "Low Risk", word: "LOW" },
+  medium: { color: "var(--risk-medium)", icon: AlertTriangle, label: "Medium Risk", word: "MEDIUM" },
+  high: { color: "var(--risk-high)", icon: AlertTriangle, label: "High Risk", word: "HIGH" },
+  critical: { color: "var(--risk-critical)", icon: XCircle, label: "Critical", word: "CRITICAL" },
 };
 
 const TRAJECTORY_CONFIG = {
-  stable:    { icon: Minus,         color: "var(--risk-low)",    cls: "badge-stable",    label: "STABLE" },
-  worsening: { icon: TrendingDown,  color: "var(--risk-critical)",cls: "badge-worsening", label: "WORSENING" },
-  improving: { icon: TrendingUp,    color: "var(--accent-blue)", cls: "badge-improving", label: "IMPROVING" },
-  new_onset: { icon: Activity,      color: "var(--risk-medium)", cls: "badge-medium",    label: "NEW ONSET" },
+  stable: { icon: Minus, color: "var(--risk-low)", label: "Stable" },
+  worsening: { icon: TrendingDown, color: "var(--risk-critical)", label: "Worsening" },
+  improving: { icon: TrendingUp, color: "var(--accent-blue)", label: "Improving" },
+  new_onset: { icon: Activity, color: "var(--risk-medium)", label: "New Onset" },
 };
 
+/* ─── Animated progress bar ─────────────────────────────────────── */
+function ConfidenceBar({ value, color, delay = 0 }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+  return (
+    <div ref={ref} className="progress-bar-track" style={{ height: 4, background: "var(--bg-inset)", borderRadius: "var(--radius-full)", overflow: "hidden" }}>
+      <motion.div
+        className="progress-bar-fill"
+        initial={{ width: 0 }}
+        animate={inView ? { width: `${(value || 0) * 100}%` } : {}}
+        transition={{ duration: 1.2, delay, ease: [0.16, 1, 0.3, 1] }}
+        style={{ background: color || "var(--accent-blue)", height: "100%", borderRadius: "var(--radius-full)" }}
+      />
+    </div>
+  );
+}
+
+/* ─── Section wrapper ─────────────────────────────────────────────── */
+function Section({ children, delay = 0, style = {} }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
+      style={style}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+/* ─── Section header ──────────────────────────────────────────────── */
+function SectionHeader({ icon: Icon, label, color = "var(--text-muted)" }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        marginBottom: "1.5rem",
+      }}
+    >
+      <Icon size={14} color={color} strokeWidth={1.5} />
+      <span
+        style={{
+          fontFamily: "var(--font-ui)",
+          fontSize: "0.68rem",
+          fontWeight: 700,
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          color,
+        }}
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
+/* ─── List item ───────────────────────────────────────────────────── */
+function ListItem({ icon: Icon, color, text, index }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+  return (
+    <motion.li
+      ref={ref}
+      initial={{ opacity: 0, x: -8 }}
+      animate={inView ? { opacity: 1, x: 0 } : {}}
+      transition={{ duration: 0.5, delay: index * 0.06, ease: "easeOut" }}
+      style={{
+        display: "flex",
+        alignItems: "flex-start",
+        gap: 12,
+        fontFamily: "var(--font-body)",
+        fontSize: "0.95rem",
+        color: "var(--text-secondary)",
+        lineHeight: 1.65,
+        fontWeight: 300,
+      }}
+    >
+      <Icon
+        size={15}
+        color={color}
+        style={{ flexShrink: 0, marginTop: 4 }}
+        strokeWidth={1.5}
+      />
+      {text}
+    </motion.li>
+  );
+}
+
+/* ─── View mode pill ──────────────────────────────────────────────── */
+function ModePill({ active, onClick, children }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        padding: "7px 20px",
+        borderRadius: "var(--radius-full)",
+        border: "none",
+        background: active ? "var(--bg-card)" : "transparent",
+        color: active ? "var(--text-primary)" : "var(--text-muted)",
+        cursor: "pointer",
+        fontFamily: "var(--font-ui)",
+        fontWeight: 700,
+        fontSize: "0.82rem",
+        letterSpacing: "0.02em",
+        transition: "all 0.25s cubic-bezier(0.16, 1, 0.3, 1)",
+        boxShadow: active ? "var(--shadow-sm)" : "none",
+        border: active ? "1px solid var(--border-color)" : "1px solid transparent",
+      }}
+    >
+      {children}
+    </button>
+  );
+}
+
+/* ─── Main ──────────────────────────────────────────────────────── */
 export default function ResultPage() {
   const { sessionId } = useParams();
   const navigate = useNavigate();
@@ -41,15 +162,12 @@ export default function ResultPage() {
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [feedbackChecked, setFeedbackChecked] = useState(false);
 
-  // Check if feedback already exists for this session
   useQuery({
     queryKey: ["feedback", sessionId],
     queryFn: async () => {
       try {
         const res = await api.get(`/feedback/${sessionId}`);
-        if (!res.data) {
-          setIsFeedbackModalOpen(true);
-        }
+        if (!res.data) setIsFeedbackModalOpen(true);
         setFeedbackChecked(true);
         return res.data;
       } catch (e) {
@@ -60,420 +178,722 @@ export default function ResultPage() {
         return null;
       }
     },
-    enabled: !!data && !feedbackChecked, // Only check once the result is loaded
+    enabled: !!data && !feedbackChecked,
   });
 
-  if (isLoading) return (
-    <div className="page-center" style={{ flexDirection: "column", gap: 24 }}>
-      <motion.div 
-        animate={{ rotate: 360 }} 
-        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-        style={{ width: 48, height: 48, borderRadius: "14px", border: "2px solid var(--border-color)", borderTopColor: "var(--accent-blue)", display: "flex", alignItems: "center", justifyContent: "center" }}
-      >
-        <Activity size={20} color="#FF3366" />
-      </motion.div>
-      <p style={{ color: "var(--text-secondary)", fontVariantNumeric: "tabular-nums", letterSpacing: "0.02em", fontSize: "0.9rem" }}>Synthesizing clinical results…</p>
-    </div>
-  );
-
-  if (error) return (
-    <div className="page-center">
-      <div style={{ textAlign: "center", color: "var(--risk-critical)" }}>
-        <p style={{ marginBottom: 16 }}>The clinical engine failed to retrieve the result set.</p>
-        <button className="btn btn-secondary btn-sm" onClick={() => navigate("/dashboard")}>Return to Dashboard</button>
+  /* Loading */
+  if (isLoading) {
+    return (
+      <div className="page-center" style={{ flexDirection: "column", gap: 20 }}>
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: "50%",
+            border: "1.5px solid var(--border-color)",
+            borderTopColor: "var(--text-primary)",
+          }}
+        />
+        <p
+          style={{
+            fontFamily: "var(--font-ui)",
+            fontSize: "0.8rem",
+            color: "var(--text-muted)",
+            letterSpacing: "0.1em",
+            textTransform: "uppercase",
+          }}
+        >
+          Synthesizing clinical results
+        </p>
       </div>
-    </div>
-  );
+    );
+  }
+
+  /* Error */
+  if (error) {
+    return (
+      <div className="page-center">
+        <div style={{ textAlign: "center" }}>
+          <p style={{ color: "var(--risk-critical)", marginBottom: 16, fontFamily: "var(--font-body)" }}>
+            The clinical engine failed to retrieve the result set.
+          </p>
+          <button className="btn btn-secondary btn-sm" onClick={() => navigate("/dashboard")}>
+            Return to Dashboard
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const risk = RISK_CONFIG[data?.risk_tier] || RISK_CONFIG.medium;
   const traj = TRAJECTORY_CONFIG[data?.trajectory] || TRAJECTORY_CONFIG.stable;
   const RiskIcon = risk.icon;
   const TrajIcon = traj.icon;
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
-  };
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
-  };
+  const scorePercent = Math.round((data?.risk_score || 0.5) * 100);
 
   return (
-    <div className="page-container" style={{ maxWidth: 840, position: "relative" }}>
-      {/* Background glow for critical state */}
-      <AnimatePresence>
-        {data?.risk_tier === "critical" && (
-          <motion.div 
-            initial={{ opacity: 0 }} animate={{ opacity: 0.04 }} exit={{ opacity: 0 }}
-            style={{ position: "fixed", inset: 0, background: "radial-gradient(circle, var(--risk-critical) 0%, transparent 70%)", zIndex: -1 }} 
-          />
-        )}
-      </AnimatePresence>
+    <div className="page-container" style={{ maxWidth: 860 }}>
 
-      <motion.div variants={containerVariants} initial="hidden" animate="visible">
-
-        {/* View Mode Toggle */}
-        <motion.div variants={itemVariants} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "3rem" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ width: 40, height: 40, borderRadius: "10px", background: "var(--bg-subtle)", border: "1px solid var(--border-color)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <Activity size={20} color="var(--accent-blue)" strokeWidth={1.5} />
+      {/* ── TOP BAR ──────────────────────────────────────────────── */}
+      <motion.div
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "4rem",
+          flexWrap: "wrap",
+          gap: "1rem",
+        }}
+      >
+        {/* Session ID + icon */}
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <div
+            style={{
+              width: 38,
+              height: 38,
+              borderRadius: 10,
+              background: "var(--bg-subtle)",
+              border: "1px solid var(--border-color)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Activity size={18} color="var(--text-secondary)" strokeWidth={1.5} />
+          </div>
+          <div>
+            <div
+              style={{
+                fontFamily: "var(--font-ui)",
+                fontSize: "0.85rem",
+                fontWeight: 700,
+                color: "var(--text-primary)",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Inference Report
             </div>
-            <div>
-              <div style={{ fontSize: "1rem", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em" }}>Inference Report</div>
-              <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Session ID: {sessionId?.slice(0, 8)}</div>
+            <div
+              style={{
+                fontFamily: "var(--font-ui)",
+                fontSize: "0.68rem",
+                color: "var(--text-muted)",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+              }}
+            >
+              Session {sessionId?.slice(0, 8)}
             </div>
           </div>
+        </div>
 
-          <div style={{ display: "inline-flex", background: "var(--bg-subtle)", borderRadius: "var(--radius-full)", padding: 4, border: "1px solid var(--border-color)" }}>
-            <button 
-              onClick={() => setViewMode("patient")}
-              style={{ padding: "8px 18px", borderRadius: "100px", border: "none", background: viewMode === "patient" ? "var(--bg-card)" : "transparent", color: viewMode === "patient" ? "var(--text-primary)" : "var(--text-muted)", cursor: "pointer", fontWeight: 700, fontSize: "0.85rem", transition: "all 0.3s", boxShadow: viewMode === "patient" ? "0 4px 12px rgba(0,0,0,0.1)" : "none" }}
-            >
-              Patient
-            </button>
-            <button 
-              onClick={() => setViewMode("doctor")}
-              style={{ padding: "8px 18px", borderRadius: "100px", border: "none", background: viewMode === "doctor" ? "var(--bg-card)" : "transparent", color: viewMode === "doctor" ? "var(--text-primary)" : "var(--text-muted)", cursor: "pointer", fontWeight: 700, fontSize: "0.85rem", transition: "all 0.3s", boxShadow: viewMode === "doctor" ? "0 4px 12px rgba(0,0,0,0.1)" : "none" }}
-            >
-              Clinical
-            </button>
-          </div>
-        </motion.div>
-
-        {/* Risk tier hero */}
-        <motion.div 
-          variants={itemVariants} 
-          className="card" 
-          style={{ 
-            padding: "3rem 2rem", marginBottom: "2rem", textAlign: "center",
-            background: `linear-gradient(135deg, ${risk.bg} 0%, transparent 100%)`, 
-            borderColor: risk.border,
-            boxShadow: `0 30px 60px -12px ${risk.bg}`
+        {/* View mode toggle */}
+        <div
+          style={{
+            display: "inline-flex",
+            background: "var(--bg-subtle)",
+            borderRadius: "var(--radius-full)",
+            padding: 4,
+            border: "1px solid var(--border-color)",
+            gap: 2,
           }}
         >
-          <div style={{ position: "relative", display: "inline-block", marginBottom: 20 }}>
-            <motion.div 
-              animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              style={{ position: "absolute", inset: -15, borderRadius: "50%", background: risk.color, filter: "blur(20px)", zIndex: -1 }}
-            />
-            <RiskIcon size={64} color={risk.color} strokeWidth={1.5} />
-          </div>
-          
-          <div style={{ fontSize: "0.8rem", letterSpacing: "0.2em", fontWeight: 800, color: risk.color, marginBottom: 12, textTransform: "uppercase" }}>
-            Validated Result
-          </div>
-          <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "clamp(2rem, 8vw, 4rem)", fontWeight: 900, color: "var(--text-primary)", letterSpacing: "-0.05em", lineHeight: 0.9, marginBottom: "1rem" }}>
-            {risk.label.split(" ")[0]}<br />
-            <span style={{ color: risk.color }}>{risk.label.split(" ").slice(1).join(" ") || "RISK"}</span>
-          </h1>
-          
-          <div style={{ display: "flex", justifyContent: "center", gap: "2rem", marginTop: "2rem" }}>
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Confidence</div>
-              <div style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text-primary)" }}>{((data?.risk_score || 0.5) * 100).toFixed(0)}%</div>
-            </div>
-            {traj && (
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 4 }}>Trajectory</div>
-                <div style={{ fontSize: "1.25rem", fontWeight: 800, color: traj.color, display: "flex", alignItems: "center", gap: 6 }}>
-                  <TrajIcon size={18} /> {traj.label}
-                </div>
+          <ModePill active={viewMode === "patient"} onClick={() => setViewMode("patient")}>
+            Patient
+          </ModePill>
+          <ModePill active={viewMode === "doctor"} onClick={() => setViewMode("doctor")}>
+            Clinical
+          </ModePill>
+        </div>
+      </motion.div>
+
+      {/* ── RISK TIER HERO ────────────────────────────────────────── */}
+      <Section>
+        <div
+          style={{
+            padding: "3.5rem 2.5rem",
+            marginBottom: "2rem",
+            border: "1px solid var(--border-color)",
+            borderTop: `4px solid ${risk.color}`,
+            borderRadius: "var(--radius-lg)",
+            background: "var(--bg-card)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              flexWrap: "wrap",
+              gap: "2rem",
+            }}
+          >
+            {/* Large typographic risk tier */}
+            <div>
+              <div
+                style={{
+                  fontFamily: "var(--font-ui)",
+                  fontSize: "0.7rem",
+                  fontWeight: 700,
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  color: risk.color,
+                  marginBottom: "1rem",
+                }}
+              >
+                Validated Result
               </div>
-            )}
+
+              <div style={{ overflow: "hidden", marginBottom: 4 }}>
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: "0%" }}
+                  transition={{ duration: 0.85, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <h1
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontStyle: "italic",
+                      fontSize: "clamp(3.5rem, 8vw, 6rem)",
+                      fontWeight: 600,
+                      letterSpacing: "-0.06em",
+                      color: risk.color,
+                      lineHeight: 1.0,
+                      margin: 0,
+                    }}
+                  >
+                    {risk.word}
+                  </h1>
+                </motion.div>
+              </div>
+              <div style={{ overflow: "hidden" }}>
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: "0%" }}
+                  transition={{ duration: 0.85, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <h2
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
+                      fontWeight: 400,
+                      letterSpacing: "-0.03em",
+                      color: "var(--text-muted)",
+                      lineHeight: 1.1,
+                      margin: 0,
+                    }}
+                  >
+                    RISK
+                  </h2>
+                </motion.div>
+              </div>
+            </div>
+
+            {/* Right side: metrics */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.5rem",
+                minWidth: 160,
+              }}
+            >
+              {/* Confidence */}
+              <div>
+                <div
+                  style={{
+                    fontFamily: "var(--font-ui)",
+                    fontSize: "0.68rem",
+                    fontWeight: 700,
+                    letterSpacing: "0.1em",
+                    textTransform: "uppercase",
+                    color: "var(--text-muted)",
+                    marginBottom: 8,
+                  }}
+                >
+                  Confidence
+                </div>
+                <div
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: "2rem",
+                    fontWeight: 700,
+                    letterSpacing: "-0.05em",
+                    color: "var(--text-primary)",
+                    lineHeight: 1,
+                    marginBottom: 8,
+                  }}
+                >
+                  {scorePercent}%
+                </div>
+                <ConfidenceBar value={data?.risk_score || 0.5} color={risk.color} />
+              </div>
+
+              {/* Trajectory */}
+              {traj && (
+                <div>
+                  <div
+                    style={{
+                      fontFamily: "var(--font-ui)",
+                      fontSize: "0.68rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      color: "var(--text-muted)",
+                      marginBottom: 8,
+                    }}
+                  >
+                    Trajectory
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      fontFamily: "var(--font-ui)",
+                      fontSize: "0.9rem",
+                      fontWeight: 700,
+                      color: traj.color,
+                    }}
+                  >
+                    <TrajIcon size={16} strokeWidth={2} />
+                    {traj.label}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </motion.div>
+        </div>
+      </Section>
 
-
-        <motion.div variants={itemVariants} className="grid-2-col" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "2rem", marginBottom: "2rem" }}>
-          {/* Top conditions */}
-          {viewMode === "doctor" && (
-            <div className="card" style={{ padding: "2rem" }}>
-              <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-primary)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
-                <Activity size={16} color="var(--accent-blue)" /> Differential Diagnosis
-              </h3>
+      {/* ── DIFFERENTIAL DIAGNOSIS (doctor only) ─────────────────── */}
+      <AnimatePresence mode="wait">
+        {viewMode === "doctor" && (data?.top_conditions || []).length > 0 && (
+          <Section delay={0.05} style={{ marginBottom: "2rem" }}>
+            <div
+              className="card"
+              style={{ padding: "2rem" }}
+            >
+              <SectionHeader icon={Activity} label="Differential Diagnosis" color="var(--accent-blue)" />
               <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
                 {(data?.top_conditions || []).map((cond, i) => (
                   <div key={i}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-                      <span style={{ fontWeight: 700, fontSize: "0.95rem" }}>{cond.name}</span>
-                      <span style={{ fontWeight: 800, fontSize: "0.95rem", color: "var(--accent-blue)" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "baseline",
+                        marginBottom: 6,
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: "var(--font-body)",
+                          fontWeight: 600,
+                          fontSize: "0.95rem",
+                          color: "var(--text-primary)",
+                        }}
+                      >
+                        {cond.name}
+                      </span>
+                      <span
+                        style={{
+                          fontFamily: "var(--font-display)",
+                          fontWeight: 700,
+                          fontSize: "1rem",
+                          color: i === 0 ? "var(--accent-blue)" : "var(--text-muted)",
+                          letterSpacing: "-0.02em",
+                        }}
+                      >
                         {((cond.confidence || 0) * 100).toFixed(0)}%
                       </span>
                     </div>
-                    <div className="progress-bar-track" style={{ height: 6, background: "var(--bg-subtle)" }}>
-                      <motion.div className="progress-bar-fill"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${(cond.confidence || 0) * 100}%` }}
-                        transition={{ duration: 1, delay: 0.5 + (i * 0.15), ease: [0.16, 1, 0.3, 1] }}
-                        style={{ background: i === 0 ? "var(--accent-blue)" : "var(--text-muted)" }}
-                      />
-                    </div>
+                    <ConfidenceBar
+                      value={cond.confidence || 0}
+                      color={i === 0 ? "var(--accent-blue)" : "var(--border-strong)"}
+                      delay={0.3 + i * 0.1}
+                    />
                     {cond.icd10 && (
-                      <div style={{ fontSize: "0.75rem", color: "var(--text-muted)", marginTop: 4, letterSpacing: "0.02em" }}>CODING: {cond.icd10}</div>
+                      <div
+                        style={{
+                          fontFamily: "var(--font-ui)",
+                          fontSize: "0.68rem",
+                          color: "var(--text-muted)",
+                          marginTop: 6,
+                          letterSpacing: "0.06em",
+                          textTransform: "uppercase",
+                        }}
+                      >
+                        ICD-10: {cond.icd10}
+                      </div>
                     )}
                   </div>
                 ))}
               </div>
             </div>
-          )}
+          </Section>
+        )}
+      </AnimatePresence>
 
-          {/* Reasoning & action */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "2rem", gridColumn: viewMode === "patient" ? "1 / -1" : "auto" }}>
-            <div className="card" style={{ padding: "2rem", flex: 1, borderTop: `4px solid ${risk.color}` }}>
-              <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-primary)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
-                <Shield size={16} color={risk.color} /> {viewMode === "patient" ? "Assessment Summary" : "Inference Logic"}
-              </h3>
-              
-              <div style={{ fontSize: "1.1rem", lineHeight: 1.8, color: "var(--text-secondary)", fontWeight: 400, whiteSpace: "pre-line" }}>
-                {viewMode === "patient" ? (data?.patient_explanation || data?.recommended_action) : (data?.doctor_explanation || data?.recommended_action)}
-              </div>
-            </div>
-
-            {viewMode === "doctor" && (data?.behavioral_flags || []).length > 0 && (
-              <div className="card" style={{ padding: "2rem" }}>
-                <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-primary)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
-                  <MessageSquare size={16} color="var(--accent-cyan)" /> Nuance Capture
-                </h3>
-                <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
-                  {data.behavioral_flags.map((flag, i) => (
-                    <li key={i} style={{ fontSize: "0.95rem", color: "var(--text-secondary)", paddingLeft: 20, position: "relative" }}>
-                      <span style={{ position: "absolute", left: 0, top: 10, width: 6, height: 6, borderRadius: "50%", background: "var(--accent-cyan)" }} />
-                      {flag}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+      {/* ── ASSESSMENT SUMMARY / INFERENCE LOGIC ─────────────────── */}
+      <Section delay={0.1} style={{ marginBottom: "2rem" }}>
+        <div
+          className="card"
+          style={{ padding: "2rem", borderTop: `3px solid ${risk.color}` }}
+        >
+          <SectionHeader
+            icon={Shield}
+            label={viewMode === "patient" ? "Assessment Summary" : "Inference Logic"}
+            color={risk.color}
+          />
+          <div
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: "1rem",
+              lineHeight: 1.8,
+              color: "var(--text-secondary)",
+              fontWeight: 300,
+              whiteSpace: "pre-line",
+            }}
+          >
+            {viewMode === "patient"
+              ? data?.patient_explanation || data?.recommended_action
+              : data?.doctor_explanation || data?.recommended_action}
           </div>
-        </motion.div>
+        </div>
+      </Section>
 
-
-        {/* Reasoning chain */}
-        {viewMode === "doctor" && (data?.reasoning_chain || []).length > 0 && (
-          <motion.div variants={itemVariants} className="card" style={{ padding: "2rem", marginBottom: "2rem" }}>
-            <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-primary)", fontWeight: 800, marginBottom: "1.5rem" }}>
-              Analytic Traversal
-            </h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      {/* ── REASONING CHAIN (doctor only) ────────────────────────── */}
+      {viewMode === "doctor" && (data?.reasoning_chain || []).length > 0 && (
+        <Section delay={0.15} style={{ marginBottom: "2rem" }}>
+          <div className="card" style={{ padding: "2rem" }}>
+            <SectionHeader icon={ChevronRight} label="Analytic Traversal" />
+            <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               {data.reasoning_chain.map((step, i) => (
-                <div key={i} style={{ display: "flex", gap: 16 }}>
-                  <div style={{ fontSize: "0.85rem", fontWeight: 800, color: "var(--accent-blue)", fontVariantNumeric: "tabular-nums" }}>{(i + 1).toString().padStart(2, '0')}</div>
-                  <div style={{ fontSize: "0.95rem", color: "var(--text-secondary)", lineHeight: 1.6 }}>{step}</div>
+                <div key={i} style={{ display: "flex", gap: "1.25rem" }}>
+                  <div
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontSize: "1.1rem",
+                      fontWeight: 700,
+                      color: "var(--border-strong)",
+                      fontVariantNumeric: "tabular-nums",
+                      flexShrink: 0,
+                      width: 24,
+                      letterSpacing: "-0.03em",
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {(i + 1).toString().padStart(2, "0")}
+                  </div>
+                  <div
+                    style={{
+                      fontFamily: "var(--font-body)",
+                      fontSize: "0.95rem",
+                      color: "var(--text-secondary)",
+                      lineHeight: 1.7,
+                      fontWeight: 300,
+                      paddingBottom: "1rem",
+                      borderBottom: i < data.reasoning_chain.length - 1 ? "1px solid var(--border-color)" : "none",
+                      flex: 1,
+                    }}
+                  >
+                    {step}
+                  </div>
                 </div>
               ))}
             </div>
-          </motion.div>
-        )}
+          </div>
+        </Section>
+      )}
 
-        {/* Mental Health Support (Ephemeral, passed via state) */}
-        {viewMode === "patient" && mentalState?.distress_detected && (
-          <motion.div variants={itemVariants} style={{ marginBottom: "2rem" }}>
-            <div className="card" style={{ padding: "2rem", borderTop: "4px solid #a78bfa", background: "rgba(167, 139, 250, 0.03)" }}>
-              <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#a78bfa", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
-                <Heart size={16} /> Mental Wellness Support
-              </h3>
-              <p style={{ color: "var(--text-secondary)", fontSize: "1.05rem", lineHeight: 1.6, marginBottom: "1.5rem" }}>
-                {mentalState.wellness_nudge || "We noticed you might be going through a tough time. Remember that your mental wellbeing is just as important as your physical health."}
-              </p>
-              <a href="https://icallhelpline.org" target="_blank" rel="noopener noreferrer" className="btn btn-secondary" style={{ color: "#a78bfa", borderColor: "rgba(167, 139, 250, 0.4)" }}>
-                Find a counselor or helpline →
-              </a>
+      {/* ── NUANCE CAPTURE (doctor only) ─────────────────────────── */}
+      {viewMode === "doctor" && (data?.behavioral_flags || []).length > 0 && (
+        <Section delay={0.15} style={{ marginBottom: "2rem" }}>
+          <div className="card" style={{ padding: "2rem" }}>
+            <SectionHeader icon={MessageSquare} label="Behavioral Signal Capture" />
+            <ul style={{ display: "flex", flexDirection: "column", gap: 10, listStyle: "none" }}>
+              {data.behavioral_flags.map((flag, i) => (
+                <ListItem key={i} icon={ChevronRight} color="var(--accent-blue)" text={flag} index={i} />
+              ))}
+            </ul>
+          </div>
+        </Section>
+      )}
+
+      {/* ── MENTAL WELLNESS (patient only) ───────────────────────── */}
+      {viewMode === "patient" && mentalState?.distress_detected && (
+        <Section delay={0.15} style={{ marginBottom: "2rem" }}>
+          <div
+            className="card"
+            style={{ padding: "2rem", borderTop: "3px solid #7c3aed" }}
+          >
+            <SectionHeader icon={Heart} label="Mental Wellness Support" color="#7c3aed" />
+            <p
+              style={{
+                fontFamily: "var(--font-body)",
+                color: "var(--text-secondary)",
+                fontSize: "1rem",
+                lineHeight: 1.75,
+                fontWeight: 300,
+                marginBottom: "1.5rem",
+              }}
+            >
+              {mentalState.wellness_nudge ||
+                "We noticed you may be going through a difficult time. Your mental wellbeing matters as much as your physical health."}
+            </p>
+            <a
+              href="https://icallhelpline.org"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-secondary btn-sm"
+              style={{ color: "#7c3aed", borderColor: "rgba(124, 58, 237, 0.3)" }}
+            >
+              Find a counselor or helpline →
+            </a>
+          </div>
+        </Section>
+      )}
+
+      {/* ── DO'S AND DON'TS ───────────────────────────────────────── */}
+      {((data?.dos || []).length > 0 || (data?.donts || []).length > 0) && (
+        <Section
+          delay={0.2}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "1.5rem",
+            marginBottom: "2rem",
+          }}
+        >
+          {(data?.dos || []).length > 0 && (
+            <div className="card" style={{ padding: "2rem", borderTop: "3px solid var(--risk-low)" }}>
+              <SectionHeader icon={CheckCircle} label="Recommended Actions" color="var(--risk-low)" />
+              <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
+                {data.dos.map((item, i) => (
+                  <ListItem key={i} icon={Check} color="var(--risk-low)" text={item} index={i} />
+                ))}
+              </ul>
             </div>
-          </motion.div>
-        )}
+          )}
+          {(data?.donts || []).length > 0 && (
+            <div className="card" style={{ padding: "2rem", borderTop: "3px solid var(--risk-critical)" }}>
+              <SectionHeader icon={XCircle} label="Things to Avoid" color="var(--risk-critical)" />
+              <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
+                {data.donts.map((item, i) => (
+                  <ListItem key={i} icon={XIcon} color="var(--risk-critical)" text={item} index={i} />
+                ))}
+              </ul>
+            </div>
+          )}
+        </Section>
+      )}
 
-        {/* Do's and Don'ts */}
-        {((data?.dos || []).length > 0 || (data?.donts || []).length > 0) && (
-          <motion.div variants={itemVariants} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem", marginBottom: "2rem" }}>
-            {(data?.dos || []).length > 0 && (
-              <div className="card" style={{ padding: "2rem", borderTop: "4px solid var(--risk-low)" }}>
-                <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--risk-low)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
-                  <CheckCircle size={16} /> Recommended Actions
-                </h3>
-                <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
-                  {data.dos.map((item, i) => (
-                    <li key={i} style={{ fontSize: "0.95rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 10 }}>
-                      <Check size={16} color="var(--risk-low)" style={{ flexShrink: 0, marginTop: 3 }} />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {(data?.donts || []).length > 0 && (
-              <div className="card" style={{ padding: "2rem", borderTop: "4px solid var(--risk-critical)" }}>
-                <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--risk-critical)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
-                  <XCircle size={16} /> Things to Avoid
-                </h3>
-                <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
-                  {data.donts.map((item, i) => (
-                    <li key={i} style={{ fontSize: "0.95rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 10 }}>
-                      <XIcon size={16} color="var(--risk-critical)" style={{ flexShrink: 0, marginTop: 3 }} />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </motion.div>
-        )}
-
-        {/* Home Remedies */}
-        {(data?.home_remedies || []).length > 0 && (
-          <motion.div variants={itemVariants} className="card" style={{ padding: "2rem", marginBottom: "2rem", borderTop: "4px solid var(--accent-blue)" }}>
-            <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent-blue)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
-              <Heart size={16} /> Home Remedies
-            </h3>
-            <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
+      {/* ── HOME REMEDIES ─────────────────────────────────────────── */}
+      {(data?.home_remedies || []).length > 0 && (
+        <Section delay={0.2} style={{ marginBottom: "2rem" }}>
+          <div className="card" style={{ padding: "2rem", borderTop: "3px solid var(--accent-blue)" }}>
+            <SectionHeader icon={Leaf} label="Home Remedies" color="var(--accent-blue)" />
+            <ul style={{ display: "flex", flexDirection: "column", gap: 10, listStyle: "none" }}>
               {data.home_remedies.map((item, i) => (
-                <li key={i} style={{ fontSize: "0.95rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 10, lineHeight: 1.5 }}>
-                  <Leaf size={16} color="var(--accent-blue)" style={{ flexShrink: 0, marginTop: 3 }} />
-                  {item}
-                </li>
+                <ListItem key={i} icon={Leaf} color="var(--accent-blue)" text={item} index={i} />
               ))}
             </ul>
-          </motion.div>
-        )}
+          </div>
+        </Section>
+      )}
 
-        {/* Dietary Guidelines */}
-        {data?.dietary_guidelines && (
-          <motion.div variants={itemVariants} style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
-            {data.dietary_guidelines.eat && data.dietary_guidelines.eat.length > 0 && (
-              <div className="card" style={{ padding: "1.5rem", borderTop: "4px solid var(--risk-low)" }}>
-                <h4 style={{ fontSize: "0.8rem", textTransform: "uppercase", color: "var(--risk-low)", fontWeight: 800, marginBottom: "1rem", display: "flex", alignItems: "center", gap: 6 }}>
-                  <Utensils size={14} /> Foods to Eat
-                </h4>
-                <ul style={{ display: "flex", flexDirection: "column", gap: 8, listStyle: "none" }}>
-                  {data.dietary_guidelines.eat.map((item, i) => (
-                    <li key={i} style={{ fontSize: "0.9rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 8 }}>
-                      <Check size={14} color="var(--risk-low)" style={{ flexShrink: 0, marginTop: 2 }} /> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {data.dietary_guidelines.drink && data.dietary_guidelines.drink.length > 0 && (
-              <div className="card" style={{ padding: "1.5rem", borderTop: "4px solid var(--accent-blue)" }}>
-                <h4 style={{ fontSize: "0.8rem", textTransform: "uppercase", color: "var(--accent-blue)", fontWeight: 800, marginBottom: "1rem", display: "flex", alignItems: "center", gap: 6 }}>
-                  <Zap size={14} /> Drinks Recommended
-                </h4>
-                <ul style={{ display: "flex", flexDirection: "column", gap: 8, listStyle: "none" }}>
-                  {data.dietary_guidelines.drink.map((item, i) => (
-                    <li key={i} style={{ fontSize: "0.9rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 8 }}>
-                      <Check size={14} color="var(--accent-blue)" style={{ flexShrink: 0, marginTop: 2 }} /> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {data.dietary_guidelines.avoid && data.dietary_guidelines.avoid.length > 0 && (
-              <div className="card" style={{ padding: "1.5rem", borderTop: "4px solid var(--risk-high)" }}>
-                <h4 style={{ fontSize: "0.8rem", textTransform: "uppercase", color: "var(--risk-high)", fontWeight: 800, marginBottom: "1rem", display: "flex", alignItems: "center", gap: 6 }}>
-                  <XIcon size={14} /> Foods to Avoid
-                </h4>
-                <ul style={{ display: "flex", flexDirection: "column", gap: 8, listStyle: "none" }}>
-                  {data.dietary_guidelines.avoid.map((item, i) => (
-                    <li key={i} style={{ fontSize: "0.9rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 8 }}>
-                      <XIcon size={14} color="var(--risk-high)" style={{ flexShrink: 0, marginTop: 2 }} /> {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-          </motion.div>
-        )}
+      {/* ── DIETARY GUIDELINES ────────────────────────────────────── */}
+      {data?.dietary_guidelines && (
+        <Section
+          delay={0.25}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: "1.25rem",
+            marginBottom: "2rem",
+          }}
+        >
+          {data.dietary_guidelines.eat?.length > 0 && (
+            <div className="card" style={{ padding: "1.75rem", borderTop: "3px solid var(--risk-low)" }}>
+              <SectionHeader icon={Utensils} label="Eat" color="var(--risk-low)" />
+              <ul style={{ display: "flex", flexDirection: "column", gap: 8, listStyle: "none" }}>
+                {data.dietary_guidelines.eat.map((item, i) => (
+                  <ListItem key={i} icon={Check} color="var(--risk-low)" text={item} index={i} />
+                ))}
+              </ul>
+            </div>
+          )}
+          {data.dietary_guidelines.drink?.length > 0 && (
+            <div className="card" style={{ padding: "1.75rem", borderTop: "3px solid var(--accent-blue)" }}>
+              <SectionHeader icon={Zap} label="Drink" color="var(--accent-blue)" />
+              <ul style={{ display: "flex", flexDirection: "column", gap: 8, listStyle: "none" }}>
+                {data.dietary_guidelines.drink.map((item, i) => (
+                  <ListItem key={i} icon={Check} color="var(--accent-blue)" text={item} index={i} />
+                ))}
+              </ul>
+            </div>
+          )}
+          {data.dietary_guidelines.avoid?.length > 0 && (
+            <div className="card" style={{ padding: "1.75rem", borderTop: "3px solid var(--risk-high)" }}>
+              <SectionHeader icon={XIcon} label="Avoid" color="var(--risk-high)" />
+              <ul style={{ display: "flex", flexDirection: "column", gap: 8, listStyle: "none" }}>
+                {data.dietary_guidelines.avoid.map((item, i) => (
+                  <ListItem key={i} icon={XIcon} color="var(--risk-high)" text={item} index={i} />
+                ))}
+              </ul>
+            </div>
+          )}
+        </Section>
+      )}
 
-        {/* Lifestyle Modifications */}
-        {(data?.lifestyle_modifications || []).length > 0 && (
-          <motion.div variants={itemVariants} className="card" style={{ padding: "2rem", marginBottom: "2rem", borderTop: "4px solid #8b5cf6" }}>
-            <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "#8b5cf6", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
-              <TrendingUp size={16} /> Lifestyle Modifications
-            </h3>
-            <ul style={{ display: "flex", flexDirection: "column", gap: 12, listStyle: "none" }}>
+      {/* ── LIFESTYLE MODIFICATIONS ───────────────────────────────── */}
+      {(data?.lifestyle_modifications || []).length > 0 && (
+        <Section delay={0.25} style={{ marginBottom: "2rem" }}>
+          <div className="card" style={{ padding: "2rem", borderTop: "3px solid #7c3aed" }}>
+            <SectionHeader icon={TrendingUp} label="Lifestyle Modifications" color="#7c3aed" />
+            <ul style={{ display: "flex", flexDirection: "column", gap: 10, listStyle: "none" }}>
               {data.lifestyle_modifications.map((item, i) => (
-                <li key={i} style={{ fontSize: "0.95rem", color: "var(--text-secondary)", display: "flex", alignItems: "flex-start", gap: 10, lineHeight: 1.5 }}>
-                  <ChevronRight size={16} color="#8b5cf6" style={{ flexShrink: 0, marginTop: 3 }} />
-                  {item}
-                </li>
+                <ListItem key={i} icon={ChevronRight} color="#7c3aed" text={item} index={i} />
               ))}
             </ul>
-          </motion.div>
-        )}
+          </div>
+        </Section>
+      )}
 
-        {/* Warning Signs */}
-        {(data?.warning_signs || []).length > 0 && (
-          <motion.div variants={itemVariants} className="card" style={{ padding: "2rem", marginBottom: "2rem", borderTop: "4px solid var(--risk-critical)", background: "rgba(239, 68, 68, 0.03)" }}>
-            <h3 style={{ fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--risk-critical)", fontWeight: 800, marginBottom: "1.5rem", display: "flex", alignItems: "center", gap: 8 }}>
-              <AlertOctagon size={16} /> Warning Signs — Seek Medical Help If...
-            </h3>
+      {/* ── WARNING SIGNS ─────────────────────────────────────────── */}
+      {(data?.warning_signs || []).length > 0 && (
+        <Section delay={0.3} style={{ marginBottom: "2rem" }}>
+          <div
+            className="card"
+            style={{ padding: "2rem", borderTop: "3px solid var(--risk-critical)" }}
+          >
+            <SectionHeader icon={AlertOctagon} label="Warning Signs — Seek Medical Help If..." color="var(--risk-critical)" />
             <ul style={{ display: "flex", flexDirection: "column", gap: 10, listStyle: "none" }}>
               {data.warning_signs.map((item, i) => (
-                <li key={i} style={{ fontSize: "0.95rem", color: "var(--risk-critical)", display: "flex", alignItems: "flex-start", gap: 10, fontWeight: 500 }}>
-                  <AlertTriangle size={16} style={{ flexShrink: 0, marginTop: 3 }} />
+                <motion.li
+                  key={i}
+                  initial={{ opacity: 0, x: -8 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.06 }}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: 12,
+                    fontFamily: "var(--font-body)",
+                    fontSize: "0.95rem",
+                    color: "var(--risk-critical)",
+                    lineHeight: 1.65,
+                    fontWeight: 500,
+                  }}
+                >
+                  <AlertTriangle size={15} style={{ flexShrink: 0, marginTop: 4 }} />
                   {item}
-                </li>
+                </motion.li>
               ))}
             </ul>
-          </motion.div>
-        )}
-        <motion.div variants={itemVariants} style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-          <motion.button 
-            whileHover={{ scale: 1.05, x: 5 }} whileTap={{ scale: 0.95 }}
-            className="btn btn-primary" onClick={() => navigate("/interview")} style={{ gap: 12, padding: "1rem 2rem" }}
+          </div>
+        </Section>
+      )}
+
+      {/* ── ACTION BUTTONS ────────────────────────────────────────── */}
+      <Section delay={0.35}>
+        <div
+          style={{
+            display: "flex",
+            gap: "0.75rem",
+            flexWrap: "wrap",
+            paddingTop: "1rem",
+          }}
+        >
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="btn btn-primary"
+            onClick={() => navigate("/interview")}
+            style={{ gap: 8 }}
           >
-            <Activity size={20} /> New Assessment
+            <Activity size={16} strokeWidth={1.5} />
+            New Assessment
           </motion.button>
-          <motion.button 
-            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            className="btn btn-secondary" onClick={() => navigate("/history")} style={{ gap: 12, padding: "1rem 2rem" }}
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="btn btn-secondary"
+            onClick={() => navigate("/history")}
+            style={{ gap: 8 }}
           >
-            <Activity size={20} /> Audit History
+            Session History
           </motion.button>
-          
-          <motion.button 
-            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            className="btn btn-primary" onClick={() => navigate("/find-doctors")} style={{ gap: 12, padding: "1rem 2rem", background: "var(--bg-subtle)", color: "var(--accent-blue)", border: "1px solid var(--border-color)", boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="btn btn-secondary"
+            onClick={() => navigate("/find-doctors")}
+            style={{ gap: 8, color: "var(--accent-blue)", borderColor: "rgba(26, 110, 247, 0.25)" }}
           >
-            <MapPin size={20} /> Contact Nearest Doctors
+            <MapPin size={16} strokeWidth={1.5} />
+            Find Nearest Doctor
           </motion.button>
-          
-          <motion.button 
-            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            className="btn btn-secondary" 
+
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            className="btn btn-secondary"
             onClick={async () => {
               try {
                 const res = await sessionApi.downloadReport(sessionId);
-                const blob = new Blob([res.data], { type: 'application/pdf' });
+                const blob = new Blob([res.data], { type: "application/pdf" });
                 const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
+                const a = document.createElement("a");
                 a.href = url;
                 a.download = `pulse_report_${sessionId.slice(0, 8)}.pdf`;
                 a.click();
                 URL.revokeObjectURL(url);
               } catch (e) {
-                console.error('PDF download failed:', e);
+                console.error("PDF download failed:", e);
               }
             }}
-            style={{ gap: 12, padding: "1rem 2rem" }}
+            style={{ gap: 8 }}
           >
-            <FileText size={20} /> Download PDF Report
+            <FileText size={16} strokeWidth={1.5} />
+            Download PDF
           </motion.button>
-        </motion.div>
+        </div>
+      </Section>
 
-        {/* Disclaimer */}
-        <motion.div variants={itemVariants} style={{ marginTop: "4rem", padding: "2rem", borderTop: "1px solid var(--border-color)", fontSize: "0.85rem", color: "var(--text-muted)", lineHeight: 1.6, textAlign: "center" }}>
-          Pulse is a high-fidelity informational probabilistic engine. Always consult a qualified clinical professional for final diagnostics.
-        </motion.div>
-      </motion.div>
+      {/* ── DISCLAIMER ────────────────────────────────────────────── */}
+      <div
+        style={{
+          marginTop: "4rem",
+          paddingTop: "2rem",
+          borderTop: "1px solid var(--border-color)",
+          fontFamily: "var(--font-body)",
+          fontSize: "0.8rem",
+          color: "var(--text-muted)",
+          lineHeight: 1.7,
+          textAlign: "center",
+        }}
+      >
+        Pulse is a high-fidelity informational probabilistic engine. Always consult a
+        qualified clinical professional for final diagnostics. This report is not a
+        substitute for medical advice.
+      </div>
 
-      <FeedbackModal 
-        sessionId={sessionId} 
-        isOpen={isFeedbackModalOpen} 
-        onClose={() => setIsFeedbackModalOpen(false)} 
+      <FeedbackModal
+        sessionId={sessionId}
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
       />
-
     </div>
   );
 }

@@ -410,6 +410,31 @@ def get_history(
     return result
 
 
+@router.delete("/{session_id}")
+def delete_session(
+    session_id: str,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    session = db.query(SessionModel).filter(
+        SessionModel.id == session_id,
+        SessionModel.user_id == current_user.id
+    ).first()
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    from ..models.feedback import SessionFeedback
+    db.query(SessionAnswer).filter(SessionAnswer.session_id == session_id).delete()
+    db.query(UserHealthMemory).filter(UserHealthMemory.session_id == session_id).delete()
+    db.query(TrainingExample).filter(TrainingExample.session_id == session_id).delete()
+    db.query(SessionFeedback).filter(SessionFeedback.session_id == session_id).delete()
+    db.query(SymptomVector).filter(SymptomVector.session_id == session_id).delete()
+    
+    db.delete(session)
+    db.commit()
+    return {"status": "deleted", "session_id": session_id}
+
+
 @router.post("/population/report")
 def population_report(
     payload: PopulationReport,

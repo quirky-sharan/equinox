@@ -91,7 +91,11 @@ def get_feedback_analytics(db: Session = Depends(get_db), current_user: User = D
         
         condition = "Unknown"
         if s.top_conditions and isinstance(s.top_conditions, list) and len(s.top_conditions) > 0:
-            condition = str(s.top_conditions[0])
+            cond_obj = s.top_conditions[0]
+            if isinstance(cond_obj, dict):
+                condition = cond_obj.get("name", str(cond_obj))
+            else:
+                condition = str(cond_obj)
             
         history.append({
             "session_id": f.SessionFeedback.session_id,

@@ -18,6 +18,7 @@ export const sessionApi = {
   submitAnswer:      (data)   => realClient.post("/session/answer", data),
   getResult:         (id)     => realClient.get(`/session/result/${id}`),
   getHistory:        ()       => realClient.get("/session/history"),
+  deleteSession:     (id)     => realClient.delete(`/session/${id}`),
   downloadReport:    (id)     => realClient.get(`/session/report/pdf/${id}`, { responseType: 'blob' }),
   populationReport:  (data)   => mockClient.post("/session/population/report", data),
   populationSummary: ()       => mockClient.get("/session/population/summary"),

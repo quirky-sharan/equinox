@@ -35,22 +35,24 @@ export default function FeedbackModal({ sessionId, isOpen, onClose }) {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        style={{ background: "rgba(0, 0, 0, 0.7)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
         <motion.div
-          className="bg-[#1A1A24] border border-white/10 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl relative"
+          className="rounded-2xl w-full max-w-lg overflow-hidden relative shadow-2xl"
+          style={{ background: "var(--bg-card)", border: "1px solid var(--border-color)" }}
           initial={{ scale: 0.95, y: 20 }}
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.95, y: 20 }}
         >
           {/* Header */}
-          <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
-            <h2 className="text-xl font-semibold text-white">Help us improve Pulse</h2>
-            <button onClick={() => onClose(false)} className="text-white/50 hover:text-white transition-colors">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          <div className="p-6 border-b flex justify-between items-center" style={{ borderColor: "var(--border-color)", background: "var(--bg-subtle)" }}>
+            <h2 className="text-xl font-semibold" style={{ color: "var(--text-primary)" }}>Help us improve Pulse</h2>
+            <button onClick={() => onClose(false)} style={{ color: "var(--text-muted)" }} className="hover:text-black transition-colors">
+              <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
           </div>
 
@@ -58,7 +60,7 @@ export default function FeedbackModal({ sessionId, isOpen, onClose }) {
           <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto custom-scrollbar">
             {/* Rating */}
             <div className="flex flex-col items-center space-y-2">
-              <p className="text-white/80 font-medium">How would you rate this assessment?</p>
+              <p className="font-medium" style={{ color: "var(--text-secondary)" }}>How would you rate this assessment?</p>
               <div className="flex space-x-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -70,7 +72,8 @@ export default function FeedbackModal({ sessionId, isOpen, onClose }) {
                     onClick={() => setRating(star)}
                   >
                     <svg
-                      className={`w-10 h-10 transition-colors ${(hoverRating || rating) >= star ? 'text-yellow-400 fill-yellow-400' : 'text-white/20'}`}
+                      className={`w-10 h-10 transition-colors ${(hoverRating || rating) >= star ? 'text-yellow-500 fill-yellow-500' : ''}`}
+                      style={{ color: (hoverRating || rating) >= star ? undefined : "var(--border-color)" }}
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -96,52 +99,56 @@ export default function FeedbackModal({ sessionId, isOpen, onClose }) {
                         type="checkbox"
                         checked={wasAccurate}
                         onChange={(e) => setWasAccurate(e.target.checked)}
-                        className="peer appearance-none w-5 h-5 border-2 border-white/20 rounded bg-white/5 checked:bg-[#FF3366] checked:border-[#FF3366] transition-all cursor-pointer focus:ring-2 focus:ring-[#FF3366]/50 focus:outline-none"
+                        className="peer appearance-none w-5 h-5 border-2 rounded transition-all cursor-pointer focus:ring-2 focus:ring-[#0ea5e9]/50 focus:outline-none"
+                        style={{ borderColor: "var(--border-color)", background: "var(--bg-base)" }}
                       />
-                      <svg className="absolute w-3.5 h-3.5 text-white pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
+                      <svg className="absolute w-3.5 h-3.5 pointer-events-none opacity-0 peer-checked:opacity-100 transition-opacity" style={{ color: "var(--accent-blue)" }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path></svg>
                     </div>
-                    <span className="text-white/80 group-hover:text-white transition-colors text-sm">The assessment matched my actual condition/diagnosis.</span>
+                    <span className="transition-colors text-sm" style={{ color: "var(--text-secondary)" }}>The assessment matched my actual condition/diagnosis.</span>
                   </label>
 
                   {!wasAccurate && (
                     <motion.div initial={{opacity:0}} animate={{opacity:1}}>
-                      <label className="block text-sm text-white/70 mb-1">What was the actual diagnosis? (optional)</label>
+                      <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>What was the actual diagnosis? (optional)</label>
                       <input
                         type="text"
                         value={actualDiagnosis}
                         onChange={(e) => setActualDiagnosis(e.target.value)}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-[#FF3366]/50 focus:ring-1 focus:ring-[#FF3366]/50 transition-all text-sm"
+                        className="w-full border rounded-lg px-4 py-2 outline-none transition-all text-sm"
+                        style={{ background: "var(--bg-base)", borderColor: "var(--border-color)", color: "var(--text-primary)" }}
                         placeholder="e.g. Migraine instead of Tension Headache"
                       />
                     </motion.div>
                   )}
 
                   <div>
-                    <label className="block text-sm text-white/70 mb-1">What was most helpful?</label>
+                    <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>What was most helpful?</label>
                     <textarea
                       value={helpfulText}
                       onChange={(e) => setHelpfulText(e.target.value)}
                       maxLength={500}
                       rows={2}
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-[#FF3366]/50 focus:ring-1 focus:ring-[#FF3366]/50 transition-all text-sm resize-none custom-scrollbar"
+                      className="w-full border rounded-lg px-4 py-2 outline-none transition-all text-sm resize-none custom-scrollbar"
+                      style={{ background: "var(--bg-base)", borderColor: "var(--border-color)", color: "var(--text-primary)" }}
                       placeholder="What did the AI get right?"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm text-white/70 mb-1">What could be improved?</label>
+                    <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>What could be improved?</label>
                     <textarea
                       value={notHelpfulText}
                       onChange={(e) => setNotHelpfulText(e.target.value)}
                       maxLength={500}
                       rows={2}
-                      className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-white outline-none focus:border-[#FF3366]/50 focus:ring-1 focus:ring-[#FF3366]/50 transition-all text-sm resize-none custom-scrollbar"
+                      className="w-full border rounded-lg px-4 py-2 outline-none transition-all text-sm resize-none custom-scrollbar"
+                      style={{ background: "var(--bg-base)", borderColor: "var(--border-color)", color: "var(--text-primary)" }}
                       placeholder="Was something missing or inaccurate?"
                     />
                   </div>
                   
-                  <div className="p-3 bg-white/5 rounded border border-white/10 text-xs text-white/50 leading-relaxed">
-                    <span className="font-semibold text-white/70">Privacy Notice:</span> Your feedback helps improve the AI. Anonymized session data may be used for model training. You can delete your health history at any time.
+                  <div className="p-3 rounded border text-xs leading-relaxed" style={{ background: "var(--bg-subtle)", borderColor: "var(--border-color)", color: "var(--text-muted)" }}>
+                    <span className="font-semibold" style={{ color: "var(--text-secondary)" }}>Privacy Notice:</span> Your feedback helps improve the AI. Anonymized session data may be used for model training. You can delete your health history at any time.
                   </div>
 
                 </motion.div>
@@ -151,10 +158,11 @@ export default function FeedbackModal({ sessionId, isOpen, onClose }) {
           </div>
 
           {/* Footer */}
-          <div className="p-4 border-t border-white/10 bg-white/5 flex justify-end space-x-3">
+          <div className="p-4 border-t flex justify-end space-x-3" style={{ borderColor: "var(--border-color)", background: "var(--bg-subtle)" }}>
             <button
               onClick={() => onClose(false)}
-              className="px-4 py-2 text-sm font-medium text-white/70 hover:text-white transition-colors"
+              className="px-4 py-2 text-sm font-medium transition-colors"
+              style={{ color: "var(--text-secondary)" }}
               disabled={isSubmitting}
             >
               Skip
@@ -164,9 +172,13 @@ export default function FeedbackModal({ sessionId, isOpen, onClose }) {
               disabled={rating === 0 || isSubmitting}
               className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
                 rating > 0 && !isSubmitting
-                  ? 'bg-gradient-to-r from-[#FF3366] to-[#FF9933] text-white hover:opacity-90 shadow-lg shadow-[#FF3366]/20'
-                  : 'bg-white/10 text-white/40 cursor-not-allowed'
+                  ? 'shadow-sm'
+                  : 'cursor-not-allowed'
               }`}
+              style={{ 
+                background: (rating > 0 && !isSubmitting) ? "var(--accent-blue)" : "var(--border-color)",
+                color: (rating > 0 && !isSubmitting) ? "#FFF" : "var(--text-muted)",
+              }}
             >
               {isSubmitting ? 'Submitting...' : 'Submit Feedback'}
             </button>
