@@ -230,6 +230,18 @@ async def submit_answer(
             
             # 2. Create training_examples row
             tc_messages = []
+            
+            # Inject system context for fine-tuning data to ensure the AI learns
+            # from the user's habits, lifestyle, and previous disease history.
+            system_context = "You are a clinical AI. The patient has the following profile:\n"
+            system_context += profile_context if profile_context else "No profile data provided.\n"
+            
+            if memory_payload:
+                system_context += "\nPatient's previous history of diseases/conditions:\n"
+                system_context += json.dumps(memory_payload)
+                
+            tc_messages.append({"role": "system", "content": system_context})
+            
             for a in all_answers:
                 tc_messages.append({"role": "assistant", "content": a.question_text})
                 tc_messages.append({"role": "user", "content": a.answer_text})
@@ -372,7 +384,7 @@ async def download_report(
     return StreamingResponse(
         BytesIO(pdf_bytes),
         media_type="application/pdf",
-        headers={"Content-Disposition": f"attachment; filename=meowmeow_report_{session_id[:8]}.pdf"},
+        headers={"Content-Disposition": f"attachment; filename=pulse_report_{session_id[:8]}.pdf"},
     )
 
 

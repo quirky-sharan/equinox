@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useMotionValue, useSpring, useMotionTemplate } from "framer-motion";
-import { ChevronRight, Shield, Activity, TrendingUp, Cpu, Cat, Star } from "lucide-react";
+import { ChevronRight, Shield, Activity, TrendingUp, Cpu, Star } from "lucide-react";
 
 // 3D Tilt Card Component for Vision Section
 function TiltCard({ children }) {
@@ -157,14 +157,7 @@ export default function LandingPage() {
             </span>
           </h1>
           
-          <motion.p 
-            initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
-            animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-            transition={{ duration: 1, delay: 1.5 }}
-            style={{ fontSize: "clamp(1rem, 2vw, 1.4rem)", color: "var(--text-secondary)", maxWidth: 700, margin: "0 auto 4rem", lineHeight: 1.6, fontWeight: 300 }}
-          >
-            Meowmeow transcends conventional diagnostics. Using Bayesian probabilistic inference and sub-conscious behavioral capture to map your clinical trajectory.
-          </motion.p>
+            Pulse transcends conventional diagnostics. Using Bayesian probabilistic inference and sub-conscious behavioral capture to map your clinical trajectory.
           
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -213,9 +206,7 @@ export default function LandingPage() {
               Diagnostic superiority.<br/>
               <span style={{ color: "transparent", WebkitTextStroke: "1px var(--text-muted)", transition: "color 0.4s" }}>Engineered for scale.</span>
             </h2>
-            <p style={{ fontSize: "1.25rem", color: "var(--text-secondary)", maxWidth: 800, margin: "0 auto", lineHeight: 1.7, fontWeight: 300 }}>
-              While traditional symptom checkers rely on rigid decision trees, Meowmeow actively learns. Our multidimensional tensor architecture detects nuances in typing speed, hesitation, and word choice simultaneously.
-            </p>
+              While traditional symptom checkers rely on rigid decision trees, Pulse actively learns. Our multidimensional tensor architecture detects nuances in typing speed, hesitation, and word choice simultaneously.
           </motion.div>
 
           <div className="bento-grid">
@@ -285,14 +276,14 @@ export default function LandingPage() {
         
         <div style={{ display: "flex", gap: "2rem", width: "max-content", animation: "marquee 40s linear infinite" }} className="hover-pause">
           {[
-            { quote: "Meowmeow’s inference engine correctly flagged a rare autoimmune panel before our seniors did.", author: "Dr. Sarah Jenkins, Diagnostician" },
+            { quote: "Pulse’s inference engine correctly flagged a rare autoimmune panel before our seniors did.", author: "Dr. Sarah Jenkins, Diagnostician" },
             { quote: "It’s not just an AI. The reasoning audit trail makes it a true peer in the emergency room.", author: "Chief of Medicine, St. Jude" },
             { quote: "Reduced our false-negative discharge rate by 14% perfectly matching our risk threshold.", author: "Director of Clinical Informatics" },
-            { quote: "The closest thing to a scalable house MD we’ve ever deployed.", author: "HealthTech Vanguard Magazine" },
-            { quote: "Meowmeow’s inference engine correctly flagged a rare autoimmune panel before our seniors did.", author: "Dr. Sarah Jenkins, Diagnostician" },
+            { quote: "The closest thing to a scalable health engine we’ve ever seen.", author: "HealthTech Vanguard Magazine" },
+            { quote: "Pulse’s inference engine correctly flagged a rare autoimmune panel before our seniors did.", author: "Dr. Sarah Jenkins, Diagnostician" },
             { quote: "It’s not just an AI. The reasoning audit trail makes it a true peer in the emergency room.", author: "Chief of Medicine, St. Jude" },
             { quote: "Reduced our false-negative discharge rate by 14% perfectly matching our risk threshold.", author: "Director of Clinical Informatics" },
-            { quote: "The closest thing to a scalable house MD we’ve ever deployed.", author: "HealthTech Vanguard Magazine" }
+            { quote: "The closest thing to a scalable health engine we’ve ever seen.", author: "HealthTech Vanguard Magazine" }
           ].map((t, i) => (
             <div key={i} className="spotlight-card" style={{ width: 450, padding: "2.5rem", display: "flex", flexDirection: "column", gap: 20 }}>
               <div style={{ display: "flex", gap: 4, zIndex: 10 }}>
@@ -318,7 +309,7 @@ export default function LandingPage() {
             { label: "Continuous Audit", value: "Live" }
           ]).flat().map((stat, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
-              <Cat size={24} color="var(--text-muted)" />
+              <Activity size={24} color="#FF3366" />
               <div>
                 <div style={{ fontSize: "3rem", fontWeight: 900, fontFamily: "'Plus Jakarta Sans', sans-serif", letterSpacing: "-0.05em", color: "var(--text-primary)", lineHeight: 1 }}>{stat.value}</div>
                 <div style={{ fontSize: "0.85rem", color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.15em", marginTop: 8, fontWeight: 700 }}>{stat.label}</div>
@@ -365,10 +356,10 @@ export default function LandingPage() {
                    transition={{ duration: 0.8, ease: "easeOut" }}
                    style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle, var(--bg-subtle) 0%, var(--bg-base) 100%)" }}
                  >
-                   <Cat size={200} color="var(--border-color)" strokeWidth={0.2} />
+                   <Activity size={200} color="#FF3366" strokeWidth={0.2} opacity={0.1} />
                  </motion.div>
                  <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", padding: "4rem 2rem 2rem", background: "linear-gradient(to top, var(--bg-card), transparent)", zIndex: 1 }}>
-                    <h3 style={{ fontSize: "2rem", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em", marginBottom: 4 }}>Dr. Purrfect</h3>
+                    <h3 style={{ fontSize: "2rem", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em", marginBottom: 4 }}>Dr. Arvi</h3>
                     <p style={{ color: "var(--accent-blue)", fontWeight: 700, fontSize: "0.95rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>Chief Medical Officer</p>
                  </div>
               </motion.div>
@@ -396,10 +387,10 @@ export default function LandingPage() {
                    transition={{ duration: 0.8, ease: "easeOut" }}
                    style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "radial-gradient(circle, var(--bg-subtle) 0%, var(--bg-base) 100%)" }}
                  >
-                   <Cat size={200} color="var(--border-color)" strokeWidth={0.2} />
+                   <Activity size={200} color="#FF3366" strokeWidth={0.2} opacity={0.1} />
                  </motion.div>
                  <div style={{ position: "absolute", bottom: 0, left: 0, width: "100%", padding: "4rem 2rem 2rem", background: "linear-gradient(to top, var(--bg-card), transparent)", zIndex: 1 }}>
-                    <h3 style={{ fontSize: "2rem", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em", marginBottom: 4 }}>Whiskers</h3>
+                    <h3 style={{ fontSize: "2rem", fontWeight: 800, color: "var(--text-primary)", letterSpacing: "-0.02em", marginBottom: 4 }}>Arvi ML</h3>
                     <p style={{ color: "var(--accent-purple)", fontWeight: 700, fontSize: "0.95rem", textTransform: "uppercase", letterSpacing: "0.1em" }}>Lead AI Infrastructure</p>
                  </div>
               </motion.div>
@@ -422,12 +413,12 @@ export default function LandingPage() {
           viewport={{ once: true }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          <Cat size={64} style={{ margin: "0 auto 2rem", strokeWidth: 1, stroke: "var(--text-primary)" }} />
+          <Activity size={64} color="#FF3366" style={{ margin: "0 auto 2rem" }} strokeWidth={1.5} />
           <h2 style={{ fontFamily: "'Plus Jakarta Sans', sans-serif", fontSize: "clamp(3rem, 6vw, 5rem)", fontWeight: 900, letterSpacing: "-0.05em", color: "var(--text-primary)", marginBottom: "1.5rem" }}>
-            Ready to deploy?
+            Ready to start?
           </h2>
           <p style={{ fontSize: "1.3rem", color: "var(--text-secondary)", maxWidth: 600, margin: "0 auto 4rem", lineHeight: 1.6, fontWeight: 300 }}>
-            Join the beta and experience the bleeding edge of diagnostic computing.
+            Take control of your health journey with Pulse's precision assessment.
           </p>
           <Link to="/register" className="btn btn-primary btn-lg" style={{ padding: "1.5rem 4rem", fontSize: "1.2rem", borderRadius: "100px", boxShadow: "0 20px 50px -10px rgba(14, 165, 233, 0.3)" }}>
             Begin Free Trial

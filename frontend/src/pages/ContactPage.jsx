@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Mail, Phone, Link as LinkIcon, GitBranch, Cat, TerminalSquare, User } from "lucide-react";
+import { Mail, Phone, Link as LinkIcon, GitBranch, Activity, TerminalSquare, User } from "lucide-react";
 
 export default function ContactPage() {
   return (
@@ -29,13 +29,13 @@ export default function ContactPage() {
           style={{ textAlign: "center" }}
         >
           <div style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10, padding: "8px 24px", borderRadius: "100px", background: "rgba(14, 165, 233, 0.1)", border: "1px solid rgba(14, 165, 233, 0.2)", color: "var(--accent-blue)", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.1em", fontSize: "0.8rem", marginBottom: "1rem" }}>
-            <Cat size={14} /> Get In Touch
+            <Activity size={14} /> Get In Touch
           </div>
           <h1 style={{ fontSize: "clamp(2.5rem, 6vw, 4rem)", fontWeight: 900, letterSpacing: "-0.04em", margin: "0 0 1rem 0", lineHeight: 1.1, backgroundImage: "linear-gradient(to right, #fff, var(--text-muted))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
             We're Here To Help.
           </h1>
           <p style={{ fontSize: "1.1rem", color: "var(--text-secondary)", maxWidth: 600, margin: "0 auto" }}>
-            Have questions about the Meowmeow Clinical AI? Need technical support? Or just want to say hi? Reach out to us directly.
+            Have questions about the Pulse Clinical AI? Need technical support? Or just want to say hi? Reach out to us directly.
           </p>
         </motion.div>
 

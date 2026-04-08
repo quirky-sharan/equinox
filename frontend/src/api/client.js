@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAuthStore } from "../store/authStore";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || (window.location.hostname === "localhost" ? "http://localhost:8000/api" : "https://meowmeow-delta.vercel.app/api"),
+  baseURL: import.meta.env.VITE_API_URL || (window.location.hostname === "localhost" ? "http://localhost:8000/api" : "https://pulse-api.vercel.app/api"),
 });
 
 api.interceptors.request.use((config) => {

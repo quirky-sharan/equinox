@@ -1,10 +1,10 @@
 ```
-                                  ███╗   ███╗███████╗ ██████╗ ██╗    ██╗███╗   ███╗███████╗ ██████╗ ██╗    ██╗
-                                  ████╗ ████║██╔════╝██╔═══██╗██║    ██║████╗ ████║██╔════╝██╔═══██╗██║    ██║
-                                  ██╔████╔██║█████╗  ██║   ██║██║ █╗ ██║██╔████╔██║█████╗  ██║   ██║██║ █╗ ██║
-                                  ██║╚██╔╝██║██╔══╝  ██║   ██║██║███╗██║██║╚██╔╝██║██╔══╝  ██║   ██║██║███╗██║
-                                  ██║ ╚═╝ ██║███████╗╚██████╔╝╚███╔███╔╝██║ ╚═╝ ██║███████╗╚██████╔╝╚███╔███╔╝
-                                  ╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝ ╚═╝     ╚═╝╚══════╝ ╚═════╝  ╚══╝╚══╝
+                            ██████╗ ██╗   ██╗██╗     ███████╗███████╗
+                            ██╔══██╗██║   ██║██║     ██╔════╝██╔════╝
+                            ██████╔╝██║   ██║██║     ███████╗█████╗  
+                            ██╔═══╝ ██║   ██║██║     ╚════██║██╔══╝  
+                            ██║     ╚██████╔╝███████╗███████║███████╗
+                            ╚═╝      ╚═════╝ ╚══════╝╚══════╝╚══════╝
 ```
 
 <div align="center">
@@ -31,26 +31,26 @@
 
 ---
 
-## 🩺 What is Meowmeow?
+## 🩺 What is Pulse?
 
-> *"You describe how you feel. Meowmeow figures out what it means."*
+> *"You describe how you feel. Pulse figures out what it means."*
 
-**Meowmeow** is a production-grade Medical AI platform built for intelligent symptom triage and health risk assessment. It accepts raw, unstructured user input — the way you'd actually describe pain to a doctor — and runs it through a multi-stage AI pipeline that returns a **risk severity score**, a ranked list of **possible conditions**, **actionable next steps**, and **adaptive follow-up questions** to narrow the clinical picture.
+**Pulse** is a production-grade Medical AI platform built for intelligent symptom triage and health risk assessment. It accepts raw, unstructured user input — the way you'd actually describe pain to a doctor — and runs it through a multi-stage AI pipeline that returns a **risk severity score**, a ranked list of **possible conditions**, **actionable next steps**, and **adaptive follow-up questions** to narrow the clinical picture.
 
-This is not a chatbot wrapper. Under the hood, Meowmeow runs a purpose-built **Retrieval-Augmented Generation (RAG)** pipeline over curated medical knowledge, combined with a specialized **NLP inference layer** for clinical entity extraction. Every response is grounded in retrieved medical context — not hallucinated. Not guessed. Not interpolated.
+This is not a chatbot wrapper. Under the hood, Pulse runs a purpose-built **Retrieval-Augmented Generation (RAG)** pipeline over curated medical knowledge, combined with a specialized **NLP inference layer** for clinical entity extraction. Every response is grounded in retrieved medical context — not hallucinated. Not guessed. Not interpolated.
 
 ```
   User types:  "I've had a splitting headache behind my eyes for 3 days,
                 light makes it worse, and I feel nauseous."
                       │
                       ▼
-  Meowmeow:    ┌─ Risk Level     →  HIGH
+  Pulse:    ┌─ Risk Level     →  HIGH
                ├─ Likely Causes  →  Migraine (primary), elevated ICP (rule out)
                ├─ Next Steps     →  Hydrate, avoid screens, seek GP if persists >24h
                └─ Follow-up      →  "Any fever or stiff neck alongside this?"
 ```
 
-> ⚕️ **Disclaimer:** Meowmeow is a research and educational tool. It is not a substitute for professional medical diagnosis or treatment.
+> ⚕️ **Disclaimer:** Pulse is a research and educational tool. It is not a substitute for professional medical diagnosis or treatment.
 
 ---
 
@@ -115,7 +115,7 @@ This is not a chatbot wrapper. Under the hood, Meowmeow runs a purpose-built **R
 
 ### The RAG Pipeline
 
-Meowmeow's intelligence does not come from a single fine-tuned model. It comes from a **Retrieval-Augmented Generation** pipeline that grounds every LLM response in actual retrieved medical knowledge, dramatically reducing hallucination.
+Pulse's intelligence does not come from a single fine-tuned model. It comes from a **Retrieval-Augmented Generation** pipeline that grounds every LLM response in actual retrieved medical knowledge, dramatically reducing hallucination.
 
 ```mermaid
 flowchart TD
@@ -355,7 +355,7 @@ Areas we're especially keen on improving:
 
 ## ⚠️ Medical Disclaimer
 
-Meowmeow is an AI-assisted research tool built for educational and informational purposes. It is **not** a licensed medical device, and outputs should **not** be used as a substitute for professional clinical judgment. Always consult a qualified healthcare provider for diagnosis and treatment decisions.
+Pulse is an AI-assisted research tool built for educational and informational purposes. It is **not** a licensed medical device, and outputs should **not** be used as a substitute for professional clinical judgment. Always consult a qualified healthcare provider for diagnosis and treatment decisions.
 
 ---
 
@@ -364,7 +364,7 @@ Meowmeow is an AI-assisted research tool built for educational and informational
 ```
                     ╔══════════════════════════════════════════════════════════╗
                     ║     Built with obsessive attention to clinical accuracy  ║
-                    ║                  — Team Meowmeow, 2026 —                 ║
+                    ║                  — Team Pulse, 2026 —                 ║
                     ╚══════════════════════════════════════════════════════════╝
 ```
 

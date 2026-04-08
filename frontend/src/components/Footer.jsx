@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Cat, Code, Camera, MessageSquare, Mail } from "lucide-react";
+import { Activity, Code, Camera, MessageSquare, Mail } from "lucide-react";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -24,8 +24,8 @@ export default function Footer() {
           {/* Brand */}
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             <Link to="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
-              <Cat size={24} strokeWidth={1.5} />
-              <span style={{ fontWeight: 800, letterSpacing: "-0.05em", fontSize: "1.25rem" }}>Meowmeow</span>
+              <Activity size={24} color="#FF3366" strokeWidth={2.5} />
+              <span style={{ fontWeight: 800, letterSpacing: "-0.05em", fontSize: "1.25rem" }}>Pulse</span>
             </Link>
             <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.6, maxWidth: 300 }}>
               Pioneering the future of clinical intelligence. High-fidelity probabilistic health assessments driven by advanced AI.
@@ -34,7 +34,7 @@ export default function Footer() {
               <a href="https://github.com" target="_blank" rel="noreferrer" className="hover-shift" style={{ color: "var(--text-muted)" }}><Code size={20} /></a>
               <a href="https://instagram.com" target="_blank" rel="noreferrer" className="hover-shift" style={{ color: "var(--text-muted)" }}><Camera size={20} /></a>
               <a href="https://twitter.com" target="_blank" rel="noreferrer" className="hover-shift" style={{ color: "var(--text-muted)" }}><MessageSquare size={20} /></a>
-              <a href="mailto:contact@meowmeow.health" className="hover-shift" style={{ color: "var(--text-muted)" }}><Mail size={20} /></a>
+              <a href="mailto:contact@pulse.health" className="hover-shift" style={{ color: "var(--text-muted)" }}><Mail size={20} /></a>
             </div>
 
           </div>
@@ -65,11 +65,11 @@ export default function Footer() {
 
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem", borderTop: "1px solid var(--border-color)", paddingTop: "2rem", textAlign: "center" }}>
           <p style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
-            &copy; {currentYear} Meowmeow Health Intelligence. All rights reserved. <br/>
+            &copy; {currentYear} Pulse Health Intelligence. All rights reserved. <br/>
             MIT License - Open Source Core.
           </p>
           <p style={{ color: "var(--text-muted)", fontSize: "0.75rem", maxWidth: 600, margin: "0 auto", lineHeight: 1.5 }}>
-            DISCLAIMER: Meowmeow is a probabilistic analysis engine and does not provide formal medical diagnoses. 
+            DISCLAIMER: Pulse is a probabilistic analysis engine and does not provide formal medical diagnoses. 
             Always consult a licensed medical professional for formal clinical decisions.
           </p>
         </div>

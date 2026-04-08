@@ -70,7 +70,7 @@ export default function ResultPage() {
         transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
         style={{ width: 48, height: 48, borderRadius: "14px", border: "2px solid var(--border-color)", borderTopColor: "var(--accent-blue)", display: "flex", alignItems: "center", justifyContent: "center" }}
       >
-        <Cat size={20} color="var(--accent-blue)" />
+        <Activity size={20} color="#FF3366" />
       </motion.div>
       <p style={{ color: "var(--text-secondary)", fontVariantNumeric: "tabular-nums", letterSpacing: "0.02em", fontSize: "0.9rem" }}>Synthesizing clinical results…</p>
     </div>
@@ -423,7 +423,7 @@ export default function ResultPage() {
             whileHover={{ scale: 1.05, x: 5 }} whileTap={{ scale: 0.95 }}
             className="btn btn-primary" onClick={() => navigate("/interview")} style={{ gap: 12, padding: "1rem 2rem" }}
           >
-            <Cat size={20} /> New Assessment
+            <Activity size={20} /> New Assessment
           </motion.button>
           <motion.button 
             whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
@@ -449,7 +449,7 @@ export default function ResultPage() {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `meowmeow_report_${sessionId.slice(0, 8)}.pdf`;
+                a.download = `pulse_report_${sessionId.slice(0, 8)}.pdf`;
                 a.click();
                 URL.revokeObjectURL(url);
               } catch (e) {

@@ -116,7 +116,7 @@ export default function SplashScreen({ onFinished }) {
 
       if (!cancelled) {
         setProgress(100);
-        setStatusText("Systems online. Ready to deploy.");
+        setStatusText("Systems online. Ready.");
       }
 
       // Ensure minimum display time for smooth UX
@@ -199,7 +199,7 @@ export default function SplashScreen({ onFinished }) {
               }}
               className="splash-icon-ring"
             />
-            <Cat size={36} strokeWidth={1.5} />
+            <Activity size={36} color="#FF3366" strokeWidth={2.5} />
           </motion.div>
 
           {/* Title */}
@@ -208,8 +208,9 @@ export default function SplashScreen({ onFinished }) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
+            style={{ textTransform: "uppercase", letterSpacing: "0.2em" }}
           >
-            meowmeow
+            PULSE
           </motion.h1>
 
           {/* Subtitle */}

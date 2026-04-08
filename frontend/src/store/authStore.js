@@ -11,6 +11,6 @@ export const useAuthStore = create(
       setAuth: (user, token) => set({ user, token }),
       logout: () => set({ user: null, token: null }),
     }),
-    { name: "meowmeow-auth" }
+    { name: "pulse-auth" }
   )
 );

@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cat, BarChart2, Clock, Moon, Sun, Monitor, Coffee, LogOut, Stethoscope, Mail, Menu, X } from "lucide-react";
+import { Activity, BarChart2, Clock, Moon, Sun, Monitor, Coffee, LogOut, Stethoscope, Mail, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import { useThemeStore } from "../store/themeStore";
@@ -58,10 +58,10 @@ export default function Navbar() {
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       >
         <Link to="/" className="navbar-brand" style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "var(--text-primary)" }}>
-          <motion.div whileHover={{ rotate: 10, scale: 1.1 }} style={{ marginRight: 8 }}>
-            <Cat size={24} style={{ fill: "var(--text-primary)" }} strokeWidth={1.5} />
+          <motion.div whileHover={{ rotate: 10, scale: 1.1 }} style={{ marginRight: 10 }}>
+            <Activity size={24} color="#FF3366" strokeWidth={2.5} />
           </motion.div>
-          <span style={{ fontWeight: 800, letterSpacing: "-0.05em" }}>Meowmeow</span>
+          <span style={{ fontWeight: 800, letterSpacing: "-0.05em" }}>Pulse</span>
         </Link>
 
         {/* Desktop Nav */}

@@ -1,1 +1,1 @@
-# Meowmeow ML Service — RAG + Groq LLM Pipeline
+# Pulse ML Service — RAG + Groq LLM Pipeline

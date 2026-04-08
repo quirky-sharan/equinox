@@ -5,7 +5,7 @@ from pathlib import Path
 _env_path = Path(__file__).resolve().parent / ".env"
 
 class Settings(BaseSettings):
-    DATABASE_URL: str = "sqlite:///./meowmeow.db"
+    DATABASE_URL: str = "sqlite:///./pulse.db"
     REDIS_URL: str = "redis://localhost:6379"
     JWT_SECRET: str = "change-me-in-production"
     JWT_ALGORITHM: str = "HS256"

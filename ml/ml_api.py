@@ -1,5 +1,5 @@
 """
-Meowmeow — ML API Service (RAG + Groq LLM)
+Pulse — ML API Service (RAG + Groq LLM)
 FastAPI microservice exposing chat, TTS, report, and session endpoints.
 Runs on port 8001 — called by the main backend at port 8000.
 """
@@ -19,7 +19,7 @@ from .report_generator import generate_report
 
 # ── App ───────────────────────────────────────────────────────────────────────
 app = FastAPI(
-    title="Meowmeow ML Service",
+    title="Pulse ML Service",
     description="RAG-powered clinical AI · ChromaDB + Llama 3.3 70B via Groq",
     version="2.1.0",
 )
@@ -102,7 +102,7 @@ def _extract_final_data(session_id: str) -> dict:
 @app.get("/")
 def root():
     return {
-        "service": "Meowmeow ML Service",
+        "service": "Pulse ML Service",
         "version": "2.1.0",
         "model": "llama-3.3-70b-versatile",
         "endpoints": [
@@ -215,7 +215,7 @@ def api_report_pdf(session_id: str = Query(..., description="Session ID to gener
             reasoning=final_data.get("reasoning", []),
         )
 
-        filename = f"meowmeow_report_{session_id[:8]}.pdf"
+        filename = f"pulse_report_{session_id[:8]}.pdf"
         return Response(
             content=pdf_bytes,
             media_type="application/pdf",

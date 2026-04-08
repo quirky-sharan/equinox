@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { authApi } from "../api/endpoints";
 import { useAuthStore } from "../store/authStore";
-import { Mail, Lock, Eye, EyeOff, AlertCircle, Cat } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, AlertCircle, Activity } from "lucide-react";
 
 // Firebase Auth
 import { signInWithPopup } from "firebase/auth";
@@ -113,13 +113,13 @@ export default function LoginPage() {
               border: "1px solid var(--border-color)", marginBottom: "1.5rem",
               boxShadow: "var(--shadow-md)"
             }}>
-            <Cat size={32} color="var(--text-primary)" strokeWidth={1.5} />
+            <Activity size={32} color="#FF3366" strokeWidth={2.5} />
           </motion.div>
           <h1 style={{ fontFamily: "'Plus Jakarta Sans',sans-serif", fontSize: "2rem", fontWeight: 800, letterSpacing: "-0.04em", marginBottom: 10 }}>
             Welcome back
           </h1>
           <p style={{ color: "var(--text-secondary)", fontSize: "0.95rem", letterSpacing: "0.01em" }}>
-            Identify yourself to continue to Meowmeow
+            Identify yourself to continue to Pulse
           </p>
         </motion.div>
 

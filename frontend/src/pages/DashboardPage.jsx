@@ -73,7 +73,7 @@ export default function DashboardPage() {
   };
 
   const features = [
-    { icon: Cat, title: "Adaptive Interview", desc: "Dynamic clinical questions, not a static form" },
+    { icon: Activity, title: "Adaptive Interview", desc: "Dynamic clinical questions, not a static form" },
     { icon: Activity, title: "Intensity Detection", desc: "Captures how you write, not just what you write" },
     { icon: Shield, title: "Bayesian Inference", desc: "Calibrated probabilistic risk assessment" },
     { icon: Zap, title: "Speech Input", desc: "Speak your answers naturally via microphone" },
@@ -121,7 +121,7 @@ export default function DashboardPage() {
             <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>intelligence.</span>
           </h1>
           <p style={{ color: "var(--text-secondary)", maxWidth: 540, fontSize: "1.15rem", marginBottom: "3.5rem", lineHeight: 1.7 }}>
-            Meowmeow transforms conversational data into high-fidelity clinical signals, providing a nuanced perspective on your systemic health.
+            Pulse transforms conversational data into high-fidelity clinical signals, providing a nuanced perspective on your systemic health.
           </p>
           <motion.button
             className="btn btn-primary btn-lg"
@@ -130,7 +130,7 @@ export default function DashboardPage() {
             whileTap={{ scale: 0.98 }}
             style={{ gap: 12, fontSize: "1rem", padding: "1.25rem 2.5rem", boxShadow: "0 20px 40px rgba(0,0,0,0.1)" }}
           >
-            <Cat size={20} /> Begin Assessment
+            <Activity size={20} /> Begin Assessment
             <ChevronRight size={18} />
           </motion.button>
         </motion.div>
@@ -196,7 +196,7 @@ export default function DashboardPage() {
 
         {/* Disclaimer */}
         <div style={{ marginTop: "4rem", padding: "1.25rem", borderTop: "1px solid var(--border-color)", fontSize: "0.8rem", color: "var(--text-muted)", lineHeight: 1.6, textAlign: "center" }}>
-          Meowmeow is an informational probabilistic engine. Always consult a qualified healthcare provider for final medical diagnostics.
+          Pulse is an informational probabilistic engine. Always consult a qualified healthcare provider for final medical diagnostics.
         </div>
       </motion.div>
     </div>

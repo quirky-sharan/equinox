@@ -34,7 +34,7 @@ app.include_router(admin_router, prefix="/api")
 
 @app.get("/")
 def root():
-    return {"status": "Meowmeow API running", "version": "1.0.0"}
+    return {"status": "Pulse API running", "version": "1.0.0"}
 
 @app.get("/health")
 def health():
