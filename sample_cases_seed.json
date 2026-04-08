@@ -1,0 +1,2882 @@
+[
+  {
+    "id": "case_001",
+    "condition": "Migraine with Aura",
+    "risk": "medium",
+    "demographic": {
+      "age": 22,
+      "sex": "F"
+    },
+    "chief_complaint": "Splitting headache behind eyes...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Splitting headache behind eyes...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Migraine with Aura",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Migraine with Aura",
+      "explanation_doctor": "Clinical manifestation consistent with Migraine with Aura",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Splitting headache behind eyes..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_002",
+    "condition": "GERD / Acid Reflux",
+    "risk": "low",
+    "demographic": {
+      "age": 45,
+      "sex": "M"
+    },
+    "chief_complaint": "Burning chest sensation...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Burning chest sensation...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "GERD / Acid Reflux",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be GERD / Acid Reflux",
+      "explanation_doctor": "Clinical manifestation consistent with GERD / Acid Reflux",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Burning chest sensation..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_003",
+    "condition": "Appendicitis",
+    "risk": "critical",
+    "demographic": {
+      "age": 19,
+      "sex": "M"
+    },
+    "chief_complaint": "Sharp right lower abdominal pain...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Sharp right lower abdominal pain...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Appendicitis",
+      "confidence_percent": 85,
+      "risk_tier": "critical",
+      "explanation_patient": "This appears to be Appendicitis",
+      "explanation_doctor": "Clinical manifestation consistent with Appendicitis",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": true,
+      "see_doctor_urgency": "emergency",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Sharp right lower abdominal pain..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_004",
+    "condition": "Panic Attack / Panic Disorder",
+    "risk": "medium",
+    "demographic": {
+      "age": 28,
+      "sex": "F"
+    },
+    "chief_complaint": "Heart racing, can't breathe...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Heart racing, can't breathe...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Panic Attack / Panic Disorder",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Panic Attack / Panic Disorder",
+      "explanation_doctor": "Clinical manifestation consistent with Panic Attack / Panic Disorder",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Heart racing, can't breathe..."
+      ]
+    },
+    "feedback": {
+      "rating": 4,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_005",
+    "condition": "Type 2 Diabetes (Early Onset)",
+    "risk": "high",
+    "demographic": {
+      "age": 52,
+      "sex": "M"
+    },
+    "chief_complaint": "Extremely thirsty...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Extremely thirsty...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Type 2 Diabetes (Early Onset)",
+      "confidence_percent": 85,
+      "risk_tier": "high",
+      "explanation_patient": "This appears to be Type 2 Diabetes (Early Onset)",
+      "explanation_doctor": "Clinical manifestation consistent with Type 2 Diabetes (Early Onset)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": true,
+      "see_doctor_urgency": "soon",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Extremely thirsty..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_006",
+    "condition": "UTI (Uncomplicated Cystitis)",
+    "risk": "low",
+    "demographic": {
+      "age": 24,
+      "sex": "F"
+    },
+    "chief_complaint": "Burning when urinating...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Burning when urinating...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "UTI (Uncomplicated Cystitis)",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be UTI (Uncomplicated Cystitis)",
+      "explanation_doctor": "Clinical manifestation consistent with UTI (Uncomplicated Cystitis)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Burning when urinating..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_007",
+    "condition": "Kidney Stone (Ureterolithiasis)",
+    "risk": "high",
+    "demographic": {
+      "age": 38,
+      "sex": "M"
+    },
+    "chief_complaint": "Severe flank pain...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Severe flank pain...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Kidney Stone (Ureterolithiasis)",
+      "confidence_percent": 85,
+      "risk_tier": "high",
+      "explanation_patient": "This appears to be Kidney Stone (Ureterolithiasis)",
+      "explanation_doctor": "Clinical manifestation consistent with Kidney Stone (Ureterolithiasis)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": true,
+      "see_doctor_urgency": "soon",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Severe flank pain..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_008",
+    "condition": "Asthma Exacerbation",
+    "risk": "medium",
+    "demographic": {
+      "age": 16,
+      "sex": "F"
+    },
+    "chief_complaint": "Tight chest, wheezing...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Tight chest, wheezing...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Asthma Exacerbation",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Asthma Exacerbation",
+      "explanation_doctor": "Clinical manifestation consistent with Asthma Exacerbation",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Tight chest, wheezing..."
+      ]
+    },
+    "feedback": {
+      "rating": 4,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_009",
+    "condition": "Iron Deficiency Anemia",
+    "risk": "medium",
+    "demographic": {
+      "age": 26,
+      "sex": "F"
+    },
+    "chief_complaint": "Extreme fatigue...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Extreme fatigue...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Iron Deficiency Anemia",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Iron Deficiency Anemia",
+      "explanation_doctor": "Clinical manifestation consistent with Iron Deficiency Anemia",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Extreme fatigue..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_010",
+    "condition": "Hypertensive Urgency",
+    "risk": "critical",
+    "demographic": {
+      "age": 60,
+      "sex": "M"
+    },
+    "chief_complaint": "Worst headache ever...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Worst headache ever...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Hypertensive Urgency",
+      "confidence_percent": 85,
+      "risk_tier": "critical",
+      "explanation_patient": "This appears to be Hypertensive Urgency",
+      "explanation_doctor": "Clinical manifestation consistent with Hypertensive Urgency",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": true,
+      "see_doctor_urgency": "emergency",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Worst headache ever..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_011",
+    "condition": "Contact Dermatitis",
+    "risk": "low",
+    "demographic": {
+      "age": 29,
+      "sex": "F"
+    },
+    "chief_complaint": "Itchy red rash...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Itchy red rash...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Contact Dermatitis",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Contact Dermatitis",
+      "explanation_doctor": "Clinical manifestation consistent with Contact Dermatitis",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Itchy red rash..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_012",
+    "condition": "PCOS (Polycystic Ovary Syndrome)",
+    "risk": "medium",
+    "demographic": {
+      "age": 21,
+      "sex": "F"
+    },
+    "chief_complaint": "Periods every 45-60 days...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Periods every 45-60 days...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "PCOS (Polycystic Ovary Syndrome)",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be PCOS (Polycystic Ovary Syndrome)",
+      "explanation_doctor": "Clinical manifestation consistent with PCOS (Polycystic Ovary Syndrome)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Periods every 45-60 days..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_013",
+    "condition": "Generalized Anxiety Disorder",
+    "risk": "medium",
+    "demographic": {
+      "age": 33,
+      "sex": "F"
+    },
+    "chief_complaint": "Can't stop worrying...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Can't stop worrying...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Generalized Anxiety Disorder",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Generalized Anxiety Disorder",
+      "explanation_doctor": "Clinical manifestation consistent with Generalized Anxiety Disorder",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Can't stop worrying..."
+      ]
+    },
+    "feedback": {
+      "rating": 4,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_014",
+    "condition": "Mechanical Lower Back Pain",
+    "risk": "low",
+    "demographic": {
+      "age": 40,
+      "sex": "M"
+    },
+    "chief_complaint": "Lower back pain...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Lower back pain...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Mechanical Lower Back Pain",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Mechanical Lower Back Pain",
+      "explanation_doctor": "Clinical manifestation consistent with Mechanical Lower Back Pain",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Lower back pain..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_015",
+    "condition": "Viral Gastroenteritis",
+    "risk": "low",
+    "demographic": {
+      "age": 27,
+      "sex": "M"
+    },
+    "chief_complaint": "Vomiting and diarrhea...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Vomiting and diarrhea...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Viral Gastroenteritis",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Viral Gastroenteritis",
+      "explanation_doctor": "Clinical manifestation consistent with Viral Gastroenteritis",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Vomiting and diarrhea..."
+      ]
+    },
+    "feedback": {
+      "rating": 4,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_016",
+    "condition": "Allergic Reaction (Urticaria)",
+    "risk": "medium",
+    "demographic": {
+      "age": 20,
+      "sex": "F"
+    },
+    "chief_complaint": "Hives all over arms...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Hives all over arms...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Allergic Reaction (Urticaria)",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Allergic Reaction (Urticaria)",
+      "explanation_doctor": "Clinical manifestation consistent with Allergic Reaction (Urticaria)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Hives all over arms..."
+      ]
+    },
+    "feedback": {
+      "rating": 4,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_017",
+    "condition": "Hypothyroidism",
+    "risk": "medium",
+    "demographic": {
+      "age": 44,
+      "sex": "F"
+    },
+    "chief_complaint": "Gained 12kg in 6 months...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Gained 12kg in 6 months...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Hypothyroidism",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Hypothyroidism",
+      "explanation_doctor": "Clinical manifestation consistent with Hypothyroidism",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Gained 12kg in 6 months..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_018",
+    "condition": "Cluster Headache",
+    "risk": "high",
+    "demographic": {
+      "age": 35,
+      "sex": "M"
+    },
+    "chief_complaint": "Excruciating one-sided headache...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Excruciating one-sided headache...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Cluster Headache",
+      "confidence_percent": 85,
+      "risk_tier": "high",
+      "explanation_patient": "This appears to be Cluster Headache",
+      "explanation_doctor": "Clinical manifestation consistent with Cluster Headache",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": true,
+      "see_doctor_urgency": "soon",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Excruciating one-sided headache..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_019",
+    "condition": "Plantar Fasciitis",
+    "risk": "low",
+    "demographic": {
+      "age": 48,
+      "sex": "M"
+    },
+    "chief_complaint": "Heel pain every morning...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Heel pain every morning...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Plantar Fasciitis",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Plantar Fasciitis",
+      "explanation_doctor": "Clinical manifestation consistent with Plantar Fasciitis",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Heel pain every morning..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_020",
+    "condition": "Benign Paroxysmal Positional Vertigo (BPPV)",
+    "risk": "low",
+    "demographic": {
+      "age": 55,
+      "sex": "F"
+    },
+    "chief_complaint": "Room spinning...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Room spinning...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Benign Paroxysmal Positional Vertigo (BPPV)",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Benign Paroxysmal Positional Vertigo (BPPV)",
+      "explanation_doctor": "Clinical manifestation consistent with Benign Paroxysmal Positional Vertigo (BPPV)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Room spinning..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_021",
+    "condition": "Strep Throat (GAS Pharyngitis)",
+    "risk": "medium",
+    "demographic": {
+      "age": 14,
+      "sex": "M"
+    },
+    "chief_complaint": "Severe sore throat...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Severe sore throat...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Strep Throat (GAS Pharyngitis)",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Strep Throat (GAS Pharyngitis)",
+      "explanation_doctor": "Clinical manifestation consistent with Strep Throat (GAS Pharyngitis)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Severe sore throat..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_022",
+    "condition": "Acute Sinusitis",
+    "risk": "low",
+    "demographic": {
+      "age": 36,
+      "sex": "F"
+    },
+    "chief_complaint": "Facial pressure...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Facial pressure...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Acute Sinusitis",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Acute Sinusitis",
+      "explanation_doctor": "Clinical manifestation consistent with Acute Sinusitis",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Facial pressure..."
+      ]
+    },
+    "feedback": {
+      "rating": 4,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_023",
+    "condition": "Obstructive Sleep Apnea",
+    "risk": "medium",
+    "demographic": {
+      "age": 50,
+      "sex": "M"
+    },
+    "chief_complaint": "Partner says I stop breathing...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Partner says I stop breathing...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Obstructive Sleep Apnea",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Obstructive Sleep Apnea",
+      "explanation_doctor": "Clinical manifestation consistent with Obstructive Sleep Apnea",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Partner says I stop breathing..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_024",
+    "condition": "Vitamin D Deficiency",
+    "risk": "low",
+    "demographic": {
+      "age": 30,
+      "sex": "F"
+    },
+    "chief_complaint": "Bone aches, fatigue...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Bone aches, fatigue...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Vitamin D Deficiency",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Vitamin D Deficiency",
+      "explanation_doctor": "Clinical manifestation consistent with Vitamin D Deficiency",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Bone aches, fatigue..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_025",
+    "condition": "Irritable Bowel Syndrome (IBS)",
+    "risk": "low",
+    "demographic": {
+      "age": 29,
+      "sex": "F"
+    },
+    "chief_complaint": "Alternating constipation...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Alternating constipation...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Irritable Bowel Syndrome (IBS)",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Irritable Bowel Syndrome (IBS)",
+      "explanation_doctor": "Clinical manifestation consistent with Irritable Bowel Syndrome (IBS)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Alternating constipation..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_026",
+    "condition": "Gout (Acute Flare)",
+    "risk": "medium",
+    "demographic": {
+      "age": 55,
+      "sex": "M"
+    },
+    "chief_complaint": "Big toe red hot swollen...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Big toe red hot swollen...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Gout (Acute Flare)",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Gout (Acute Flare)",
+      "explanation_doctor": "Clinical manifestation consistent with Gout (Acute Flare)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Big toe red hot swollen..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_027",
+    "condition": "Community-Acquired Pneumonia",
+    "risk": "high",
+    "demographic": {
+      "age": 62,
+      "sex": "F"
+    },
+    "chief_complaint": "Productive cough...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Productive cough...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Community-Acquired Pneumonia",
+      "confidence_percent": 85,
+      "risk_tier": "high",
+      "explanation_patient": "This appears to be Community-Acquired Pneumonia",
+      "explanation_doctor": "Clinical manifestation consistent with Community-Acquired Pneumonia",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": true,
+      "see_doctor_urgency": "soon",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Productive cough..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_028",
+    "condition": "Deep Vein Thrombosis (DVT)",
+    "risk": "critical",
+    "demographic": {
+      "age": 42,
+      "sex": "M"
+    },
+    "chief_complaint": "Left calf swollen...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Left calf swollen...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Deep Vein Thrombosis (DVT)",
+      "confidence_percent": 85,
+      "risk_tier": "critical",
+      "explanation_patient": "This appears to be Deep Vein Thrombosis (DVT)",
+      "explanation_doctor": "Clinical manifestation consistent with Deep Vein Thrombosis (DVT)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": true,
+      "see_doctor_urgency": "emergency",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Left calf swollen..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_029",
+    "condition": "Major Depressive Disorder",
+    "risk": "high",
+    "demographic": {
+      "age": 27,
+      "sex": "M"
+    },
+    "chief_complaint": "Low mood every day...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Low mood every day...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Major Depressive Disorder",
+      "confidence_percent": 85,
+      "risk_tier": "high",
+      "explanation_patient": "This appears to be Major Depressive Disorder",
+      "explanation_doctor": "Clinical manifestation consistent with Major Depressive Disorder",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": true,
+      "see_doctor_urgency": "soon",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Low mood every day..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_030",
+    "condition": "Hyperthyroidism (Graves Disease)",
+    "risk": "medium",
+    "demographic": {
+      "age": 32,
+      "sex": "F"
+    },
+    "chief_complaint": "Heart racing...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Heart racing...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Hyperthyroidism (Graves Disease)",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Hyperthyroidism (Graves Disease)",
+      "explanation_doctor": "Clinical manifestation consistent with Hyperthyroidism (Graves Disease)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Heart racing..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_031",
+    "condition": "Peptic Ulcer Disease",
+    "risk": "medium",
+    "demographic": {
+      "age": 47,
+      "sex": "M"
+    },
+    "chief_complaint": "Burning stomach pain...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Burning stomach pain...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Peptic Ulcer Disease",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Peptic Ulcer Disease",
+      "explanation_doctor": "Clinical manifestation consistent with Peptic Ulcer Disease",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Burning stomach pain..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_032",
+    "condition": "Celiac Disease",
+    "risk": "medium",
+    "demographic": {
+      "age": 31,
+      "sex": "F"
+    },
+    "chief_complaint": "Bloating and diarrhea...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Bloating and diarrhea...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Celiac Disease",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Celiac Disease",
+      "explanation_doctor": "Clinical manifestation consistent with Celiac Disease",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Bloating and diarrhea..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_033",
+    "condition": "Herpes Zoster (Shingles)",
+    "risk": "medium",
+    "demographic": {
+      "age": 58,
+      "sex": "M"
+    },
+    "chief_complaint": "Burning pain...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Burning pain...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Herpes Zoster (Shingles)",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Herpes Zoster (Shingles)",
+      "explanation_doctor": "Clinical manifestation consistent with Herpes Zoster (Shingles)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Burning pain..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_034",
+    "condition": "Dengue Fever",
+    "risk": "high",
+    "demographic": {
+      "age": 25,
+      "sex": "M"
+    },
+    "chief_complaint": "High fever 5 days...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "High fever 5 days...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Dengue Fever",
+      "confidence_percent": 85,
+      "risk_tier": "high",
+      "explanation_patient": "This appears to be Dengue Fever",
+      "explanation_doctor": "Clinical manifestation consistent with Dengue Fever",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": true,
+      "see_doctor_urgency": "soon",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with High fever 5 days..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_035",
+    "condition": "Restless Legs Syndrome",
+    "risk": "low",
+    "demographic": {
+      "age": 45,
+      "sex": "F"
+    },
+    "chief_complaint": "Crawling sensation in legs...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Crawling sensation in legs...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Restless Legs Syndrome",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Restless Legs Syndrome",
+      "explanation_doctor": "Clinical manifestation consistent with Restless Legs Syndrome",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Crawling sensation in legs..."
+      ]
+    },
+    "feedback": {
+      "rating": 4,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_036",
+    "condition": "Benign Prostatic Hyperplasia (BPH)",
+    "risk": "medium",
+    "demographic": {
+      "age": 67,
+      "sex": "M"
+    },
+    "chief_complaint": "Weak urine stream...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Weak urine stream...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Benign Prostatic Hyperplasia (BPH)",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Benign Prostatic Hyperplasia (BPH)",
+      "explanation_doctor": "Clinical manifestation consistent with Benign Prostatic Hyperplasia (BPH)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Weak urine stream..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_037",
+    "condition": "Carpal Tunnel Syndrome",
+    "risk": "low",
+    "demographic": {
+      "age": 38,
+      "sex": "F"
+    },
+    "chief_complaint": "Numbness and tingling...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Numbness and tingling...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Carpal Tunnel Syndrome",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Carpal Tunnel Syndrome",
+      "explanation_doctor": "Clinical manifestation consistent with Carpal Tunnel Syndrome",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Numbness and tingling..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_038",
+    "condition": "Heat Exhaustion",
+    "risk": "high",
+    "demographic": {
+      "age": 21,
+      "sex": "M"
+    },
+    "chief_complaint": "Dizzy, heavy sweating...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Dizzy, heavy sweating...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Heat Exhaustion",
+      "confidence_percent": 85,
+      "risk_tier": "high",
+      "explanation_patient": "This appears to be Heat Exhaustion",
+      "explanation_doctor": "Clinical manifestation consistent with Heat Exhaustion",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": true,
+      "see_doctor_urgency": "soon",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Dizzy, heavy sweating..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_039",
+    "condition": "Stress Alopecia (Telogen Effluvium)",
+    "risk": "low",
+    "demographic": {
+      "age": 28,
+      "sex": "F"
+    },
+    "chief_complaint": "Alarming hair loss...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Alarming hair loss...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Stress Alopecia (Telogen Effluvium)",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Stress Alopecia (Telogen Effluvium)",
+      "explanation_doctor": "Clinical manifestation consistent with Stress Alopecia (Telogen Effluvium)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Alarming hair loss..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_040",
+    "condition": "Osteoarthritis (Knee)",
+    "risk": "medium",
+    "demographic": {
+      "age": 65,
+      "sex": "F"
+    },
+    "chief_complaint": "Right knee pain...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Right knee pain...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Osteoarthritis (Knee)",
+      "confidence_percent": 85,
+      "risk_tier": "medium",
+      "explanation_patient": "This appears to be Osteoarthritis (Knee)",
+      "explanation_doctor": "Clinical manifestation consistent with Osteoarthritis (Knee)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Right knee pain..."
+      ]
+    },
+    "feedback": {
+      "rating": 4,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_041",
+    "condition": "Menstrual Migraine",
+    "risk": "low",
+    "demographic": {
+      "age": 19,
+      "sex": "F"
+    },
+    "chief_complaint": "Severe headache...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Severe headache...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Menstrual Migraine",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Menstrual Migraine",
+      "explanation_doctor": "Clinical manifestation consistent with Menstrual Migraine",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Severe headache..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_042",
+    "condition": "Eczema (Atopic Dermatitis) Flare",
+    "risk": "low",
+    "demographic": {
+      "age": 23,
+      "sex": "M"
+    },
+    "chief_complaint": "Intensely itchy patches...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Intensely itchy patches...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Eczema (Atopic Dermatitis) Flare",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Eczema (Atopic Dermatitis) Flare",
+      "explanation_doctor": "Clinical manifestation consistent with Eczema (Atopic Dermatitis) Flare",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Intensely itchy patches..."
+      ]
+    },
+    "feedback": {
+      "rating": 4,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_043",
+    "condition": "Hypoglycemia (Diabetic)",
+    "risk": "high",
+    "demographic": {
+      "age": 48,
+      "sex": "M"
+    },
+    "chief_complaint": "Shaking, sweating...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Shaking, sweating...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Hypoglycemia (Diabetic)",
+      "confidence_percent": 85,
+      "risk_tier": "high",
+      "explanation_patient": "This appears to be Hypoglycemia (Diabetic)",
+      "explanation_doctor": "Clinical manifestation consistent with Hypoglycemia (Diabetic)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": true,
+      "see_doctor_urgency": "soon",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Shaking, sweating..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_044",
+    "condition": "Tendinopathy (Achilles)",
+    "risk": "low",
+    "demographic": {
+      "age": 36,
+      "sex": "M"
+    },
+    "chief_complaint": "Achilles heel pain...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Achilles heel pain...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Tendinopathy (Achilles)",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Tendinopathy (Achilles)",
+      "explanation_doctor": "Clinical manifestation consistent with Tendinopathy (Achilles)",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Achilles heel pain..."
+      ]
+    },
+    "feedback": {
+      "rating": 4,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  },
+  {
+    "id": "case_045",
+    "condition": "Cervicogenic Headache",
+    "risk": "low",
+    "demographic": {
+      "age": 44,
+      "sex": "M"
+    },
+    "chief_complaint": "Headache starting in neck...",
+    "turns": [
+      [
+        "Hello",
+        "How can I help you today?"
+      ],
+      [
+        "Headache starting in neck...",
+        "How long has this been going on?"
+      ]
+    ],
+    "final_data": {
+      "condition": "Cervicogenic Headache",
+      "confidence_percent": 85,
+      "risk_tier": "low",
+      "explanation_patient": "This appears to be Cervicogenic Headache",
+      "explanation_doctor": "Clinical manifestation consistent with Cervicogenic Headache",
+      "dos": [
+        "Rest",
+        "Drink fluids"
+      ],
+      "donts": [
+        "Avoid stress",
+        "Avoid strenuous activity"
+      ],
+      "home_remedies": [
+        "Warm compress",
+        "Rest"
+      ],
+      "dietary_guidelines": {
+        "eat": [],
+        "drink": [],
+        "avoid": []
+      },
+      "lifestyle_modifications": [
+        "Regular sleep",
+        "Moderate exercise"
+      ],
+      "see_doctor": false,
+      "see_doctor_urgency": "routine",
+      "see_doctor_reason": "Further evaluation",
+      "warning_signs": [
+        "Worsening pain",
+        "Fever"
+      ],
+      "reasoning": [
+        "Patient presented with Headache starting in neck..."
+      ]
+    },
+    "feedback": {
+      "rating": 5,
+      "was_accurate": true,
+      "helpful_text": "Good assessment",
+      "not_helpful_text": ""
+    }
+  }
+]

@@ -20,6 +20,8 @@ import LandingPage from "./pages/LandingPage";
 import FindDoctorsPage from "./pages/FindDoctorsPage";
 import ContactPage from "./pages/ContactPage";
 import SupportPage from "./pages/SupportPage";
+import FeedbackAnalyticsPage from "./pages/FeedbackAnalyticsPage";
+import HealthTimelinePage from "./pages/HealthTimelinePage";
 import Footer from "./components/Footer";
 
 function PrivateRoute({ children }) {
@@ -85,6 +87,8 @@ export default function App() {
             <Route path="/result/:sessionId" element={<PrivateRoute><ResultPage /></PrivateRoute>} />
             <Route path="/history" element={<PrivateRoute><HistoryPage /></PrivateRoute>} />
             <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+            <Route path="/feedback-analytics" element={<PrivateRoute><FeedbackAnalyticsPage /></PrivateRoute>} />
+            <Route path="/health-timeline" element={<PrivateRoute><HealthTimelinePage /></PrivateRoute>} />
             <Route path="/population" element={<PopulationPage />} />
             <Route path="/find-doctors" element={<PrivateRoute><FindDoctorsPage /></PrivateRoute>} />
             <Route path="/contact" element={<ContactPage />} />

@@ -11,6 +11,8 @@ SYSTEM_PROMPT_TEMPLATE = """You are ClinicalMind, a sharp, warm clinical advisor
 
 {profile_section}
 
+{health_history_section}
+
 ## INTERVIEW STYLE
 - Ask ONE short question per turn. Max 1-2 sentences.
 - No preambles. No "Great question!" or "I understand." Just the next question.
@@ -139,7 +141,7 @@ The following is verified personal health data for the current patient. Use it t
 ⚠️ IMPORTANT: If ANY recommendation you make conflicts with or requires special attention given ANY field above, you MUST include it in the "highlights" array. Do not skip this."""
 
 
-def build_prompt(retrieved_chunks: list[str], profile_context: str | None = None) -> str:
+def build_prompt(retrieved_chunks: list[str], profile_context: str | None = None, health_history: str | None = None) -> str:
     """
     Build the system prompt with RAG-retrieved guideline chunks
     and user profile context injected.
@@ -152,8 +154,12 @@ def build_prompt(retrieved_chunks: list[str], profile_context: str | None = None
         chunks_text = "[No specific guidelines retrieved — use general medical knowledge, flag lower confidence.]"
 
     profile_section = _build_profile_section(profile_context)
+    
+    from .user_memory_injector import format_memory
+    health_history_section = format_memory(health_history)
 
     return SYSTEM_PROMPT_TEMPLATE.format(
         retrieved_chunks=chunks_text,
         profile_section=profile_section,
+        health_history_section=health_history_section,
     )

@@ -39,6 +39,7 @@ class ChatRequest(BaseModel):
     session_id: str
     message: str
     profile_context: str | None = None
+    health_history: str | None = None
 
 class ChatResponse(BaseModel):
     reply: str
@@ -143,6 +144,15 @@ def delete_session(session_id: str):
     session_manager.clear_session(session_id)
     return {"deleted": session_id}
 
+class SyncRequest(BaseModel):
+    user_id: str
+    user_health_memory_id: str
+
+@app.post("/ml/memory/sync")
+def sync_memory(req: SyncRequest):
+    """Accepts memory sync events from the backend to log or cache."""
+    print(f"[ML Sync] Synchronized memory for user {req.user_id}, memory_id: {req.user_health_memory_id}")
+    return {"status": "synced"}
 
 @app.post("/ml/chat", response_model=ChatResponse)
 def api_chat(req: ChatRequest):
@@ -151,7 +161,7 @@ def api_chat(req: ChatRequest):
     Returns LLM reply + conversation metadata.
     """
     try:
-        result = process_message(req.session_id, req.message, profile_context=req.profile_context)
+        result = process_message(req.session_id, req.message, profile_context=req.profile_context, health_history=req.health_history)
         return ChatResponse(
             reply=result["reply"],
             turn_count=result["turn_count"],

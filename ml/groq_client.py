@@ -171,12 +171,12 @@ def call_groq(system_prompt: str, messages: list, is_final_turn: bool = False) -
 
 # ── RAG pipeline entry point ──────────────────────────────────────────────────
 
-def process_message(session_id: str, user_message: str, profile_context: str | None = None) -> dict:
+def process_message(session_id: str, user_message: str, profile_context: str | None = None, health_history: str | None = None) -> dict:
     """
     Full RAG pipeline:
       1. Store user message
       2. Retrieve guideline chunks (count scales with query length)
-      3. Build system prompt with RAG context + user profile
+      3. Build system prompt with RAG context + user profile + health history
       4. Trim history to context window limit
       5. Detect final-turn heuristic
       6. Call Groq with retry + backoff
@@ -193,7 +193,7 @@ def process_message(session_id: str, user_message: str, profile_context: str | N
     n_results = _get_n_results(combined_text)
     chunks = retrieve(combined_text, n_results=n_results)
 
-    system_prompt = build_prompt(chunks, profile_context=profile_context)
+    system_prompt = build_prompt(chunks, profile_context=profile_context, health_history=health_history)
 
     raw_history = session_manager.get_history(session_id)
     history = _trim_history(raw_history)

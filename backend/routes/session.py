@@ -11,6 +11,8 @@ import json
 from ..database import get_db
 from ..models.user import User
 from ..models.session import Session as SessionModel, SessionAnswer, SymptomVector, PopulationAggregate
+from ..models.memory import UserHealthMemory
+from ..models.training import TrainingExample
 from ..schemas.session import (
     SessionStartResponse, AnswerSubmit, AnswerResponse,
     RiskOutput, SessionHistoryItem, PopulationReport
@@ -106,11 +108,19 @@ async def start_session(
     # Build profile context from user's stored health data
     profile_context = _build_profile_context(current_user)
 
+    # Fetch memory timeline
+    memory_rows = db.query(UserHealthMemory).filter(
+        UserHealthMemory.user_id == current_user.id
+    ).order_by(UserHealthMemory.created_at.desc()).limit(10).all()
+    # pass as strings to ML payload
+    memory_payload = [{"condition":m.condition, "date":str(m.created_at)} for m in memory_rows]
+
     # Call the RAG pipeline with an initial greeting to get the first question
     ml_result = await call_ml("chat", {
         "session_id": str(session.id),
         "message": "Hello, I need help understanding what's going on with my health.",
         "profile_context": profile_context or None,
+        "health_history": json.dumps(memory_payload) if memory_payload else None
     })
 
     first_question = ml_result.get("reply", "How are you feeling today? Please describe your symptoms in your own words.")
@@ -160,11 +170,19 @@ async def submit_answer(
     # Build profile context from user's stored health data
     profile_context = _build_profile_context(current_user)
 
+    # Fetch memory timeline
+    memory_rows = db.query(UserHealthMemory).filter(
+        UserHealthMemory.user_id == current_user.id
+    ).order_by(UserHealthMemory.created_at.desc()).limit(10).all()
+    # Format memory timeline
+    memory_payload = [{"condition":m.condition, "date":str(m.created_at)} for m in memory_rows]
+
     # Call RAG pipeline — forward user's answer to the LLM
     ml_result = await call_ml("chat", {
         "session_id": str(payload.session_id),
         "message": payload.answer_text,
         "profile_context": profile_context or None,
+        "health_history": json.dumps(memory_payload) if memory_payload else None
     })
 
     turn_count = ml_result.get("turn_count", answer_count + 1)
@@ -185,6 +203,51 @@ async def submit_answer(
             session.top_conditions = [
                 {"name": final_data.get("condition", "Unknown"), "confidence": final_data.get("confidence_percent", 50) / 100.0}
             ]
+            
+            # 1. Save user_health_memory row
+            all_answers = db.query(SessionAnswer).filter(SessionAnswer.session_id == payload.session_id).order_by(SessionAnswer.sequence_number).all()
+            user_texts = [a.answer_text for a in all_answers]
+            symptoms_summary = " ".join(user_texts)
+            key_findings = {
+                "dos": final_data.get("dos", []),
+                "donts": final_data.get("donts", []),
+                "warning_signs": final_data.get("warning_signs", [])
+            }
+            
+            uhm = UserHealthMemory(
+                user_id=current_user.id,
+                session_id=str(session.id),
+                condition=final_data.get("condition"),
+                risk_tier=final_data.get("risk_tier"),
+                confidence_percent=final_data.get("confidence_percent"),
+                symptoms_summary=symptoms_summary,
+                key_findings=key_findings,
+                see_doctor=final_data.get("see_doctor"),
+                see_doctor_urgency=final_data.get("see_doctor_urgency")
+            )
+            db.add(uhm)
+            db.flush() # get uhm.id without committing
+            
+            # 2. Create training_examples row
+            tc_messages = []
+            for a in all_answers:
+                tc_messages.append({"role": "assistant", "content": a.question_text})
+                tc_messages.append({"role": "user", "content": a.answer_text})
+                
+            import hashlib
+            te = TrainingExample(
+                session_id=str(session.id),
+                user_id=current_user.id,
+                messages=tc_messages,
+                system_prompt_hash=hashlib.sha256(b"dynamic_prompt").hexdigest(), # mock hash for now, real one depends on prompt builder
+                final_output=final_data,
+            )
+            db.add(te)
+            
+            # 3. Call ML memory sync endpoint (async, fire-and-forget)
+            import asyncio
+            asyncio.create_task(call_ml("memory/sync", {"user_id": current_user.id, "user_health_memory_id": uhm.id}))
+
         db.commit()
 
     total_questions = 8  # Approximate

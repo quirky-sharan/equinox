@@ -10,7 +10,8 @@ import {
   Check, X as XIcon, Heart, Utensils, Leaf, Zap, AlertOctagon
 } from "lucide-react";
 import WellnessNudge from "../components/WellnessNudge";
-
+import FeedbackModal from "../components/FeedbackModal";
+import api from "../api/client";
 const RISK_CONFIG = {
   low:      { color: "var(--risk-low)",      bg: "rgba(16,185,129,0.08)",  border: "rgba(16,185,129,0.25)",  icon: CheckCircle,   label: "LOW RISK" },
   medium:   { color: "var(--risk-medium)",   bg: "rgba(245,158,11,0.08)",   border: "rgba(245,158,11,0.25)",   icon: AlertTriangle, label: "MEDIUM RISK" },
@@ -35,6 +36,31 @@ export default function ResultPage() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["result", sessionId],
     queryFn: () => sessionApi.getResult(sessionId).then((r) => r.data),
+  });
+
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [feedbackChecked, setFeedbackChecked] = useState(false);
+
+  // Check if feedback already exists for this session
+  useQuery({
+    queryKey: ["feedback", sessionId],
+    queryFn: async () => {
+      try {
+        const res = await api.get(`/feedback/${sessionId}`);
+        if (!res.data) {
+          setIsFeedbackModalOpen(true);
+        }
+        setFeedbackChecked(true);
+        return res.data;
+      } catch (e) {
+        if (e.response?.status === 404 || e.response?.status === 400 || !e.response?.data) {
+          setIsFeedbackModalOpen(true);
+        }
+        setFeedbackChecked(true);
+        return null;
+      }
+    },
+    enabled: !!data && !feedbackChecked, // Only check once the result is loaded
   });
 
   if (isLoading) return (
@@ -438,9 +464,15 @@ export default function ResultPage() {
 
         {/* Disclaimer */}
         <motion.div variants={itemVariants} style={{ marginTop: "4rem", padding: "2rem", borderTop: "1px solid var(--border-color)", fontSize: "0.85rem", color: "var(--text-muted)", lineHeight: 1.6, textAlign: "center" }}>
-          Meowmeow is a high-fidelity informational probabilistic engine. Always consult a qualified clinical professional for final diagnostics.
+          Pulse is a high-fidelity informational probabilistic engine. Always consult a qualified clinical professional for final diagnostics.
         </motion.div>
       </motion.div>
+
+      <FeedbackModal 
+        sessionId={sessionId} 
+        isOpen={isFeedbackModalOpen} 
+        onClose={() => setIsFeedbackModalOpen(false)} 
+      />
 
     </div>
   );
