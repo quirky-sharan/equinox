@@ -25,23 +25,26 @@ export default function HistoryPage() {
     queryFn: () => sessionApi.getHistory().then((r) => r.data),
   });
 
+  const [deleteError, setDeleteError] = useState(null);
+
   const deleteMutation = useMutation({
     mutationFn: (id) => sessionApi.deleteSession(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["history"] });
+      setDeleteError(null);
       setSessionToDelete(null);
     },
     onError: (err) => {
       console.error("Failed to delete session", err);
-      // Optional: show a toast/alert here
-      setSessionToDelete(null);
+      const msg = err?.response?.data?.detail || err?.message || "Unknown error";
+      setDeleteError(msg);
     }
   });
 
   const sessions = data || [];
 
   return (
-    <div className="page-container" style={{ maxWidth: 840 }}>
+    <div className="page-container" style={{ maxWidth: 840, position: "relative" }}>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "3rem", flexWrap: "wrap", gap: 20 }}>
           <div>
@@ -140,41 +143,124 @@ export default function HistoryPage() {
 
       </motion.div>
 
-      {/* Delete Confirmation Modal */}
+    {/* Delete Confirmation Modal - Moved outside to escape main motion div containment */}
       <AnimatePresence>
         {sessionToDelete && (
           <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 2000, /* Higher than Navbar */
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              background: "rgba(0, 0, 0, 0.6)", /* Darker backdrop as requested */
+              backdropFilter: "blur(4px)",
+              padding: "2rem"
+            }}
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            exit={{ opacity: 0 }}
+            onClick={() => !deleteMutation.isPending && setSessionToDelete(null)}
           >
             <motion.div
-              className="bg-[#1A1A24] border border-white/10 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl relative p-6"
-              initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
+              style={{
+                background: "var(--bg-card)",
+                border: "1px solid var(--border-color)",
+                borderRadius: "var(--radius-xl)",
+                width: "100%",
+                maxWidth: "420px",
+                overflow: "hidden",
+                boxShadow: "var(--shadow-lg)",
+                padding: "2.5rem",
+                position: "relative",
+                zIndex: 2001
+              }}
+              initial={{ scale: 0.9, y: 20 }} 
+              animate={{ scale: 1, y: 0 }} 
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
             >
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "1rem" }}>
-                <div style={{ width: 48, height: 48, borderRadius: "50%", background: "rgba(239, 68, 68, 0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <AlertTriangle size={24} color="var(--risk-critical)" />
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "1.5rem" }}>
+                <div style={{ width: 56, height: 56, borderRadius: "50%", background: "rgba(239, 68, 68, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "0.5rem" }}>
+                  <AlertTriangle size={28} color="var(--risk-critical)" />
                 </div>
-                <h3 style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--text-primary)", margin: 0 }}>Delete Assessment?</h3>
-                <p style={{ fontSize: "0.95rem", color: "var(--text-secondary)", margin: 0, lineHeight: 1.5 }}>
-                  This will permanently remove this assessment from your clinical history and analytics. This action cannot be undone.
-                </p>
+                <div>
+                  <h3 style={{ fontFamily: "var(--font-display)", fontSize: "1.5rem", fontWeight: 600, color: "var(--text-primary)", margin: "0 0 0.75rem", letterSpacing: "-0.02em" }}>
+                    Permanently delete?
+                  </h3>
+                  <p style={{ fontFamily: "var(--font-body)", fontSize: "0.95rem", color: "var(--text-secondary)", margin: 0, lineHeight: 1.6, fontWeight: 300 }}>
+                    This action will remove all clinical findings and behavioral history for this assessment. This cannot be undone.
+                  </p>
+                </div>
                 <div style={{ display: "flex", gap: "1rem", width: "100%", marginTop: "1rem" }}>
                   <button 
-                    onClick={() => setSessionToDelete(null)}
+                    onClick={() => { setSessionToDelete(null); setDeleteError(null); }}
                     disabled={deleteMutation.isPending}
-                    className="btn btn-secondary" style={{ flex: 1 }}
+                    style={{
+                      flex: 1,
+                      background: "transparent",
+                      border: "1px solid var(--border-color)",
+                      color: "var(--text-primary)",
+                      padding: "0.85rem",
+                      borderRadius: "var(--radius-md)",
+                      fontFamily: "var(--font-ui)",
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      cursor: "pointer",
+                      transition: "all 0.2s"
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = "var(--bg-subtle)"}
+                    onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}
                   >
                     Cancel
                   </button>
                   <button 
-                    onClick={() => deleteMutation.mutate(sessionToDelete)}
+                    onClick={() => { setDeleteError(null); deleteMutation.mutate(sessionToDelete); }}
                     disabled={deleteMutation.isPending}
-                    className="btn btn-primary" style={{ flex: 1, background: "var(--risk-critical)", borderColor: "var(--risk-critical)" }}
+                    style={{
+                      flex: 1,
+                      background: "var(--risk-critical)",
+                      border: "1px solid var(--risk-critical)",
+                      color: "#FFF",
+                      padding: "0.85rem",
+                      borderRadius: "var(--radius-md)",
+                      fontFamily: "var(--font-ui)",
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      letterSpacing: "0.1em",
+                      textTransform: "uppercase",
+                      cursor: deleteMutation.isPending ? "not-allowed" : "pointer",
+                      transition: "all 0.2s",
+                      position: "relative",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center"
+                    }}
                   >
-                    {deleteMutation.isPending ? "Deleting..." : "Delete"}
+                    {deleteMutation.isPending ? (
+                       <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} style={{ width: 14, height: 14, border: "2px solid #FFF", borderTopColor: "transparent", borderRadius: "50%" }} />
+                    ) : "Delete History"}
                   </button>
                 </div>
+                {deleteError && (
+                  <div style={{ 
+                    marginTop: "1rem", padding: "0.75rem 1rem", 
+                    background: "rgba(239, 68, 68, 0.08)", 
+                    border: "1px solid rgba(239, 68, 68, 0.2)", 
+                    borderRadius: "var(--radius-md)",
+                    width: "100%"
+                  }}>
+                    <p style={{ fontFamily: "var(--font-body)", fontSize: "0.85rem", color: "var(--risk-critical)", margin: 0, lineHeight: 1.5 }}>
+                      Error: {deleteError}
+                    </p>
+                  </div>
+                )}
               </div>
             </motion.div>
           </motion.div>

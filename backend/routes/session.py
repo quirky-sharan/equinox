@@ -204,6 +204,19 @@ async def submit_answer(
                 {"name": final_data.get("condition", "Unknown"), "confidence": final_data.get("confidence_percent", 50) / 100.0}
             ]
             
+            session.patient_explanation = final_data.get("explanation_patient", "")
+            session.doctor_explanation = final_data.get("explanation_doctor", "")
+            session.reasoning_chain = final_data.get("reasoning", [])
+            session.recommended_action = final_data.get("see_doctor_reason", "Consult a healthcare provider.")
+            session.dos = final_data.get("dos", [])
+            session.donts = final_data.get("donts", [])
+            session.see_doctor = final_data.get("see_doctor", False)
+            session.see_doctor_urgency = final_data.get("see_doctor_urgency")
+            session.home_remedies = final_data.get("home_remedies", [])
+            session.dietary_guidelines = final_data.get("dietary_guidelines")
+            session.lifestyle_modifications = final_data.get("lifestyle_modifications", [])
+            session.warning_signs = final_data.get("warning_signs", [])
+            
             # 1. Save user_health_memory row
             all_answers = db.query(SessionAnswer).filter(SessionAnswer.session_id == payload.session_id).order_by(SessionAnswer.sequence_number).all()
             user_texts = [a.answer_text for a in all_answers]
@@ -295,7 +308,31 @@ async def get_result(
         SessionAnswer.session_id == session_id
     ).order_by(SessionAnswer.sequence_number).all()
 
-    # If we already have stored results, use them
+    # If we already have a generated report stored, use it directly!
+    if session.patient_explanation:
+        return RiskOutput(
+            session_id=session_id,
+            risk_tier=session.risk_tier or "medium",
+            risk_score=session.risk_score or 0.5,
+            top_conditions=session.top_conditions or [{"name": "Assessment Completed", "confidence": 0.5}],
+            reasoning_chain=session.reasoning_chain or [],
+            behavioral_flags=[],
+            recommended_action=session.recommended_action or "Please consult a healthcare provider.",
+            patient_explanation=session.patient_explanation,
+            doctor_explanation=session.doctor_explanation or session.patient_explanation,
+            trajectory_label=session.trajectory_label,
+            trajectory_score=None,
+            dos=session.dos or [],
+            donts=session.donts or [],
+            see_doctor=bool(session.see_doctor),
+            see_doctor_urgency=session.see_doctor_urgency,
+            home_remedies=session.home_remedies or [],
+            dietary_guidelines=session.dietary_guidelines,
+            lifestyle_modifications=session.lifestyle_modifications or [],
+            warning_signs=session.warning_signs or [],
+        )
+
+    # Fallback for old sessions that didn't persist the full report
     if session.risk_tier and session.top_conditions:
         risk_tier = session.risk_tier
         risk_score = session.risk_score or 0.5
@@ -305,18 +342,22 @@ async def get_result(
         risk_score = 0.5
         top_conditions = [{"name": "Assessment Pending", "confidence": 0.5}]
 
-    # Try to get the final assessment from the ML session
-    ml_result = await call_ml("chat", {
-        "session_id": str(session_id),
-        "message": "Please provide your final assessment now in JSON format.",
-    })
+    # Try to get the final assessment from the ML session if it's not cached
+    try:
+        ml_result = await call_ml("chat", {
+            "session_id": str(session_id),
+            "message": "Please provide your final assessment now in JSON format.",
+        })
+        final_data = ml_result.get("final_data")
+    except Exception as e:
+        print(f"Failed to regenerate legacy report for {session_id}: {e}")
+        final_data = None
 
-    final_data = ml_result.get("final_data")
     if final_data:
         risk_tier = final_data.get("risk_tier", risk_tier)
         risk_score = final_data.get("confidence_percent", 50) / 100.0
         top_conditions = [{"name": final_data.get("condition", "Unknown"), "confidence": risk_score}]
-        patient_exp = final_data.get("explanation_patient", "")
+        patient_exp = final_data.get("explanation_patient", "This is a past assessment. Detailed explanations were not saved at the time.")
         doctor_exp = final_data.get("explanation_doctor", "")
         reasoning = final_data.get("reasoning", [])
         recommended_action = final_data.get("see_doctor_reason", "Consult a healthcare provider.")
@@ -329,13 +370,28 @@ async def get_result(
         lifestyle_modifications = final_data.get("lifestyle_modifications", [])
         warning_signs = final_data.get("warning_signs", [])
 
-        # Save updated results
+        # Save updated results back to DB so we don't have to fetch next time
         session.risk_tier = risk_tier
         session.risk_score = risk_score
         session.top_conditions = top_conditions
+        session.patient_explanation = patient_exp
+        session.doctor_explanation = doctor_exp
+        session.reasoning_chain = reasoning
+        session.recommended_action = recommended_action
+        session.dos = dos
+        session.donts = donts
+        session.see_doctor = see_doctor
+        session.see_doctor_urgency = see_doctor_urgency
+        session.home_remedies = home_remedies
+        session.dietary_guidelines = dietary_guidelines
+        session.lifestyle_modifications = lifestyle_modifications
+        session.warning_signs = warning_signs
         db.commit()
     else:
-        patient_exp = "The AI analysis session is processing. If this persists, please start a new assessment."
+        if session.status == "completed":
+            patient_exp = "This is a legacy assessment. Full detailed explanations were not stored locally, and the clinical engine is currently unreachable to regenerate them."
+        else:
+            patient_exp = "The AI analysis session is processing. If this persists, please start a new assessment."
         doctor_exp = "RAG pipeline final output not received."
         reasoning = []
         recommended_action = "Please consult a healthcare provider for a full evaluation."
@@ -394,11 +450,14 @@ def get_history(
     db: Session = Depends(get_db)
 ):
     sessions = db.query(SessionModel).filter(
-        SessionModel.user_id == current_user.id
+        SessionModel.user_id == current_user.id,
+        SessionModel.status == "completed"
     ).order_by(SessionModel.created_at.desc()).all()
 
     result = []
     for s in sessions:
+        if not s.top_conditions and not s.patient_explanation:
+            continue
         top = s.top_conditions[0]["name"] if s.top_conditions else None
         result.append(SessionHistoryItem(
             session_id=s.id,
@@ -416,23 +475,42 @@ def delete_session(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    print(f"[DELETE] Attempting to delete session {session_id} for user {current_user.id}")
+    
     session = db.query(SessionModel).filter(
         SessionModel.id == session_id,
         SessionModel.user_id == current_user.id
     ).first()
     if not session:
+        print(f"[DELETE] Session {session_id} not found for user {current_user.id}")
         raise HTTPException(status_code=404, detail="Session not found")
 
-    from ..models.feedback import SessionFeedback
-    db.query(SessionAnswer).filter(SessionAnswer.session_id == session_id).delete()
-    db.query(UserHealthMemory).filter(UserHealthMemory.session_id == session_id).delete()
-    db.query(TrainingExample).filter(TrainingExample.session_id == session_id).delete()
-    db.query(SessionFeedback).filter(SessionFeedback.session_id == session_id).delete()
-    db.query(SymptomVector).filter(SymptomVector.session_id == session_id).delete()
-    
-    db.delete(session)
-    db.commit()
-    return {"status": "deleted", "session_id": session_id}
+    try:
+        from ..models.feedback import SessionFeedback
+        
+        n1 = db.query(SessionAnswer).filter(SessionAnswer.session_id == session_id).delete(synchronize_session="fetch")
+        print(f"[DELETE] Deleted {n1} answers")
+        
+        n2 = db.query(UserHealthMemory).filter(UserHealthMemory.session_id == session_id).delete(synchronize_session="fetch")
+        print(f"[DELETE] Deleted {n2} health memories")
+        
+        n3 = db.query(TrainingExample).filter(TrainingExample.session_id == session_id).delete(synchronize_session="fetch")
+        print(f"[DELETE] Deleted {n3} training examples")
+        
+        n4 = db.query(SessionFeedback).filter(SessionFeedback.session_id == session_id).delete(synchronize_session="fetch")
+        print(f"[DELETE] Deleted {n4} feedback entries")
+        
+        n5 = db.query(SymptomVector).filter(SymptomVector.session_id == session_id).delete(synchronize_session="fetch")
+        print(f"[DELETE] Deleted {n5} symptom vectors")
+        
+        db.delete(session)
+        db.commit()
+        print(f"[DELETE] Successfully deleted session {session_id}")
+        return {"status": "deleted", "session_id": session_id}
+    except Exception as e:
+        db.rollback()
+        print(f"[DELETE] ERROR deleting session {session_id}: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to delete session: {str(e)}")
 
 
 @router.post("/population/report")
