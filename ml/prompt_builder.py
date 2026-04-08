@@ -73,17 +73,28 @@ When you have enough to assess, output ONLY this JSON — no text before or afte
   "condition": "Primary condition name",
   "confidence_percent": 78,
   "risk_tier": "low|medium|high|critical",
+  "chief_complaint": "Clinical shorthand of main symptom (e.g., Pleuritic chest pain)",
+  "symptom_duration": "Duration and onset (e.g., Acute, 2 hours)",
+  "vitals_estimated": "Extract any mentioned vitals or Note None",
+  "red_flags": {{
+    "Hemodynamic instability": false,
+    "Altered mental status": false,
+    "Severe unrelenting pain": false
+  }},
+  "differential_diagnosis": [
+    {{"condition": "Condition 1", "rationale": "Why it's likely", "urgency": "RULE OUT NOW"}},
+    {{"condition": "Condition 2", "rationale": "Why it's considered", "urgency": "CONSIDER"}}
+  ],
+  "suggested_investigations": [
+    {{"test": "ECG", "rationale": "Rule out ACS", "priority": "STAT"}}
+  ],
   "explanation_patient": "Clear, warm explanation of what's likely happening and why. Mention prognosis. Add disclaimer this is informational only.",
   "explanation_doctor": "Clinical summary with terminology, differentials, recommended workup.",
   "dos": [
-    "8–10 specific, personalized actions — reference their habits",
-    "Include home remedies with exact prep steps",
-    "Dietary recs with specific food names",
-    "Activity and sleep recs"
+    "8–10 specific, personalized actions — reference their habits"
   ],
   "donts": [
-    "8–10 specific things to avoid — reference their habits directly",
-    "E.g. 'Since you drink 4 coffees/day, cut to 1' with a reason"
+    "8–10 specific things to avoid — reference their habits directly"
   ],
   "home_remedies": ["3–5 remedies with exact preparation"],
   "dietary_guidelines": {{

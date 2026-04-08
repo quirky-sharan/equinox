@@ -83,11 +83,14 @@ async def call_ml(endpoint: str, payload: dict = None, method: str = "POST", tim
         raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
 
-async def call_ml_raw(endpoint: str, params: dict = None, timeout: float = 30.0) -> bytes:
+async def call_ml_raw(endpoint: str, payload: dict = None, params: dict = None, method: str = "GET", timeout: float = 30.0) -> bytes:
     """Call ML microservice and return raw bytes (for PDF)."""
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
-            r = await client.get(f"{settings.ML_SERVICE_URL}/ml/{endpoint}", params=params)
+            if method.upper() == "POST":
+                r = await client.post(f"{settings.ML_SERVICE_URL}/ml/{endpoint}", json=payload, params=params)
+            else:
+                r = await client.get(f"{settings.ML_SERVICE_URL}/ml/{endpoint}", params=params)
             r.raise_for_status()
             return r.content
     except Exception as e:
@@ -431,9 +434,45 @@ async def get_result(
 async def download_report(
     session_id: str,
     current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     """Proxy PDF download from the ML service."""
-    pdf_bytes = await call_ml_raw("report/pdf", {"session_id": str(session_id)})
+    session = db.query(SessionModel).filter(SessionModel.id == session_id, SessionModel.user_id == current_user.id).first()
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    user_data = {
+        "full_name": current_user.full_name,
+        "age": current_user.age,
+        "sex": current_user.sex,
+        "weight": current_user.weight,
+        "allergies": current_user.allergies,
+        "medical_conditions": current_user.medical_conditions,
+        "habits": current_user.habits,
+        "family_history": current_user.family_history
+    }
+    
+    final_data = {
+        "condition": session.top_conditions[0]["name"] if session.top_conditions else "Unknown",
+        "confidence_percent": int((session.risk_score or 0.5) * 100),
+        "risk_tier": session.risk_tier or "medium",
+        "explanation_doctor": session.doctor_explanation,
+        "warning_signs": session.warning_signs or [],
+        "see_doctor_urgency": session.see_doctor_urgency or "routine",
+        "see_doctor_reason": session.recommended_action or "General Physician",
+        "reasoning": session.reasoning_chain or [],
+        "dos": session.dos or [],
+        "donts": session.donts or [],
+        "home_remedies": session.home_remedies or [],
+        "dietary_guidelines": session.dietary_guidelines,
+        "lifestyle_modifications": session.lifestyle_modifications or [],
+    }
+
+    pdf_bytes = await call_ml_raw(
+        "report/pdf", 
+        payload={"session_id": str(session_id), "patient_data": user_data, "final_data": final_data}, 
+        method="POST"
+    )
     if not pdf_bytes:
         raise HTTPException(status_code=500, detail="Failed to generate PDF report")
 
