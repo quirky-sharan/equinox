@@ -91,26 +91,26 @@ export default function SplashScreen({ onFinished }) {
       // Preload the ML health check (warm up backend connection)
       try {
         const mlUrl = import.meta.env.VITE_ML_URL || "http://localhost:8001";
-        fetch(`${mlUrl}/health`, { mode: "cors" }).catch(() => {});
-      } catch (_) {}
+        fetch(`${mlUrl}/health`, { mode: "cors" }).catch(() => { });
+      } catch (_) { }
 
       // Preload API health
       try {
         const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:8005/api";
-        fetch(`${apiUrl}/../health`, { mode: "cors" }).catch(() => {});
-      } catch (_) {}
+        fetch(`${apiUrl}/../health`, { mode: "cors" }).catch(() => { });
+      } catch (_) { }
 
       // If user is authenticated, preload the clinical session in advance
       if (!cancelled) {
         const token = useAuthStore.getState().token;
         if (token) {
-           setProgress(98);
-           setStatusText("Initializing clinical session…");
-           try {
-             await useSessionStore.getState().preloadSession();
-           } catch (e) {
-             // Non-critical if it fails here, InterviewPage will handle failure/retry
-           }
+          setProgress(98);
+          setStatusText("Initializing clinical session…");
+          try {
+            await useSessionStore.getState().preloadSession();
+          } catch (e) {
+            // Non-critical if it fails here, InterviewPage will handle failure/retry
+          }
         }
       }
 
