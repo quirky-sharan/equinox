@@ -1,8 +1,9 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Stethoscope, Phone, MapPin, IndianRupee, Star, Filter,
-  Search, Building2, Clock, ChevronDown, AlertTriangle, X, User
+  Phone, MapPin, IndianRupee, Star, Filter,
+  Search, Building2, Clock, ChevronDown, AlertTriangle, X, User,
+  CalendarCheck, Loader2, PhoneCall, PhoneOff, CheckCircle2, XCircle
 } from "lucide-react";
 
 const SPECIALTIES = [
@@ -30,26 +31,26 @@ const SORT_OPTIONS = [
 ];
 
 const DOCTORS_BASE = [
-  { id: 1, name: "Dr. Aarav Sharma", specialty: "General Physician", hospital: "Apollo Hospitals", address: "Greams Lane, Chennai", distance: 0.8, fee: 500, rating: 4.8, experience: 15, available: "Mon-Sat, 9AM-5PM", languages: ["Hindi", "English", "Tamil"] },
-  { id: 2, name: "Dr. Priya Patel", specialty: "Cardiologist", hospital: "Fortis Hospital", address: "Bannerghatta Road, Bangalore", distance: 1.2, fee: 1200, rating: 4.9, experience: 22, available: "Mon-Fri, 10AM-4PM", languages: ["Hindi", "English", "Gujarati"] },
-  { id: 3, name: "Dr. Rohan Mehta", specialty: "Dermatologist", hospital: "Max Super Speciality", address: "Saket, New Delhi", distance: 1.5, fee: 800, rating: 4.6, experience: 10, available: "Mon-Sat, 11AM-7PM", languages: ["Hindi", "English"] },
-  { id: 4, name: "Dr. Sneha Iyer", specialty: "Gynecologist", hospital: "Manipal Hospital", address: "Old Airport Road, Bangalore", distance: 2.0, fee: 1000, rating: 4.7, experience: 18, available: "Tue-Sat, 9AM-3PM", languages: ["Hindi", "English", "Kannada"] },
-  { id: 5, name: "Dr. Vikram Singh", specialty: "Orthopedic", hospital: "AIIMS", address: "Ansari Nagar, New Delhi", distance: 2.3, fee: 600, rating: 4.5, experience: 20, available: "Mon-Fri, 8AM-2PM", languages: ["Hindi", "English", "Punjabi"] },
-  { id: 6, name: "Dr. Kavitha Reddy", specialty: "Pediatrician", hospital: "Rainbow Children's Hospital", address: "Banjara Hills, Hyderabad", distance: 2.8, fee: 700, rating: 4.8, experience: 14, available: "Mon-Sat, 9AM-6PM", languages: ["Hindi", "English", "Telugu"] },
-  { id: 7, name: "Dr. Arjun Nair", specialty: "ENT Specialist", hospital: "Amrita Hospital", address: "Ponekkara, Kochi", distance: 3.1, fee: 650, rating: 4.4, experience: 12, available: "Mon-Fri, 10AM-5PM", languages: ["Hindi", "English", "Malayalam"] },
-  { id: 8, name: "Dr. Meera Joshi", specialty: "Neurologist", hospital: "Kokilaben Hospital", address: "Andheri West, Mumbai", distance: 3.5, fee: 1500, rating: 4.9, experience: 25, available: "Mon-Thu, 10AM-4PM", languages: ["Hindi", "English", "Marathi"] },
-  { id: 9, name: "Dr. Rajesh Kumar", specialty: "Dentist", hospital: "Clove Dental", address: "Connaught Place, New Delhi", distance: 1.0, fee: 400, rating: 4.3, experience: 8, available: "Mon-Sat, 9AM-8PM", languages: ["Hindi", "English"] },
-  { id: 10, name: "Dr. Ananya Ghosh", specialty: "Ophthalmologist", hospital: "Sankara Nethralaya", address: "Nungambakkam, Chennai", distance: 4.0, fee: 900, rating: 4.7, experience: 16, available: "Mon-Fri, 9AM-5PM", languages: ["Hindi", "English", "Bengali"] },
-  { id: 11, name: "Dr. Siddharth Desai", specialty: "Psychiatrist", hospital: "NIMHANS", address: "Hosur Road, Bangalore", distance: 4.5, fee: 1100, rating: 4.6, experience: 19, available: "Mon-Fri, 11AM-6PM", languages: ["Hindi", "English", "Gujarati"] },
-  { id: 12, name: "Dr. Pooja Agarwal", specialty: "Pulmonologist", hospital: "Medanta Hospital", address: "Sector 38, Gurugram", distance: 5.0, fee: 1300, rating: 4.8, experience: 17, available: "Mon-Sat, 10AM-4PM", languages: ["Hindi", "English"] },
-  { id: 13, name: "Dr. Karan Malhotra", specialty: "General Physician", hospital: "Sir Ganga Ram Hospital", address: "Rajinder Nagar, New Delhi", distance: 1.8, fee: 550, rating: 4.5, experience: 11, available: "Mon-Sat, 8AM-4PM", languages: ["Hindi", "English", "Punjabi"] },
-  { id: 14, name: "Dr. Lakshmi Venkatesh", specialty: "Cardiologist", hospital: "Narayana Health", address: "Bommasandra, Bangalore", distance: 5.5, fee: 1400, rating: 4.9, experience: 28, available: "Mon-Wed-Fri, 9AM-1PM", languages: ["Hindi", "English", "Tamil", "Kannada"] },
-  { id: 15, name: "Dr. Neeraj Gupta", specialty: "Dermatologist", hospital: "Skin & You Clinic", address: "Juhu, Mumbai", distance: 2.5, fee: 950, rating: 4.4, experience: 9, available: "Tue-Sat, 11AM-7PM", languages: ["Hindi", "English", "Marathi"] },
-  { id: 16, name: "Dr. Deepa Krishnan", specialty: "Gynecologist", hospital: "Cloudnine Hospital", address: "Jayanagar, Bangalore", distance: 3.3, fee: 1100, rating: 4.8, experience: 21, available: "Mon-Sat, 10AM-5PM", languages: ["Hindi", "English", "Malayalam", "Kannada"] },
-  { id: 17, name: "Dr. Aditya Bhatt", specialty: "Orthopedic", hospital: "Hinduja Hospital", address: "Mahim, Mumbai", distance: 3.8, fee: 850, rating: 4.6, experience: 13, available: "Mon-Fri, 9AM-3PM", languages: ["Hindi", "English", "Gujarati"] },
-  { id: 18, name: "Dr. Ishita Sen", specialty: "Pediatrician", hospital: "Wockhardt Hospital", address: "Mira Road, Mumbai", distance: 6.0, fee: 600, rating: 4.5, experience: 10, available: "Mon-Sat, 9AM-5PM", languages: ["Hindi", "English", "Bengali"] },
-  { id: 19, name: "Dr. Manish Tiwari", specialty: "ENT Specialist", hospital: "Safdarjung Hospital", address: "Ring Road, New Delhi", distance: 2.0, fee: 500, rating: 4.3, experience: 15, available: "Mon-Sat, 8AM-2PM", languages: ["Hindi", "English"] },
-  { id: 20, name: "Dr. Ritu Saxena", specialty: "Neurologist", hospital: "BLK Hospital", address: "Pusa Road, New Delhi", distance: 4.2, fee: 1600, rating: 4.7, experience: 23, available: "Mon-Thu, 9AM-3PM", languages: ["Hindi", "English"] },
+  { id: 1, name: "Dr. Aarav Sharma", specialty: "General Physician", hospital: "Apollo Hospitals", address: "Greams Lane, Chennai", distance: 0.8, fee: 500, rating: 4.8, experience: 15, available: "Mon-Sat, 9AM-5PM", languages: ["Hindi", "English", "Tamil"], phone: "+917990588077" },
+  { id: 2, name: "Dr. Priya Patel", specialty: "Cardiologist", hospital: "Fortis Hospital", address: "Bannerghatta Road, Bangalore", distance: 1.2, fee: 1200, rating: 4.9, experience: 22, available: "Mon-Fri, 10AM-4PM", languages: ["Hindi", "English", "Gujarati"], phone: "+917990588077" },
+  { id: 3, name: "Dr. Rohan Mehta", specialty: "Dermatologist", hospital: "Max Super Speciality", address: "Saket, New Delhi", distance: 1.5, fee: 800, rating: 4.6, experience: 10, available: "Mon-Sat, 11AM-7PM", languages: ["Hindi", "English"], phone: "+917990588077" },
+  { id: 4, name: "Dr. Sneha Iyer", specialty: "Gynecologist", hospital: "Manipal Hospital", address: "Old Airport Road, Bangalore", distance: 2.0, fee: 1000, rating: 4.7, experience: 18, available: "Tue-Sat, 9AM-3PM", languages: ["Hindi", "English", "Kannada"], phone: "+917990588077" },
+  { id: 5, name: "Dr. Vikram Singh", specialty: "Orthopedic", hospital: "AIIMS", address: "Ansari Nagar, New Delhi", distance: 2.3, fee: 600, rating: 4.5, experience: 20, available: "Mon-Fri, 8AM-2PM", languages: ["Hindi", "English", "Punjabi"], phone: "+917990588077" },
+  { id: 6, name: "Dr. Kavitha Reddy", specialty: "Pediatrician", hospital: "Rainbow Children's Hospital", address: "Banjara Hills, Hyderabad", distance: 2.8, fee: 700, rating: 4.8, experience: 14, available: "Mon-Sat, 9AM-6PM", languages: ["Hindi", "English", "Telugu"], phone: "+917990588077" },
+  { id: 7, name: "Dr. Arjun Nair", specialty: "ENT Specialist", hospital: "Amrita Hospital", address: "Ponekkara, Kochi", distance: 3.1, fee: 650, rating: 4.4, experience: 12, available: "Mon-Fri, 10AM-5PM", languages: ["Hindi", "English", "Malayalam"], phone: "+917990588077" },
+  { id: 8, name: "Dr. Meera Joshi", specialty: "Neurologist", hospital: "Kokilaben Hospital", address: "Andheri West, Mumbai", distance: 3.5, fee: 1500, rating: 4.9, experience: 25, available: "Mon-Thu, 10AM-4PM", languages: ["Hindi", "English", "Marathi"], phone: "+917990588077" },
+  { id: 9, name: "Dr. Rajesh Kumar", specialty: "Dentist", hospital: "Clove Dental", address: "Connaught Place, New Delhi", distance: 1.0, fee: 400, rating: 4.3, experience: 8, available: "Mon-Sat, 9AM-8PM", languages: ["Hindi", "English"], phone: "+917990588077" },
+  { id: 10, name: "Dr. Ananya Ghosh", specialty: "Ophthalmologist", hospital: "Sankara Nethralaya", address: "Nungambakkam, Chennai", distance: 4.0, fee: 900, rating: 4.7, experience: 16, available: "Mon-Fri, 9AM-5PM", languages: ["Hindi", "English", "Bengali"], phone: "+917990588077" },
+  { id: 11, name: "Dr. Siddharth Desai", specialty: "Psychiatrist", hospital: "NIMHANS", address: "Hosur Road, Bangalore", distance: 4.5, fee: 1100, rating: 4.6, experience: 19, available: "Mon-Fri, 11AM-6PM", languages: ["Hindi", "English", "Gujarati"], phone: "+917990588077" },
+  { id: 12, name: "Dr. Pooja Agarwal", specialty: "Pulmonologist", hospital: "Medanta Hospital", address: "Sector 38, Gurugram", distance: 5.0, fee: 1300, rating: 4.8, experience: 17, available: "Mon-Sat, 10AM-4PM", languages: ["Hindi", "English"], phone: "+917990588077" },
+  { id: 13, name: "Dr. Karan Malhotra", specialty: "General Physician", hospital: "Sir Ganga Ram Hospital", address: "Rajinder Nagar, New Delhi", distance: 1.8, fee: 550, rating: 4.5, experience: 11, available: "Mon-Sat, 8AM-4PM", languages: ["Hindi", "English", "Punjabi"], phone: "+917990588077" },
+  { id: 14, name: "Dr. Lakshmi Venkatesh", specialty: "Cardiologist", hospital: "Narayana Health", address: "Bommasandra, Bangalore", distance: 5.5, fee: 1400, rating: 4.9, experience: 28, available: "Mon-Wed-Fri, 9AM-1PM", languages: ["Hindi", "English", "Tamil", "Kannada"], phone: "+917990588077" },
+  { id: 15, name: "Dr. Neeraj Gupta", specialty: "Dermatologist", hospital: "Skin & You Clinic", address: "Juhu, Mumbai", distance: 2.5, fee: 950, rating: 4.4, experience: 9, available: "Tue-Sat, 11AM-7PM", languages: ["Hindi", "English", "Marathi"], phone: "+917990588077" },
+  { id: 16, name: "Dr. Deepa Krishnan", specialty: "Gynecologist", hospital: "Cloudnine Hospital", address: "Jayanagar, Bangalore", distance: 3.3, fee: 1100, rating: 4.8, experience: 21, available: "Mon-Sat, 10AM-5PM", languages: ["Hindi", "English", "Malayalam", "Kannada"], phone: "+917990588077" },
+  { id: 17, name: "Dr. Aditya Bhatt", specialty: "Orthopedic", hospital: "Hinduja Hospital", address: "Mahim, Mumbai", distance: 3.8, fee: 850, rating: 4.6, experience: 13, available: "Mon-Fri, 9AM-3PM", languages: ["Hindi", "English", "Gujarati"], phone: "+917990588077" },
+  { id: 18, name: "Dr. Ishita Sen", specialty: "Pediatrician", hospital: "Wockhardt Hospital", address: "Mira Road, Mumbai", distance: 6.0, fee: 600, rating: 4.5, experience: 10, available: "Mon-Sat, 9AM-5PM", languages: ["Hindi", "English", "Bengali"], phone: "+917990588077" },
+  { id: 19, name: "Dr. Manish Tiwari", specialty: "ENT Specialist", hospital: "Safdarjung Hospital", address: "Ring Road, New Delhi", distance: 2.0, fee: 500, rating: 4.3, experience: 15, available: "Mon-Sat, 8AM-2PM", languages: ["Hindi", "English"], phone: "+917990588077" },
+  { id: 20, name: "Dr. Ritu Saxena", specialty: "Neurologist", hospital: "BLK Hospital", address: "Pusa Road, New Delhi", distance: 4.2, fee: 1600, rating: 4.7, experience: 23, available: "Mon-Thu, 9AM-3PM", languages: ["Hindi", "English"], phone: "+917990588077" },
 ];
 
 const PHONE = "+91 7990588077";
@@ -68,6 +69,10 @@ const DISTANCE_RANGES = [
   { label: "Within 3 km", max: 3 },
   { label: "Within 5 km", max: 5 },
 ];
+
+// ── Booking Call State ─────────────────────────────────────────────────────────
+// callState: null | { phase, callId, doctorName, result, error }
+// phase: 'initiating' | 'ringing' | 'in-progress' | 'ended' | 'failed'
 
 function useIsMobile() {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -88,6 +93,80 @@ export default function FindDoctorsPage() {
   const [sortBy, setSortBy] = useState("distance");
   const [showFilters, setShowFilters] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
+
+  // AI booking modal state
+  const [callState, setCallState] = useState(null); // { phase, callId, doctorName, result, error }
+  const pollRef = useRef(null);
+
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+
+  // ── Initiate Vapi Call ────────────────────────────────────────────────────────
+  const handleBookAppointment = useCallback(async (doctor) => {
+    setCallState({ phase: "initiating", doctorName: doctor.name, callId: null, result: null, error: null });
+
+    try {
+      const resp = await fetch(`${API_URL}/appointments/call`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          doctor_name: doctor.name,
+          doctor_specialty: doctor.specialty,
+          doctor_phone: doctor.phone,
+          doctor_hospital: doctor.hospital,
+          doctor_available: doctor.available,
+          patient_name: "the patient",
+        }),
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json();
+        throw new Error(err.detail || "Failed to initiate call");
+      }
+
+      const data = await resp.json();
+      setCallState(prev => ({ ...prev, phase: "ringing", callId: data.call_id }));
+
+      // Start polling
+      startPolling(data.call_id, doctor.name);
+    } catch (e) {
+      setCallState(prev => ({ ...prev, phase: "failed", error: e.message }));
+    }
+  }, [API_URL]);
+
+  // ── Poll Vapi for Call Status ─────────────────────────────────────────────────
+  const startPolling = useCallback((callId, doctorName) => {
+    if (pollRef.current) clearInterval(pollRef.current);
+
+    pollRef.current = setInterval(async () => {
+      try {
+        const resp = await fetch(`${API_URL}/appointments/call/${callId}`);
+        if (!resp.ok) return;
+        const data = await resp.json();
+
+        const status = data.status;
+        if (status === "in-progress") {
+          setCallState(prev => ({ ...prev, phase: "in-progress" }));
+        }
+        if (status === "ended" || status === "failed") {
+          clearInterval(pollRef.current);
+          pollRef.current = null;
+          setCallState(prev => ({
+            ...prev,
+            phase: status,
+            result: {
+              structured: data.structured_data,
+              summary: data.summary,
+              transcript: data.transcript,
+              endedReason: data.ended_reason,
+            }
+          }));
+        }
+      } catch (_) {}
+    }, 3000);
+  }, [API_URL]);
+
+  // Cleanup polling on unmount
+  useEffect(() => () => { if (pollRef.current) clearInterval(pollRef.current); }, []);
 
   const [doctorsWithCoords, setDoctorsWithCoords] = useState([]);
   const [mapInstance, setMapInstance] = useState(null);
@@ -496,20 +575,233 @@ export default function FindDoctorsPage() {
                         </div>
                     </div>
 
-                    <a
-                        href={`tel:${PHONE.replace(/\s/g, "")}`}
+                    {/* Contact / Book Button */}
+                    <button
+                        id="book-appointment-btn"
+                        onClick={() => handleBookAppointment(selectedDoctor)}
+                        disabled={callState && callState.phase !== "ended" && callState.phase !== "failed"}
                         style={{
                             display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                            padding: "10px", borderRadius: "100px",
-                            background: "white", color: "black",
-                            fontWeight: 700, fontSize: "0.9rem", textDecoration: "none",
-                            width: "100%"
+                            padding: "12px 20px", borderRadius: "100px",
+                            background: "linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%)",
+                            color: "white", fontWeight: 700, fontSize: "0.9rem",
+                            border: "none", cursor: "pointer", width: "100%",
+                            boxShadow: "0 4px 20px rgba(14,165,233,0.4)",
+                            opacity: (callState && callState.phase !== "ended" && callState.phase !== "failed") ? 0.6 : 1,
+                            transition: "all 0.2s",
                         }}
                     >
-                        <Phone size={16} /> Contact {PHONE}
-                    </a>
+                        <PhoneCall size={16} />
+                        Book Appointment via AI
+                    </button>
                 </motion.div>
             )}
+        </AnimatePresence>
+
+        {/* ── AI Call Status Modal ─────────────────────────────────────────── */}
+        <AnimatePresence>
+          {callState && (
+            <motion.div
+              key="call-modal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{
+                position: "fixed", inset: 0, zIndex: 9000,
+                background: "rgba(0,0,0,0.75)", backdropFilter: "blur(8px)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+                padding: "1rem",
+              }}
+            >
+              <motion.div
+                initial={{ scale: 0.85, opacity: 0, y: 30 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.85, opacity: 0, y: 30 }}
+                transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                style={{
+                  background: "rgba(9,9,11,0.97)",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  borderRadius: 24,
+                  padding: "2rem",
+                  maxWidth: 480, width: "100%",
+                  boxShadow: "0 30px 80px -10px rgba(0,0,0,0.8), 0 0 0 1px rgba(99,102,241,0.2)",
+                  position: "relative",
+                }}
+              >
+                {/* Close — only when terminal state */}
+                {(callState.phase === "ended" || callState.phase === "failed") && (
+                  <button
+                    onClick={() => setCallState(null)}
+                    style={{ position: "absolute", top: 16, right: 16, background: "transparent", border: "none", color: "#9ca3af", cursor: "pointer" }}
+                  >
+                    <X size={20} />
+                  </button>
+                )}
+
+                {/* ── Initiating ── */}
+                {callState.phase === "initiating" && (
+                  <div style={{ textAlign: "center", padding: "1rem 0" }}>
+                    <motion.div
+                      animate={{ rotate: 360 }}
+                      transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
+                      style={{ display: "inline-block", marginBottom: 20 }}
+                    >
+                      <Loader2 size={48} color="#6366f1" />
+                    </motion.div>
+                    <h2 style={{ fontWeight: 800, fontSize: "1.3rem", margin: "0 0 8px" }}>Connecting AI Agent</h2>
+                    <p style={{ color: "#9ca3af", fontSize: "0.9rem" }}>Preparing call to {callState.doctorName}…</p>
+                  </div>
+                )}
+
+                {/* ── Ringing / In-Progress ── */}
+                {(callState.phase === "ringing" || callState.phase === "in-progress") && (
+                  <div style={{ textAlign: "center", padding: "1rem 0" }}>
+                    <div style={{ position: "relative", display: "inline-block", marginBottom: 24 }}>
+                      {[1, 2, 3].map(i => (
+                        <motion.div
+                          key={i}
+                          animate={{ scale: [1, 2.2], opacity: [0.5, 0] }}
+                          transition={{ repeat: Infinity, duration: 1.8, delay: i * 0.5, ease: "easeOut" }}
+                          style={{
+                            position: "absolute", inset: 0, borderRadius: "50%",
+                            border: "2px solid #0ea5e9",
+                          }}
+                        />
+                      ))}
+                      <div style={{
+                        width: 60, height: 60, borderRadius: "50%",
+                        background: "linear-gradient(135deg, #0ea5e9, #6366f1)",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                      }}>
+                        <PhoneCall size={28} color="white" />
+                      </div>
+                    </div>
+                    <h2 style={{ fontWeight: 800, fontSize: "1.3rem", margin: "0 0 8px" }}>
+                      {callState.phase === "ringing" ? "Calling…" : "In Progress"}
+                    </h2>
+                    <p style={{ color: "#9ca3af", fontSize: "0.9rem", marginBottom: 16 }}>
+                      AI agent is speaking with {callState.doctorName}'s clinic
+                    </p>
+                    <div style={{
+                      background: "rgba(14,165,233,0.08)", border: "1px solid rgba(14,165,233,0.2)",
+                      borderRadius: 12, padding: "0.75rem 1rem", fontSize: "0.8rem", color: "#9ca3af",
+                    }}>
+                      ⏳ Waiting for call to complete — results will appear automatically
+                    </div>
+                  </div>
+                )}
+
+                {/* ── Ended: Success ── */}
+                {callState.phase === "ended" && (
+                  <div>
+                    <div style={{ textAlign: "center", marginBottom: 24 }}>
+                      {callState.result?.structured?.confirmed ? (
+                        <CheckCircle2 size={52} color="#22c55e" style={{ marginBottom: 12 }} />
+                      ) : (
+                        <XCircle size={52} color="#f59e0b" style={{ marginBottom: 12 }} />
+                      )}
+                      <h2 style={{ fontWeight: 800, fontSize: "1.3rem", margin: "0 0 4px" }}>
+                        {callState.result?.structured?.confirmed ? "Appointment Booked! 🎉" : "Call Ended"}
+                      </h2>
+                      <p style={{ color: "#9ca3af", fontSize: "0.85rem", margin: 0 }}>
+                        {callState.doctorName}
+                      </p>
+                    </div>
+
+                    {/* Appointment Details */}
+                    {callState.result?.structured?.confirmed && (
+                      <div style={{
+                        background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.25)",
+                        borderRadius: 16, padding: "1.25rem", marginBottom: 16,
+                      }}>
+                        <h3 style={{ fontSize: "0.8rem", fontWeight: 700, color: "#22c55e", margin: "0 0 12px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Appointment Details</h3>
+                        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                          {callState.result.structured.appointment_date && (
+                            <div>
+                              <p style={{ fontSize: "0.7rem", color: "#6b7280", margin: "0 0 2px" }}>Date</p>
+                              <p style={{ fontSize: "0.95rem", fontWeight: 600, color: "white", margin: 0 }}>
+                                {callState.result.structured.appointment_date}
+                              </p>
+                            </div>
+                          )}
+                          {callState.result.structured.appointment_time && (
+                            <div>
+                              <p style={{ fontSize: "0.7rem", color: "#6b7280", margin: "0 0 2px" }}>Time</p>
+                              <p style={{ fontSize: "0.95rem", fontWeight: 600, color: "white", margin: 0 }}>
+                                {callState.result.structured.appointment_time}
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                        {callState.result.structured.notes && (
+                          <div style={{ marginTop: 12, paddingTop: 12, borderTop: "1px solid rgba(34,197,94,0.2)" }}>
+                            <p style={{ fontSize: "0.7rem", color: "#6b7280", margin: "0 0 4px" }}>Notes</p>
+                            <p style={{ fontSize: "0.85rem", color: "#d1fae5", margin: 0 }}>{callState.result.structured.notes}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Summary */}
+                    {callState.result?.summary && (
+                      <div style={{
+                        background: "rgba(99,102,241,0.08)", border: "1px solid rgba(99,102,241,0.2)",
+                        borderRadius: 12, padding: "1rem", marginBottom: 16,
+                      }}>
+                        <p style={{ fontSize: "0.7rem", fontWeight: 700, color: "#818cf8", margin: "0 0 6px", textTransform: "uppercase", letterSpacing: "0.05em" }}>Call Summary</p>
+                        <p style={{ fontSize: "0.85rem", color: "#c7d2fe", margin: 0, lineHeight: 1.5 }}>{callState.result.summary}</p>
+                      </div>
+                    )}
+
+                    {/* Not confirmed fallback */}
+                    {!callState.result?.structured?.confirmed && (
+                      <div style={{
+                        background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)",
+                        borderRadius: 12, padding: "1rem", marginBottom: 16,
+                      }}>
+                        <p style={{ fontSize: "0.85rem", color: "#fcd34d", margin: 0 }}>
+                          The appointment could not be confirmed automatically. Please call the doctor directly.
+                        </p>
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => setCallState(null)}
+                      style={{
+                        width: "100%", padding: "10px", borderRadius: 100,
+                        background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
+                        color: "white", fontWeight: 700, fontSize: "0.9rem", cursor: "pointer",
+                      }}
+                    >
+                      Close
+                    </button>
+                  </div>
+                )}
+
+                {/* ── Failed ── */}
+                {callState.phase === "failed" && (
+                  <div style={{ textAlign: "center", padding: "1rem 0" }}>
+                    <PhoneOff size={48} color="#ef4444" style={{ marginBottom: 16 }} />
+                    <h2 style={{ fontWeight: 800, fontSize: "1.3rem", margin: "0 0 8px" }}>Call Failed</h2>
+                    <p style={{ color: "#9ca3af", fontSize: "0.85rem", marginBottom: 20 }}>
+                      {callState.error || "An unexpected error occurred."}
+                    </p>
+                    <button
+                      onClick={() => setCallState(null)}
+                      style={{
+                        padding: "10px 24px", borderRadius: 100,
+                        background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
+                        color: "white", fontWeight: 700, cursor: "pointer",
+                      }}
+                    >
+                      Dismiss
+                    </button>
+                  </div>
+                )}
+
+              </motion.div>
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
 
