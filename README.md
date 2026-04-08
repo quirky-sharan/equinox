@@ -1,10 +1,10 @@
 ```
-                            ██████╗ ██╗   ██╗██╗     ███████╗███████╗
-                            ██╔══██╗██║   ██║██║     ██╔════╝██╔════╝
-                            ██████╔╝██║   ██║██║     ███████╗█████╗  
-                            ██╔═══╝ ██║   ██║██║     ╚════██║██╔══╝  
-                            ██║     ╚██████╔╝███████╗███████║███████╗
-                            ╚═╝      ╚═════╝ ╚══════╝╚══════╝╚══════╝
+  ███████╗ ██████╗ ██╗   ██╗██╗███╗   ██╗ ██████╗ ██╗  ██╗
+  ██╔════╝██╔═══██╗██║   ██║██║████╗  ██║██╔═══██╗╚██╗██╔╝
+  █████╗  ██║   ██║██║   ██║██║██╔██╗ ██║██║   ██║ ╚███╔╝
+  ██╔══╝  ██║▄▄ ██║██║   ██║██║██║╚██╗██║██║   ██║ ██╔██╗
+  ███████╗╚██████╔╝╚██████╔╝██║██║ ╚████║╚██████╔╝██╔╝ ██╗
+  ╚══════╝ ╚══▀▀═╝  ╚═════╝ ╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═╝  ╚═╝
 ```
 
 <div align="center">
@@ -21,6 +21,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18+-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org/)
+[![LangChain](https://img.shields.io/badge/LangChain-RAG-1C3C3C?style=for-the-badge&logo=chainlink&logoColor=white)](https://python.langchain.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)](LICENSE)
 
 <br/>
@@ -31,42 +32,49 @@
 
 ---
 
-## 🩺 What is Pulse?
+## 🩺 What is Equinox?
 
-> *"You describe how you feel. Pulse figures out what it means."*
+> *"You describe how you feel. Equinox figures out what it means."*
 
-**Pulse** is a production-grade Medical AI platform built for intelligent symptom triage and health risk assessment. It accepts raw, unstructured user input — the way you'd actually describe pain to a doctor — and runs it through a multi-stage AI pipeline that returns a **risk severity score**, a ranked list of **possible conditions**, **actionable next steps**, and **adaptive follow-up questions** to narrow the clinical picture.
+**Equinox** is a production-grade Medical AI platform engineered for intelligent symptom triage and health risk assessment. It accepts raw, unstructured natural language input — the way you'd actually describe discomfort to a doctor — and routes it through a multi-stage AI pipeline that returns a **calibrated risk severity score**, a ranked differential list of **possible conditions**, **actionable next steps**, and **adaptive follow-up questions** to sharpen the clinical picture with every exchange.
 
-This is not a chatbot wrapper. Under the hood, Pulse runs a purpose-built **Retrieval-Augmented Generation (RAG)** pipeline over curated medical knowledge, combined with a specialized **NLP inference layer** for clinical entity extraction. Every response is grounded in retrieved medical context — not hallucinated. Not guessed. Not interpolated.
+This is not a chatbot wrapper over a general-purpose LLM. Under the hood, Equinox runs a purpose-built **Retrieval-Augmented Generation (RAG)** pipeline over a curated medical knowledge corpus, fronted by a **specialized NLP extraction layer** that structures raw symptom descriptions before any retrieval takes place. Every response is grounded in retrieved, authoritative medical context — not hallucinated, not interpolated, not guessed.
 
 ```
-  User types:  "I've had a splitting headache behind my eyes for 3 days,
-                light makes it worse, and I feel nauseous."
-                      │
-                      ▼
-  Pulse:    ┌─ Risk Level     →  HIGH
-               ├─ Likely Causes  →  Migraine (primary), elevated ICP (rule out)
-               ├─ Next Steps     →  Hydrate, avoid screens, seek GP if persists >24h
-               └─ Follow-up      →  "Any fever or stiff neck alongside this?"
+  User types:  "Splitting headache behind my eyes for 3 days,
+                light makes it unbearable, and I keep feeling nauseous."
+                        │
+                        ▼
+  ┌─ [NLP]  Entity extraction → symptoms, severity, duration, negations
+  │
+  ├─ [RAG]  Semantic retrieval → top-K relevant medical knowledge chunks
+  │
+  ├─ [LLM]  Grounded generation → response built on retrieved context only
+  │
+  └─ Equinox returns:
+        Risk Level    →  HIGH
+        Likely Causes →  Migraine (primary), elevated ICP (rule-out)
+        Next Steps    →  Hydrate, screen rest, GP if no improvement >24h
+        Follow-up     →  "Any fever or neck stiffness alongside this?"
 ```
 
-> ⚕️ **Disclaimer:** Pulse is a research and educational tool. It is not a substitute for professional medical diagnosis or treatment.
+> ⚕️ **Medical Disclaimer:** Equinox is a research and educational tool. It is not a substitute for professional medical diagnosis or clinical treatment.
 
 ---
 
-## ✦ Features at a Glance
+## ✦ Features
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│  → Symptom input via natural language (free-text)           │
-│  → NLP-based clinical entity extraction                     │
-│  → RAG-grounded condition differentials                     │
-│  → Risk level scoring (Low / Moderate / High / Critical)    │
-│  → Triaged next-step recommendations                        │
-│  → Adaptive follow-up questioning engine                    │
-│  → Google Sign-In (Firebase Auth)                           │
-│  → Full session history per authenticated user              │
-└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│  → Free-text symptom input — describe it the way you would      │
+│  → Multi-stage NLP clinical entity extraction                   │
+│  → RAG-grounded condition differential generation               │
+│  → Four-tier risk scoring  (Low / Moderate / High / Critical)   │
+│  → Triaged, actionable next-step recommendations                │
+│  → Adaptive follow-up questioning to narrow the differential    │
+│  → Google Sign-In via Firebase Auth                             │
+│  → Full per-user session history with persistent storage        │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
@@ -77,166 +85,344 @@ This is not a chatbot wrapper. Under the hood, Pulse runs a purpose-built **Retr
 
 | Technology | Role |
 |---|---|
-| React 18 + Vite | SPA framework with fast HMR dev server |
-| Tailwind CSS / Vanilla CSS | Utility-first styling + custom design tokens |
-| Framer Motion | Page transitions, component animations |
+| React 18 + Vite | SPA framework — fast HMR dev server, optimized production build |
+| Tailwind CSS / Vanilla CSS | Utility-first styling with custom design tokens |
+| Framer Motion | Fluid page transitions and component animations |
 | Firebase Auth | Google OAuth 2.0 Sign-In |
 
 ### Backend
 
 | Technology | Role |
 |---|---|
-| FastAPI (Python) | REST API — async, auto-documented via OpenAPI |
-| SQLAlchemy | ORM layer — models, relationships, migrations |
-| Pydantic v2 | Request/response schema validation |
-| PyJWT | Session token signing and verification |
+| FastAPI (Python 3.11) | Async REST API — auto-documented via OpenAPI/Swagger |
+| SQLAlchemy | ORM layer — models, relationships, session management |
+| Pydantic v2 | Request/response schema validation and serialization |
+| PyJWT | Session token signing, verification and expiry |
 
 ### AI / ML Microservice
 
 | Technology | Role |
 |---|---|
-| Flask | Lightweight inference server |
-| Hugging Face Transformers | NLP model inference (symptom extraction) |
-| LangChain / RAG Pipeline | Retrieval-augmented generation orchestration |
-| ChromaDB | Vector store for semantic medical knowledge retrieval |
-
-### Infrastructure
-
-| Service | What lives there |
-|---|---|
-| Vercel | Frontend (React) + Backend (FastAPI as Serverless Functions via `api/`) |
-| Render | ML microservice (Flask, heavy model weights) |
-| Neon PostgreSQL | Managed serverless Postgres — AWS `ap-southeast-1` |
-| Firebase | Authentication provider |
+| Flask | Lightweight Python inference server |
+| Hugging Face Transformers | Medical NLP model inference — NER, negation, severity |
+| Sentence Transformers | Dense vector embeddings for semantic similarity |
+| LangChain | RAG orchestration — prompt assembly, chain management |
+| ChromaDB | Persistent vector store for medical knowledge retrieval |
+| Groq / OpenAI-compatible LLM | Grounded response generation |
 
 ---
 
-## 🧠 AI Architecture — Deep Dive
+## 🧠 AI/ML Architecture — Full Deep Dive
 
-### The RAG Pipeline
-
-Pulse's intelligence does not come from a single fine-tuned model. It comes from a **Retrieval-Augmented Generation** pipeline that grounds every LLM response in actual retrieved medical knowledge, dramatically reducing hallucination.
-
-```mermaid
-flowchart TD
-    A[📝 User Symptom Input] --> B[NLP Preprocessing]
-    B --> C[Clinical Entity Extractor\nHuggingFace Transformers]
-    C --> D[Structured Symptom Object\njson]
-
-    D --> E[Query Embedder\nSentence Transformers]
-    E --> F[(ChromaDB\nVector Store)]
-    F --> G[Top-K Semantic Chunks\nMedical Knowledge Base]
-
-    G --> H[Context Assembly\nRAG Prompt Builder]
-    D --> H
-
-    H --> I[LLM Inference\nGrounded Generation]
-    I --> J[Structured Output Parser\nPydantic]
-
-    J --> K1[Risk Score]
-    J --> K2[Condition Differentials]
-    J --> K3[Next Steps]
-    J --> K4[Follow-up Questions]
-
-    K1 & K2 & K3 & K4 --> L[FastAPI Response → Frontend]
-```
-
-**How the knowledge base is built:**
-
-```
-Medical Datasets (guidelines, symptom corpora, ICD-10 references)
-        ↓
-  Text chunking + cleaning
-        ↓
-  Embedding model (Sentence Transformers)
-        ↓
-  ChromaDB ingestion → persistent vector store
-        ↓
-  At inference time: query → top-K relevant chunks → injected into LLM prompt
-```
-
-When a user submits symptoms, the pipeline embeds the query, retrieves the most semantically relevant medical knowledge chunks from ChromaDB, assembles them into a structured prompt, and passes everything to the language model. The model never generates in a vacuum — it always has authoritative context to reason from.
+Equinox's intelligence is not a single model. It is a **three-layer AI pipeline** where each layer has a distinct, non-overlapping responsibility: extraction, retrieval, and generation. No layer generates in a vacuum — every output feeds the next.
 
 ---
 
-### NLP — Clinical Entity Extraction
+### Layer 1 — NLP: Clinical Entity Extraction
 
-Before retrieval even begins, raw user text passes through a **specialized medical NLP model** (via Hugging Face Transformers) that performs:
+Before any retrieval or generation takes place, raw free-text passes through a **specialized medical NLP model** loaded via Hugging Face Transformers. This is not a general-purpose text classifier. It is a clinically-trained extraction layer designed to convert unstructured symptom prose into a normalized, machine-readable symptom object.
 
-- **Named Entity Recognition (NER)** — identifying symptom tokens (`"sharp chest pain"`, `"shortness of breath"`)
-- **Negation detection** — distinguishing `"no fever"` from `"fever"`
-- **Severity signal extraction** — parsing intensity cues (`"mild"`, `"severe"`, `"intermittent"`)
-- **Duration and onset parsing** — temporal context that affects risk scoring
+**What it does:**
 
-The output is a structured symptom object (JSON) passed downstream to the RAG retriever and risk scorer.
+```
+  Raw input:  "I've had this dull ache in my lower back for about a week.
+               No fever. It gets worse when I sit for too long."
+                              │
+                              ▼
+            ┌─────────────────────────────────────────────────┐
+            │  Named Entity Recognition (NER)                 │
+            │    → "dull ache"         [SYMPTOM]              │
+            │    → "lower back"        [BODY_SITE]            │
+            │    → "a week"            [DURATION]             │
+            │    → "sits for too long" [AGGRAVATING_FACTOR]   │
+            │                                                  │
+            │  Negation Detection                              │
+            │    → "No fever"          [SYMPTOM: fever = ¬]   │
+            │                                                  │
+            │  Severity Parsing                                │
+            │    → "dull"              [INTENSITY: low]       │
+            │                                                  │
+            │  Temporal Extraction                             │
+            │    → "a week"            [ONSET: chronic]       │
+            └─────────────────────────────────────────────────┘
+                              │
+                              ▼
+            {
+              "symptoms": ["lower back pain"],
+              "negated":  ["fever"],
+              "severity": "mild",
+              "duration": "~7 days",
+              "aggravators": ["prolonged sitting"],
+              "onset": "gradual"
+            }
+```
+
+**Capabilities in detail:**
+
+- **Named Entity Recognition (NER)** — identifies symptom tokens (`"sharp chest pain"`), body site references (`"right shoulder"`), and clinical descriptors
+- **Negation Detection** — correctly maps `"no fever"` to `fever: false`, preventing false positives that would corrupt the retrieval query
+- **Severity Signal Extraction** — parses linguistic intensity cues: `"mild"`, `"severe"`, `"unbearable"`, `"intermittent"`, `"constant"`
+- **Duration and Onset Parsing** — extracts temporal context (`"for three days"`, `"since this morning"`) that materially affects risk tier assignment
+- **Aggravating/Relieving Factor Parsing** — captures what makes symptoms better or worse, informing both retrieval and follow-up question generation
+
+The output is a **structured symptom object** (JSON schema) that flows into both the retrieval layer and the risk scoring logic.
 
 ---
 
-## 🏗️ Deployment Architecture
+### Layer 2 — RAG: Semantic Medical Knowledge Retrieval
+
+This is the core of Equinox's anti-hallucination strategy. Instead of asking an LLM to generate a diagnosis from memory, Equinox **retrieves the most semantically relevant medical knowledge** for the presented symptoms and passes that context directly into the generation prompt.
+
+#### Knowledge Base Construction
 
 ```
-┌─────────────────────────────────────────────────────────────────────┐
-│                          VERCEL PLATFORM                            │
-│                                                                     │
-│   ┌─────────────────────┐        ┌──────────────────────────────┐  │
-│   │   frontend/         │        │   api/                       │  │
-│   │   React + Vite      │◄──────►│   FastAPI → Serverless Fn    │  │
-│   │   Static Build      │        │   (Python 3.11 runtime)      │  │
-│   └─────────────────────┘        └──────────────┬───────────────┘  │
-└──────────────────────────────────────────────────┼──────────────────┘
-                                                   │
-              ┌────────────────────────────────────┼──────────────────┐
-              │                                    │                  │
-              ▼                                    ▼                  ▼
-   ┌─────────────────────┐          ┌──────────────────────┐  ┌──────────────┐
-   │   RENDER            │          │   NEON POSTGRESQL    │  │   FIREBASE   │
-   │   Flask ML Server   │          │   Serverless DB      │  │   Auth       │
-   │   :8001             │          │   ap-southeast-1     │  │   (Google)   │
-   │   (model weights,   │          │   (user data,        │  └──────────────┘
-   │    ChromaDB,        │          │    session history,  │
-   │    Transformers)    │          │    analysis logs)    │
-   └─────────────────────┘          └──────────────────────┘
+  Medical source datasets
+  (clinical guidelines, symptom corpora, ICD-10 references,
+   differential diagnosis references, triage protocols)
+          │
+          ▼
+  ┌──────────────────────────────┐
+  │  Text Preprocessing          │
+  │  → chunking (512 tokens)     │
+  │  → deduplication             │
+  │  → noise removal             │
+  └──────────────┬───────────────┘
+                 │
+                 ▼
+  ┌──────────────────────────────┐
+  │  Sentence Transformer        │
+  │  Embedding Model             │
+  │  → dense vector per chunk    │
+  │  → semantic space alignment  │
+  └──────────────┬───────────────┘
+                 │
+                 ▼
+  ┌──────────────────────────────┐
+  │  ChromaDB                    │
+  │  Persistent Vector Store     │
+  │  → indexed by embedding      │
+  │  → metadata preserved        │
+  │  → cosine similarity search  │
+  └──────────────────────────────┘
 ```
 
-**Why this split?**
+#### Inference-Time Retrieval
 
-Vercel Serverless Functions have a **250MB deployment size limit** — incompatible with PyTorch model weights and ChromaDB. The ML microservice is therefore hosted on Render, which supports persistent disk, longer execution timeouts, and uncapped bundle sizes. The FastAPI backend on Vercel communicates with the Render ML service over HTTP, acting as an orchestration layer.
-
-### Monorepo Structure
+At inference time, the structured symptom object from Layer 1 is **re-embedded** using the same Sentence Transformer model and used as the query vector against ChromaDB:
 
 ```
-ieee_internal_hack/
+  Structured symptom JSON
+          │
+          ▼
+  Query embedding (Sentence Transformers)
+          │
+          ▼
+  ChromaDB cosine similarity search
+          │
+          ▼
+  Top-K most semantically relevant medical knowledge chunks
+  (K is configurable; default K=5)
+          │
+          ▼
+  Retrieved chunks → ranked by relevance score → filtered by threshold
+```
+
+The top-K chunks are the **ground truth context** that the LLM will reason over. The model cannot and does not reason beyond this retrieved context — this architectural constraint is what prevents hallucination of medical facts.
+
+---
+
+### Layer 3 — LLM: Grounded Generation
+
+With the structured symptom object and the retrieved context assembled, LangChain orchestrates the **prompt construction and LLM call**.
+
+#### Prompt Assembly
+
+```
+  ┌──────────────────────────────────────────────────────────────┐
+  │  SYSTEM PROMPT                                               │
+  │  → Clinical reasoning persona                                │
+  │  → Output schema definition (JSON)                           │
+  │  → Strict grounding instruction:                             │
+  │    "Respond only based on the provided context.              │
+  │     Do not use knowledge outside of what is given."          │
+  ├──────────────────────────────────────────────────────────────┤
+  │  RETRIEVED CONTEXT  (from ChromaDB)                          │
+  │  → Chunk 1: [medical text...]                                │
+  │  → Chunk 2: [medical text...]                                │
+  │  → Chunk 3: [medical text...]                                │
+  │     ... up to K chunks                                       │
+  ├──────────────────────────────────────────────────────────────┤
+  │  USER INPUT  (structured symptom object)                     │
+  │  → Symptoms, severity, duration, negations, aggravators      │
+  ├──────────────────────────────────────────────────────────────┤
+  │  OUTPUT INSTRUCTION                                          │
+  │  → Return structured JSON:                                   │
+  │    { risk_level, conditions[], next_steps[], follow_up[] }   │
+  └──────────────────────────────────────────────────────────────┘
+```
+
+#### Structured Output Parsing
+
+The LLM response is validated against a **Pydantic schema** before being returned to the FastAPI layer. Malformed or incomplete outputs trigger a retry with tightened constraints.
+
+```
+  LLM raw output
+        │
+        ▼
+  Pydantic v2 parser
+        │
+        ├── risk_level      →  Enum["LOW", "MODERATE", "HIGH", "CRITICAL"]
+        ├── conditions[]    →  List[{ name, confidence, reasoning }]
+        ├── next_steps[]    →  List[str]
+        └── follow_up[]     →  List[str]
+```
+
+---
+
+### Full Pipeline — End to End
+
+```
+  ┌───────────────────────────────────────────────────────────────────┐
+  │                                                                   │
+  │   User types free-text symptom description                        │
+  │                         │                                         │
+  │                         ▼                                         │
+  │          ┌──────────────────────────────┐                         │
+  │          │   NLP Extraction Layer        │                         │
+  │          │   HuggingFace Transformers    │                         │
+  │          │                              │                         │
+  │          │   NER → Negation →           │                         │
+  │          │   Severity → Duration        │                         │
+  │          └──────────────┬───────────────┘                         │
+  │                         │  Structured Symptom JSON                │
+  │             ┌───────────┴───────────┐                             │
+  │             │                       │                             │
+  │             ▼                       ▼                             │
+  │   ┌──────────────────┐   ┌──────────────────────┐                 │
+  │   │  Query Embedder   │   │   Risk Pre-Scorer     │                │
+  │   │  Sentence        │   │   (severity + duration│                │
+  │   │  Transformers    │   │    heuristics)        │                │
+  │   └────────┬─────────┘   └──────────┬────────────┘                │
+  │            │                        │                             │
+  │            ▼                        │                             │
+  │   ┌──────────────────┐              │                             │
+  │   │   ChromaDB        │              │                             │
+  │   │   Vector Store    │              │                             │
+  │   │   (cosine search) │              │                             │
+  │   └────────┬─────────┘              │                             │
+  │            │  Top-K chunks          │                             │
+  │            ▼                        │                             │
+  │   ┌──────────────────────────────┐  │                             │
+  │   │   LangChain RAG Prompt       │◄─┘                             │
+  │   │   Builder                    │                                │
+  │   │   (context + symptoms +      │                                │
+  │   │    schema instruction)       │                                │
+  │   └──────────────┬───────────────┘                                │
+  │                  │                                                │
+  │                  ▼                                                │
+  │   ┌──────────────────────────────┐                                │
+  │   │   LLM Inference              │                                │
+  │   │   (grounded, context-only)   │                                │
+  │   └──────────────┬───────────────┘                                │
+  │                  │                                                │
+  │                  ▼                                                │
+  │   ┌──────────────────────────────┐                                │
+  │   │   Pydantic Output Parser     │                                │
+  │   │   + Schema Validation        │                                │
+  │   └──────────────┬───────────────┘                                │
+  │                  │                                                │
+  │         ┌────────┴────────┐                                       │
+  │         │                 │                                       │
+  │    Risk Level      Condition Differentials                        │
+  │    Next Steps      Follow-up Questions                            │
+  │                                                                   │
+  └───────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### Risk Scoring — How It Works
+
+Risk tier assignment is a **two-signal fusion**, not a pure LLM output:
+
+```
+  Signal 1 — NLP Heuristic Pre-Score
+  ┌────────────────────────────────────────────────────┐
+  │  Severity tokens  →  weighted score contribution   │
+  │  Duration class   →  acute / subacute / chronic    │
+  │  Negation map     →  remove false-positive signals │
+  │  Red flag keywords→  "chest", "paralysis", "blood" │
+  └─────────────────────────┬──────────────────────────┘
+                            │
+  Signal 2 — LLM Reasoned Score
+  ┌────────────────────────────────────────────────────┐
+  │  LLM evaluates symptom cluster against retrieved   │
+  │  medical context and assigns one of:               │
+  │    LOW / MODERATE / HIGH / CRITICAL                │
+  └─────────────────────────┬──────────────────────────┘
+                            │
+                            ▼
+              Final risk tier = max(signal_1, signal_2)
+              (conservative: always escalate, never downgrade)
+```
+
+---
+
+### Adaptive Follow-Up Engine
+
+After the initial analysis, Equinox generates **clinically targeted follow-up questions** based on what was *not* established in the original input. These are not generic clarifiers — they are grounded in which differentials from the retrieved context remain unresolvable without additional information.
+
+```
+  Retrieved differentials include:
+    → Migraine     (requires: photophobia confirmed, no neck stiffness)
+    → Meningitis   (requires: fever, neck stiffness, rash)
+    → Cluster HA   (requires: eye redness, unilateral, cyclical pattern)
+
+  Missing data from input → generates questions:
+    → "Do you have any stiffness or pain when moving your neck?"
+    → "Is the pain on one side of the head or both?"
+    → "Have you noticed any rash or skin changes?"
+```
+
+---
+
+## 🗂️ Codebase Structure
+
+```
+equinox/
 │
-├── frontend/               # React + Vite application
+├── frontend/                    # React 18 + Vite application
 │   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   └── firebase.js
+│   │   ├── components/          # Reusable UI components
+│   │   ├── pages/               # Route-level page components
+│   │   └── firebase.js          # Firebase Auth configuration
 │   └── vite.config.js
 │
-├── backend/                # FastAPI application
-│   ├── main.py
-│   ├── models/             # SQLAlchemy models
-│   ├── routes/             # API route handlers
-│   ├── schemas/            # Pydantic schemas
-│   └── auth/               # PyJWT auth logic
+├── backend/                     # FastAPI application
+│   ├── main.py                  # App entrypoint, CORS, router mounting
+│   ├── models/                  # SQLAlchemy ORM models
+│   ├── routes/                  # Endpoint handlers (analyze, history, auth)
+│   ├── schemas/                 # Pydantic request/response schemas
+│   └── auth/                    # PyJWT token issuance and verification
 │
-├── ml/                     # Flask inference microservice
-│   ├── app.py
-│   ├── rag/                # RAG pipeline
-│   │   ├── embedder.py
-│   │   ├── retriever.py
-│   │   └── chroma_store/
-│   ├── nlp/                # NLP extraction logic
-│   │   └── extractor.py
-│   └── models/             # Model weights (gitignored)
+├── ml/                          # Flask AI/ML inference microservice
+│   ├── app.py                   # Flask server, route registration
+│   ├── rag/
+│   │   ├── embedder.py          # Sentence Transformer embedding logic
+│   │   ├── retriever.py         # ChromaDB query and top-K selection
+│   │   └── chroma_store/        # Persisted vector index (gitignored)
+│   ├── nlp/
+│   │   └── extractor.py         # HuggingFace NER + negation + severity
+│   └── models/                  # Downloaded model weights (gitignored)
 │
-├── api/                    # Vercel serverless entry point (backend)
-│   └── index.py
+├── api/                         # Serverless backend entrypoint
+│   └── index.py                 # ASGI adapter
 │
-├── start_all.bat           # One-command local launcher
-├── vercel.json
-└── README.md
+├── fix_imports.py               # Import path normalisation utility
+├── start_all.bat                # One-command local launcher (all services)
+├── vercel.json                  # Frontend + API routing config
+├── render.yaml                  # ML service process config
+└── package.json                 # Root workspace config
 ```
 
 ---
@@ -249,20 +435,18 @@ ieee_internal_hack/
 - Node.js 18+
 - Git
 
-### 1 — Clone the repository
+### 1 — Clone
 
 ```bash
-git clone https://github.com/quirky-sharan/ieee_internal_hack.git
-cd ieee_internal_hack
+git clone https://github.com/quirky-sharan/equinox.git
+cd equinox
 ```
 
 ### 2 — Environment Variables
 
-Create `.env` files in the relevant directories:
-
 **`backend/.env`**
 ```env
-DATABASE_URL=postgresql://user:password@host/dbname     # Neon connection string
+DATABASE_URL=postgresql://user:password@host/dbname
 JWT_SECRET=your_jwt_secret_here
 ML_SERVICE_URL=http://localhost:8001
 ```
@@ -281,25 +465,21 @@ CHROMA_PERSIST_DIR=./rag/chroma_store
 MODEL_NAME=your_hf_model_id
 ```
 
-### 3 — Launch Everything
-
-From the root directory, run:
+### 3 — Launch
 
 ```bat
 start_all.bat
 ```
 
-This single script boots all three services in parallel:
+Boots all three services in parallel:
 
 ```
-                    ┌─────────────────────────────────────────────────┐
-                    │  ML Inference Server  →  http://localhost:8001  │
-                    │  FastAPI Backend      →  http://localhost:8000  │
-                    │  React Frontend       →  http://localhost:5173  │
-                    └─────────────────────────────────────────────────┘
+  ML Inference Server  →  http://localhost:8001
+  FastAPI Backend      →  http://localhost:8000
+  React Frontend       →  http://localhost:5173
 ```
 
-> **Note:** First run will download model weights and build the ChromaDB vector store. This may take a few minutes depending on your internet connection.
+> **Note:** First run downloads model weights and builds the ChromaDB index. Allow a few minutes.
 
 ---
 
@@ -307,12 +487,12 @@ This single script boots all three services in parallel:
 
 | Method | Endpoint | Description |
 |---|---|---|
-| `POST` | `/api/analyze` | Submit symptoms → returns full analysis |
-| `GET` | `/api/history` | Fetch session history for authenticated user |
-| `POST` | `/api/auth/verify` | Verify Firebase token, issue JWT |
-| `GET` | `/api/health` | Service health check |
-| `POST` | `/ml/extract` | (Internal) NLP entity extraction |
-| `POST` | `/ml/retrieve` | (Internal) ChromaDB RAG retrieval |
+| `POST` | `/api/analyze` | Submit symptoms → full AI analysis response |
+| `GET` | `/api/history` | Fetch analysis history for authenticated user |
+| `POST` | `/api/auth/verify` | Exchange Firebase token for signed JWT |
+| `GET` | `/api/health` | Service liveness check |
+| `POST` | `/ml/extract` | *(Internal)* NLP entity extraction |
+| `POST` | `/ml/retrieve` | *(Internal)* ChromaDB RAG retrieval |
 
 ---
 
@@ -331,45 +511,44 @@ This single script boots all three services in parallel:
   </tr>
 </table>
 
-> PRs are open and welcome. If you have ideas for improving the diagnostic accuracy of the AI pipeline — better embedding models, expanded knowledge bases, improved NLP extraction — open an issue or submit a pull request. Clinical accuracy is the north star.
-
 ---
 
 ## 🤝 Contributing
 
 ```
 1. Fork the repository
-2. Create your feature branch  →  git checkout -b feature/improve-rag-retrieval
-3. Commit your changes         →  git commit -m 'feat: improve top-K chunk selection'
-4. Push to the branch          →  git push origin feature/improve-rag-retrieval
+2. Create a feature branch   →  git checkout -b feature/improve-rag-retrieval
+3. Commit your changes        →  git commit -m 'feat: improve top-K chunk selection'
+4. Push to branch             →  git push origin feature/improve-rag-retrieval
 5. Open a Pull Request
 ```
 
 Areas we're especially keen on improving:
-- Retrieval precision (better chunking strategies, rerankers)
-- NLP model accuracy on rare symptom descriptions
-- Risk scoring calibration against clinical benchmarks
-- Expanded medical knowledge base coverage
+
+- **Retrieval precision** — better chunking strategies, cross-encoder rerankers
+- **NLP model accuracy** — rare symptom descriptions, multi-symptom co-reference
+- **Risk scoring calibration** — benchmarking against validated clinical triage datasets
+- **Knowledge base coverage** — expanded ICD-10 mapping, paediatric and geriatric corpora
 
 ---
 
 ## ⚠️ Medical Disclaimer
 
-Pulse is an AI-assisted research tool built for educational and informational purposes. It is **not** a licensed medical device, and outputs should **not** be used as a substitute for professional clinical judgment. Always consult a qualified healthcare provider for diagnosis and treatment decisions.
+Equinox is an AI-assisted research tool built for educational and informational purposes only. It is **not** a licensed medical device, and its outputs should **not** be treated as a substitute for professional clinical judgment, diagnosis, or treatment. Always consult a qualified healthcare provider.
 
 ---
 
 <div align="center">
 
 ```
-                    ╔══════════════════════════════════════════════════════════╗
-                    ║     Built with obsessive attention to clinical accuracy  ║
-                    ║                  — Team Pulse, 2026 —                 ║
-                    ╚══════════════════════════════════════════════════════════╝
+  ╔══════════════════════════════════════════════════════════════╗
+  ║   Built with obsessive attention to clinical accuracy        ║
+  ║                  — Team Equinox, 2026 —                      ║
+  ╚══════════════════════════════════════════════════════════════╝
 ```
 
-[![Repo](https://img.shields.io/badge/GitHub-quirky--sharan%2Fieee__internal__hack-181717?style=flat-square&logo=github)](https://github.com/quirky-sharan/ieee_internal_hack)
+[![Repo](https://img.shields.io/badge/GitHub-quirky--sharan%2Fequinox-181717?style=flat-square&logo=github)](https://github.com/quirky-sharan/equinox)
 [![Demo](https://img.shields.io/badge/Live%20Demo-ieee--internal--hack.vercel.app-6366f1?style=flat-square&logo=vercel)](https://ieee-internal-hack.vercel.app/)
-[![Made with ❤️](https://img.shields.io/badge/Made%20with-%E2%9D%A4%EF%B8%8F-red?style=flat-square)](https://github.com/quirky-sharan/ieee_internal_hack)
+[![Made with ❤️](https://img.shields.io/badge/Made%20with-%E2%9D%A4%EF%B8%8F-red?style=flat-square)](https://github.com/quirky-sharan/equinox)
 
 </div>
