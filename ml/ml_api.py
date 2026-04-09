@@ -195,24 +195,27 @@ async def api_speak(req: SpeakRequest):
         raise HTTPException(status_code=500, detail="Voice synthesis failed.")
 
 
-@app.get("/ml/report/pdf")
-def api_report_pdf(session_id: str = Query(..., description="Session ID to generate report for")):
+class ReportRequest(BaseModel):
+    session_id: str
+    patient_data: Optional[dict] = None
+    final_data: Optional[dict] = None
+
+@app.post("/ml/report/pdf")
+def api_report_pdf(req: ReportRequest):
     """
     Generate a PDF clinical summary for a completed session.
     Session must have a final assessment (is_final=true) stored.
     """
     try:
-        final_data = _extract_final_data(session_id)
+        session_id = req.session_id
+        final_data = req.final_data
+        if not final_data:
+            final_data = _extract_final_data(session_id)
 
         pdf_bytes = generate_report(
-            condition=final_data.get("condition", "Unknown"),
-            confidence=final_data.get("confidence_percent", 50),
-            risk_tier=final_data.get("risk_tier", "medium"),
-            explanation_doctor=final_data.get("explanation_doctor", "No detailed clinical summary provided."),
-            warning_signs=final_data.get("warning_signs", []),
-            urgency=final_data.get("see_doctor_urgency", "routine"),
-            specialist=final_data.get("see_doctor_reason", "General Physician"),
-            reasoning=final_data.get("reasoning", []),
+            session_id=session_id,
+            final_data=final_data,
+            patient_data=req.patient_data,
         )
 
         filename = f"pulse_report_{session_id[:8]}.pdf"

@@ -15,6 +15,21 @@ class Session(Base):
     top_conditions = Column(JSON, nullable=True)
     intensity_score = Column(Float, nullable=True)
     trajectory_label = Column(String, nullable=True)
+    
+    # Storage for full assessment results
+    patient_explanation = Column(String, nullable=True)
+    doctor_explanation = Column(String, nullable=True)
+    reasoning_chain = Column(JSON, nullable=True)
+    recommended_action = Column(String, nullable=True)
+    dos = Column(JSON, nullable=True)
+    donts = Column(JSON, nullable=True)
+    see_doctor = Column(Boolean, nullable=True)
+    see_doctor_urgency = Column(String, nullable=True)
+    home_remedies = Column(JSON, nullable=True)
+    dietary_guidelines = Column(JSON, nullable=True)
+    lifestyle_modifications = Column(JSON, nullable=True)
+    warning_signs = Column(JSON, nullable=True)
+
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     completed_at = Column(DateTime(timezone=True), nullable=True)
 

@@ -24,7 +24,7 @@ load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), ".env"))
 # ── Config ────────────────────────────────────────────────────────────────────
 @dataclass
 class GroqConfig:
-    model: str               = "llama-3.3-70b-versatile"
+    model: str               = "llama-3.1-8b-instant"
     temperature: float       = 0.07      
     top_p: float             = 0.9
     max_tokens_chat: int     = 512    # keep conversational turns tight

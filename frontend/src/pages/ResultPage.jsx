@@ -315,25 +315,22 @@ export default function ResultPage() {
   });
 
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-  const [feedbackChecked, setFeedbackChecked] = useState(false);
+  const [feedbackGiven, setFeedbackGiven] = useState(false);
 
+  // Check if feedback already exists (don't auto-open modal)
   useQuery({
     queryKey: ["feedback", sessionId],
     queryFn: async () => {
       try {
         const res = await api.get(`/feedback/${sessionId}`);
-        if (!res.data) setIsFeedbackModalOpen(true);
-        setFeedbackChecked(true);
+        if (res.data) setFeedbackGiven(true);
         return res.data;
       } catch (e) {
-        if (e.response?.status === 404 || e.response?.status === 400 || !e.response?.data) {
-          setIsFeedbackModalOpen(true);
-        }
-        setFeedbackChecked(true);
+        // No feedback yet — that's fine, user can give it from the button
         return null;
       }
     },
-    enabled: !!data && !feedbackChecked,
+    enabled: !!data,
   });
 
   /* Loading */
@@ -1032,6 +1029,19 @@ export default function ResultPage() {
             <FileText size={16} strokeWidth={1.5} />
             Download PDF
           </motion.button>
+
+          {!feedbackGiven && (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="btn btn-secondary"
+              onClick={() => setIsFeedbackModalOpen(true)}
+              style={{ gap: 8, color: "#7c3aed", borderColor: "rgba(124, 58, 237, 0.25)" }}
+            >
+              <MessageSquare size={16} strokeWidth={1.5} />
+              Give Feedback
+            </motion.button>
+          )}
         </div>
       </Section>
 
@@ -1056,7 +1066,7 @@ export default function ResultPage() {
       <FeedbackModal
         sessionId={sessionId}
         isOpen={isFeedbackModalOpen}
-        onClose={() => setIsFeedbackModalOpen(false)}
+        onClose={() => { setIsFeedbackModalOpen(false); setFeedbackGiven(true); }}
       />
 
       {/* ── CRITICAL RISK BANNER ──────────────────────────────── */}

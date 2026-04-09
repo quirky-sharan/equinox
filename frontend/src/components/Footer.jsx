@@ -6,21 +6,21 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <motion.footer 
+    <motion.footer
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
-      style={{ 
-        borderTop: "1px solid var(--border-color)", 
-        background: "var(--bg-base)", 
+      style={{
+        borderTop: "1px solid var(--border-color)",
+        background: "var(--bg-base)",
         padding: "4rem 2rem 2rem",
         marginTop: "auto"
       }}
     >
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "3rem", marginBottom: "3rem" }}>
-          
+
           {/* Brand */}
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
             <Link to="/" style={{ display: "flex", alignItems: "center", gap: "0.5rem", textDecoration: "none", color: "var(--text-primary)" }}>
@@ -65,11 +65,11 @@ export default function Footer() {
 
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem", borderTop: "1px solid var(--border-color)", paddingTop: "2rem", textAlign: "center" }}>
           <p style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
-            &copy; {currentYear} Pulse Health Intelligence. All rights reserved. <br/>
+            &copy; {currentYear} Pulse Health Intelligence. All rights reserved. <br />
             MIT License - Open Source Core.
           </p>
           <p style={{ color: "var(--text-muted)", fontSize: "0.75rem", maxWidth: 600, margin: "0 auto", lineHeight: 1.5 }}>
-            DISCLAIMER: Pulse is a probabilistic analysis engine and does not provide formal medical diagnoses. 
+            DISCLAIMER: Pulse is a probabilistic analysis engine and does not provide formal medical diagnoses.
             Always consult a licensed medical professional for formal clinical decisions.
           </p>
         </div>
