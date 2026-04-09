@@ -22,6 +22,7 @@ import ContactPage from "./pages/ContactPage";
 import SupportPage from "./pages/SupportPage";
 import FeedbackAnalyticsPage from "./pages/FeedbackAnalyticsPage";
 import HealthTimelinePage from "./pages/HealthTimelinePage";
+import DemoCriticalPage from "./pages/DemoCriticalPage";
 import Footer from "./components/Footer";
 
 function PrivateRoute({ children }) {
@@ -93,6 +94,7 @@ export default function App() {
             <Route path="/find-doctors" element={<PrivateRoute><FindDoctorsPage /></PrivateRoute>} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/support" element={<SupportPage />} />
+            <Route path="/demo-critical" element={<DemoCriticalPage />} />
           </Routes>
         </motion.div>
       </AnimatePresence>

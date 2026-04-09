@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, Float, JSON, ForeignKey, Integer
+from sqlalchemy import Column, String, DateTime, Float, JSON, ForeignKey, Integer, Boolean
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 import uuid
@@ -17,6 +17,21 @@ class Session(Base):
     trajectory_label = Column(String, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     completed_at = Column(DateTime(timezone=True), nullable=True)
+
+    # ── Extended diagnosis fields ──────────────────────────────────
+    patient_explanation = Column(String, nullable=True)
+    doctor_explanation = Column(String, nullable=True)
+    reasoning_chain = Column(JSON, nullable=True)
+    recommended_action = Column(String, nullable=True)
+    dos = Column(JSON, nullable=True)
+    donts = Column(JSON, nullable=True)
+    see_doctor = Column(Boolean, nullable=True)
+    see_doctor_urgency = Column(String, nullable=True)
+    home_remedies = Column(JSON, nullable=True)
+    dietary_guidelines = Column(JSON, nullable=True)
+    lifestyle_modifications = Column(JSON, nullable=True)
+    warning_signs = Column(JSON, nullable=True)
+    behavioral_flags = Column(JSON, nullable=True)
 
     user = relationship("User", backref="sessions")
     answers = relationship("SessionAnswer", back_populates="session")
