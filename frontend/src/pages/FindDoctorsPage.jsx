@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLocation } from "react-router-dom";
 import {
   Phone, MapPin, IndianRupee, Star, Filter,
   Search, Building2, Clock, ChevronDown, AlertTriangle, X, User,
@@ -86,6 +87,11 @@ function useIsMobile() {
 
 export default function FindDoctorsPage() {
   const isMobile = useIsMobile();
+  const { state: routeState } = useLocation();
+  const autoSelectNearest = routeState?.autoSelectNearest ?? false;
+  const triggerCall = routeState?.triggerCall ?? false;
+  const autoTriggeredRef = useRef(false);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [specialty, setSpecialty] = useState("All Specialties");
   const [priceRange, setPriceRange] = useState(0);
@@ -173,7 +179,34 @@ export default function FindDoctorsPage() {
   const [markersLayer, setMarkersLayer] = useState(null);
   const [mapError, setMapError] = useState(null);
   const [userLocation, setUserLocation] = useState(null);
-  
+
+  // ── Auto-select nearest + auto-call when coming from critical alert ──────────
+  useEffect(() => {
+    if (!autoSelectNearest || autoTriggeredRef.current) return;
+    if (doctorsWithCoords.length === 0) return;
+
+    autoTriggeredRef.current = true;
+
+    // Sort by distance and pick nearest
+    const sorted = [...doctorsWithCoords].sort((a, b) => a.distance - b.distance);
+    const nearest = sorted[0];
+    if (!nearest) return;
+
+    setSelectedDoctor(nearest);
+
+    // Fly map to nearest doctor
+    if (mapInstance) {
+      mapInstance.flyTo([nearest.lat, nearest.lng], 15, { animate: true, duration: 1.5 });
+    }
+
+    // Auto-trigger Vapi call after a short delay so UI settles
+    if (triggerCall) {
+      setTimeout(() => {
+        handleBookAppointment(nearest);
+      }, 1500);
+    }
+  }, [autoSelectNearest, triggerCall, doctorsWithCoords, mapInstance, handleBookAppointment]);
+
   const mapRef = useRef(null);
 
   // Initialize Map & Generate Fake Coordinates

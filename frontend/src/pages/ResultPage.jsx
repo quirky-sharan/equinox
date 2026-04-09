@@ -1,6 +1,6 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { sessionApi } from "../api/endpoints";
 import {
@@ -8,10 +8,164 @@ import {
   TrendingUp, TrendingDown, Minus, Activity, MessageSquare,
   ChevronRight, MapPin, FileText, Check, X as XIcon,
   Heart, Utensils, Leaf, Zap, AlertOctagon, ArrowRight,
+  Phone, Siren,
 } from "lucide-react";
 import WellnessNudge from "../components/WellnessNudge";
 import FeedbackModal from "../components/FeedbackModal";
 import api from "../api/client";
+
+/* ─── Critical Risk Banner ────────────────────────────────────────── */
+function CriticalAlertBanner({ scorePercent, onDismiss, onAction }) {
+  return (
+    <AnimatePresence>
+      <motion.div
+        key="critical-banner"
+        initial={{ opacity: 0, y: 80, scale: 0.92 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 80, scale: 0.92 }}
+        transition={{ type: "spring", stiffness: 260, damping: 22, delay: 1.2 }}
+        style={{
+          position: "fixed",
+          bottom: 32,
+          right: 32,
+          zIndex: 9999,
+          width: 360,
+          background: "rgba(10, 4, 4, 0.97)",
+          backdropFilter: "blur(20px)",
+          borderRadius: 20,
+          padding: "1.5rem",
+          boxShadow: "0 0 0 1px rgba(239,68,68,0.6), 0 0 40px rgba(239,68,68,0.25), 0 25px 60px rgba(0,0,0,0.8)",
+          border: "1px solid rgba(239,68,68,0.5)",
+        }}
+      >
+        {/* Pulsing top border */}
+        <motion.div
+          animate={{ opacity: [1, 0.3, 1] }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: 3,
+            background: "linear-gradient(90deg, #ef4444, #f97316, #ef4444)",
+            borderRadius: "20px 20px 0 0",
+          }}
+        />
+
+        {/* Dismiss */}
+        <button
+          onClick={onDismiss}
+          style={{
+            position: "absolute",
+            top: 14,
+            right: 14,
+            background: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(255,255,255,0.1)",
+            borderRadius: 8,
+            color: "#9ca3af",
+            cursor: "pointer",
+            width: 28,
+            height: 28,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <XIcon size={14} />
+        </button>
+
+        {/* Icon + Title */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: "1rem" }}>
+          <motion.div
+            animate={{ scale: [1, 1.15, 1] }}
+            transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+            style={{
+              width: 44,
+              height: 44,
+              borderRadius: 12,
+              background: "rgba(239,68,68,0.15)",
+              border: "1px solid rgba(239,68,68,0.4)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <AlertOctagon size={22} color="#ef4444" strokeWidth={2} />
+          </motion.div>
+          <div>
+            <div
+              style={{
+                fontFamily: "var(--font-ui)",
+                fontWeight: 800,
+                fontSize: "0.95rem",
+                color: "#ffffff",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Critical Risk Detected
+            </div>
+            <div
+              style={{
+                fontFamily: "var(--font-ui)",
+                fontSize: "0.72rem",
+                color: "#ef4444",
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                textTransform: "uppercase",
+              }}
+            >
+              Severity: {scorePercent}% — Immediate Action Required
+            </div>
+          </div>
+        </div>
+
+        {/* Body */}
+        <p
+          style={{
+            fontFamily: "var(--font-body)",
+            fontSize: "0.84rem",
+            color: "#d1d5db",
+            lineHeight: 1.65,
+            margin: "0 0 1.25rem",
+            fontWeight: 300,
+          }}
+        >
+          Your assessment indicates a critical health risk. We recommend
+          connecting with the nearest available doctor immediately.
+        </p>
+
+        {/* CTA */}
+        <motion.button
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={onAction}
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
+            padding: "12px 20px",
+            borderRadius: 100,
+            background: "linear-gradient(135deg, #ef4444 0%, #f97316 100%)",
+            color: "white",
+            fontWeight: 800,
+            fontSize: "0.9rem",
+            border: "none",
+            cursor: "pointer",
+            boxShadow: "0 4px 24px rgba(239,68,68,0.45)",
+            letterSpacing: "-0.01em",
+          }}
+        >
+          <Phone size={16} strokeWidth={2.5} />
+          Find Nearest Doctor &amp; Call Now
+        </motion.button>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
 
 /* ─── Config maps ───────────────────────────────────────────────── */
 const RISK_CONFIG = {
@@ -153,6 +307,7 @@ export default function ResultPage() {
   const location = useLocation();
   const [viewMode, setViewMode] = useState("patient");
   const mentalState = location.state?.mentalState;
+  const [criticalDismissed, setCriticalDismissed] = useState(false);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["result", sessionId],
@@ -233,6 +388,15 @@ export default function ResultPage() {
   const TrajIcon = traj.icon;
 
   const scorePercent = Math.round((data?.risk_score || 0.5) * 100);
+
+  const isCritical = data?.risk_tier === "critical";
+
+  const handleCriticalAction = () => {
+    setCriticalDismissed(true);
+    navigate("/find-doctors", {
+      state: { autoSelectNearest: true, triggerCall: true },
+    });
+  };
 
   return (
     <div className="page-container" style={{ maxWidth: 860 }}>
@@ -894,6 +1058,15 @@ export default function ResultPage() {
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
       />
+
+      {/* ── CRITICAL RISK BANNER ──────────────────────────────── */}
+      {isCritical && !criticalDismissed && (
+        <CriticalAlertBanner
+          scorePercent={scorePercent}
+          onDismiss={() => setCriticalDismissed(true)}
+          onAction={handleCriticalAction}
+        />
+      )}
     </div>
   );
 }
