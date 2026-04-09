@@ -29,10 +29,15 @@ export default function PersonalizedAlerts({ highlights = [] }) {
       <div className="pa-list">
         <AnimatePresence>
           {highlights.map((h, i) => {
-            const isCritical = h.severity === "critical";
+            const isStr = typeof h === "string";
+            const title = isStr ? "Health Highlight" : h.title || "Note";
+            const detail = isStr ? h : h.detail;
+            const isCritical = !isStr && h.severity === "critical";
+            const profileField = !isStr ? h.profile_field : null;
+
             return (
               <motion.div
-                key={`${h.title}-${i}`}
+                key={`${title}-${i}`}
                 initial={{ opacity: 0, x: -15, scale: 0.95 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: 15 }}
@@ -40,18 +45,14 @@ export default function PersonalizedAlerts({ highlights = [] }) {
                 className={`pa-alert ${isCritical ? "pa-critical" : "pa-warning"}`}
               >
                 <div className="pa-alert-icon">
-                  {isCritical ? (
-                    <AlertTriangle size={18} />
-                  ) : (
-                    <Info size={18} />
-                  )}
+                  {isCritical ? <AlertTriangle size={18} /> : <Info size={18} />}
                 </div>
                 <div className="pa-alert-body">
-                  <div className="pa-alert-title">{h.title}</div>
-                  <div className="pa-alert-detail">{h.detail}</div>
-                  {h.profile_field && (
+                  <div className="pa-alert-title">{title}</div>
+                  <div className="pa-alert-detail">{detail}</div>
+                  {profileField && (
                     <span className="pa-alert-tag">
-                      <User size={10} /> {h.profile_field.replace(/_/g, " ")}
+                      <User size={10} /> {profileField.replace(/_/g, " ")}
                     </span>
                   )}
                 </div>

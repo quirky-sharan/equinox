@@ -9,7 +9,7 @@ class SessionStartResponse(BaseModel):
     session_id: str
     first_question: str
     question_category: str
-    highlights: Optional[List[Dict[str, Any]]] = None
+    highlights: Optional[List[Any]] = None
     mental_state: Optional[Dict[str, Any]] = None
 
 class BehavioralMetadata(BaseModel):
@@ -35,7 +35,7 @@ class AnswerResponse(BaseModel):
     progress_pct: float
     options: Optional[List[Dict[str, str]]] = None
     final_data: Optional[Dict[str, Any]] = None
-    highlights: Optional[List[Dict[str, Any]]] = None
+    highlights: Optional[List[Any]] = None
     mental_state: Optional[Dict[str, Any]] = None
 
 class RiskOutput(BaseModel):

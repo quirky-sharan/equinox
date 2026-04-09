@@ -6,7 +6,10 @@ Run this ONCE before starting the ML service.
 import os
 import json
 import glob
+import pandas as pd
+import hdbscan
 import chromadb
+from sentence_transformers import SentenceTransformer
 from chromadb.utils import embedding_functions
 
 KB_DIR = os.path.dirname(__file__)
@@ -98,6 +101,42 @@ def build_chunks(condition: dict) -> list[tuple[str, dict]]:
     return chunks
 
 
+def load_kaggle_transcripts() -> list[tuple[str, dict]]:
+    """Load Kaggle medical transcriptions and build chunks."""
+    filepath = os.path.join(KB_DIR, "mtsamples.csv")
+    if not os.path.exists(filepath):
+        print(f"[WARN] Kaggle transcripts not found at {filepath}")
+        return []
+
+    try:
+        df = pd.read_csv(filepath)
+        chunks = []
+        for index, row in df.iterrows():
+            if pd.isna(row.get('transcription')):
+                continue
+
+            specialty = str(row.get('medical_specialty', 'Unknown')).strip()
+            sample_name = str(row.get('sample_name', 'Unknown')).strip()
+            transcription = str(row['transcription'])
+
+            text = f"CLINICAL TRANSCRIPT\nSPECIALTY: {specialty}\nSAMPLE: {sample_name}\n\nTRANSCRIPTION:\n{transcription}"
+            meta = {
+                "chunk_type": "kaggle_transcript",
+                "specialty": specialty[:50],  # keep metadata short
+            }
+            chunks.append((text, meta))
+        print(f"   Loaded {len(chunks)} Kaggle transcript chunks.")
+        # Optional limit to keep ingestion time reasonable if the dataset is huge
+        max_kaggle = 2000 
+        if len(chunks) > max_kaggle:
+            print(f"   [INFO] Truncating Kaggle transcripts to {max_kaggle} to save memory/time.")
+            chunks = chunks[:max_kaggle]
+        return chunks
+    except Exception as e:
+        print(f"[ERROR] Failed to load Kaggle transcripts: {e}")
+        return []
+
+
 def ingest():
     """Load all medical knowledge, build chunks, embed, and store in ChromaDB."""
     print("[*] Starting medical knowledge base ingestion...")
@@ -110,11 +149,15 @@ def ingest():
 
     print(f"   Total conditions loaded: {len(conditions)}")
 
-    # Initialize ChromaDB
-    client = chromadb.PersistentClient(path=CHROMA_DIR)
+    # Initialize Model for Embedding & Clustering
+    model_name = "NeuML/pubmedbert-base-embeddings"
+    print(f"   Loading embedding model: {model_name} ...")
+    model = SentenceTransformer(model_name)
     ef = embedding_functions.SentenceTransformerEmbeddingFunction(
-        model_name="all-MiniLM-L6-v2"
+        model_name=model_name
     )
+
+    client = chromadb.PersistentClient(path=CHROMA_DIR)
 
     # Clean rebuild
     try:
@@ -128,24 +171,54 @@ def ingest():
         embedding_function=ef,
         metadata={"hnsw:space": "cosine"}
     )
-
-    # Process all conditions
-    total_chunks = 0
+    
+    # Gather chunks
+    all_chunks = []
+    
+    # Process JSON conditions
     for condition in conditions:
         chunks = build_chunks(condition)
-        for i, (text, meta) in enumerate(chunks):
-            chunk_id = f"{condition['id']}_{meta['chunk_type']}_{i}"
-            collection.add(
-                documents=[text],
-                ids=[chunk_id],
-                metadatas=[meta],
-            )
-        total_chunks += len(chunks)
-        print(f"   [OK] {condition['condition']}: {len(chunks)} chunks")
+        all_chunks.extend(chunks)
+        
+    all_chunks.extend(load_kaggle_transcripts())
+    
+    if not all_chunks:
+        print("[ERROR] No chunks to ingest!")
+        return
+
+    texts = [text for text, meta in all_chunks]
+    metadatas = [meta for text, meta in all_chunks]
+    
+    print(f"   Computing embeddings for {len(texts)} chunks...")
+    embeddings_list = model.encode(texts, show_progress_bar=False).tolist()
+
+    print("   Applying HDBSCAN clustering...")
+    try:
+        clusterer = hdbscan.HDBSCAN(min_cluster_size=3, min_samples=2)
+        labels = clusterer.fit_predict(embeddings_list)
+        for i, meta in enumerate(metadatas):
+            meta["hdbscan_cluster"] = int(labels[i])
+        print(f"   Successfully clustered into {len(set(labels)) - (1 if -1 in labels else 0)} unique clusters.")
+    except Exception as e:
+        print(f"   [WARN] HDBSCAN failed (maybe too few samples): {e}")
+
+    # Insert in batches
+    batch_size = 500
+    total_chunks = len(texts)
+    print(f"   Inserting {total_chunks} chunks into ChromaDB...")
+    
+    for i in range(0, total_chunks, batch_size):
+        end = min(i + batch_size, total_chunks)
+        batch_ids = [f"doc_{j}" for j in range(i, end)]
+        collection.add(
+            documents=texts[i:end],
+            embeddings=embeddings_list[i:end],
+            metadatas=metadatas[i:end],
+            ids=batch_ids,
+        )
 
     print(f"\n[DONE] Ingestion complete!")
-    print(f"   {len(conditions)} conditions -> {total_chunks} searchable chunks")
-    print(f"   Database: {CHROMA_DIR}")
+    print(f"   Total chunks ingested: {total_chunks}")
 
 
 if __name__ == "__main__":

@@ -32,29 +32,29 @@ const SORT_OPTIONS = [
 ];
 
 const DOCTORS_BASE = [
-  { id: 1, name: "Dr. Aarav Sharma", specialty: "General Physician", hospital: "Apollo Hospitals", address: "Greams Lane, Chennai", distance: 0.8, fee: 500, rating: 4.8, experience: 15, available: "Mon-Sat, 9AM-5PM", languages: ["Hindi", "English", "Tamil"], phone: "+917990588077" },
-  { id: 2, name: "Dr. Priya Patel", specialty: "Cardiologist", hospital: "Fortis Hospital", address: "Bannerghatta Road, Bangalore", distance: 1.2, fee: 1200, rating: 4.9, experience: 22, available: "Mon-Fri, 10AM-4PM", languages: ["Hindi", "English", "Gujarati"], phone: "+917990588077" },
-  { id: 3, name: "Dr. Rohan Mehta", specialty: "Dermatologist", hospital: "Max Super Speciality", address: "Saket, New Delhi", distance: 1.5, fee: 800, rating: 4.6, experience: 10, available: "Mon-Sat, 11AM-7PM", languages: ["Hindi", "English"], phone: "+917990588077" },
-  { id: 4, name: "Dr. Sneha Iyer", specialty: "Gynecologist", hospital: "Manipal Hospital", address: "Old Airport Road, Bangalore", distance: 2.0, fee: 1000, rating: 4.7, experience: 18, available: "Tue-Sat, 9AM-3PM", languages: ["Hindi", "English", "Kannada"], phone: "+917990588077" },
-  { id: 5, name: "Dr. Vikram Singh", specialty: "Orthopedic", hospital: "AIIMS", address: "Ansari Nagar, New Delhi", distance: 2.3, fee: 600, rating: 4.5, experience: 20, available: "Mon-Fri, 8AM-2PM", languages: ["Hindi", "English", "Punjabi"], phone: "+917990588077" },
-  { id: 6, name: "Dr. Kavitha Reddy", specialty: "Pediatrician", hospital: "Rainbow Children's Hospital", address: "Banjara Hills, Hyderabad", distance: 2.8, fee: 700, rating: 4.8, experience: 14, available: "Mon-Sat, 9AM-6PM", languages: ["Hindi", "English", "Telugu"], phone: "+917990588077" },
-  { id: 7, name: "Dr. Arjun Nair", specialty: "ENT Specialist", hospital: "Amrita Hospital", address: "Ponekkara, Kochi", distance: 3.1, fee: 650, rating: 4.4, experience: 12, available: "Mon-Fri, 10AM-5PM", languages: ["Hindi", "English", "Malayalam"], phone: "+917990588077" },
-  { id: 8, name: "Dr. Meera Joshi", specialty: "Neurologist", hospital: "Kokilaben Hospital", address: "Andheri West, Mumbai", distance: 3.5, fee: 1500, rating: 4.9, experience: 25, available: "Mon-Thu, 10AM-4PM", languages: ["Hindi", "English", "Marathi"], phone: "+917990588077" },
-  { id: 9, name: "Dr. Rajesh Kumar", specialty: "Dentist", hospital: "Clove Dental", address: "Connaught Place, New Delhi", distance: 1.0, fee: 400, rating: 4.3, experience: 8, available: "Mon-Sat, 9AM-8PM", languages: ["Hindi", "English"], phone: "+917990588077" },
-  { id: 10, name: "Dr. Ananya Ghosh", specialty: "Ophthalmologist", hospital: "Sankara Nethralaya", address: "Nungambakkam, Chennai", distance: 4.0, fee: 900, rating: 4.7, experience: 16, available: "Mon-Fri, 9AM-5PM", languages: ["Hindi", "English", "Bengali"], phone: "+917990588077" },
-  { id: 11, name: "Dr. Siddharth Desai", specialty: "Psychiatrist", hospital: "NIMHANS", address: "Hosur Road, Bangalore", distance: 4.5, fee: 1100, rating: 4.6, experience: 19, available: "Mon-Fri, 11AM-6PM", languages: ["Hindi", "English", "Gujarati"], phone: "+917990588077" },
-  { id: 12, name: "Dr. Pooja Agarwal", specialty: "Pulmonologist", hospital: "Medanta Hospital", address: "Sector 38, Gurugram", distance: 5.0, fee: 1300, rating: 4.8, experience: 17, available: "Mon-Sat, 10AM-4PM", languages: ["Hindi", "English"], phone: "+917990588077" },
-  { id: 13, name: "Dr. Karan Malhotra", specialty: "General Physician", hospital: "Sir Ganga Ram Hospital", address: "Rajinder Nagar, New Delhi", distance: 1.8, fee: 550, rating: 4.5, experience: 11, available: "Mon-Sat, 8AM-4PM", languages: ["Hindi", "English", "Punjabi"], phone: "+917990588077" },
-  { id: 14, name: "Dr. Lakshmi Venkatesh", specialty: "Cardiologist", hospital: "Narayana Health", address: "Bommasandra, Bangalore", distance: 5.5, fee: 1400, rating: 4.9, experience: 28, available: "Mon-Wed-Fri, 9AM-1PM", languages: ["Hindi", "English", "Tamil", "Kannada"], phone: "+917990588077" },
-  { id: 15, name: "Dr. Neeraj Gupta", specialty: "Dermatologist", hospital: "Skin & You Clinic", address: "Juhu, Mumbai", distance: 2.5, fee: 950, rating: 4.4, experience: 9, available: "Tue-Sat, 11AM-7PM", languages: ["Hindi", "English", "Marathi"], phone: "+917990588077" },
-  { id: 16, name: "Dr. Deepa Krishnan", specialty: "Gynecologist", hospital: "Cloudnine Hospital", address: "Jayanagar, Bangalore", distance: 3.3, fee: 1100, rating: 4.8, experience: 21, available: "Mon-Sat, 10AM-5PM", languages: ["Hindi", "English", "Malayalam", "Kannada"], phone: "+917990588077" },
-  { id: 17, name: "Dr. Aditya Bhatt", specialty: "Orthopedic", hospital: "Hinduja Hospital", address: "Mahim, Mumbai", distance: 3.8, fee: 850, rating: 4.6, experience: 13, available: "Mon-Fri, 9AM-3PM", languages: ["Hindi", "English", "Gujarati"], phone: "+917990588077" },
-  { id: 18, name: "Dr. Ishita Sen", specialty: "Pediatrician", hospital: "Wockhardt Hospital", address: "Mira Road, Mumbai", distance: 6.0, fee: 600, rating: 4.5, experience: 10, available: "Mon-Sat, 9AM-5PM", languages: ["Hindi", "English", "Bengali"], phone: "+917990588077" },
-  { id: 19, name: "Dr. Manish Tiwari", specialty: "ENT Specialist", hospital: "Safdarjung Hospital", address: "Ring Road, New Delhi", distance: 2.0, fee: 500, rating: 4.3, experience: 15, available: "Mon-Sat, 8AM-2PM", languages: ["Hindi", "English"], phone: "+917990588077" },
-  { id: 20, name: "Dr. Ritu Saxena", specialty: "Neurologist", hospital: "BLK Hospital", address: "Pusa Road, New Delhi", distance: 4.2, fee: 1600, rating: 4.7, experience: 23, available: "Mon-Thu, 9AM-3PM", languages: ["Hindi", "English"], phone: "+917990588077" },
+  { id: 1, name: "Dr. Aarav Sharma", specialty: "General Physician", hospital: "Apollo Hospitals", address: "Greams Lane, Chennai", distance: 0.8, fee: 500, rating: 4.8, experience: 15, available: "Mon-Sat, 9AM-5PM", languages: ["Hindi", "English", "Tamil"], phone: "+919511928019" },
+  { id: 2, name: "Dr. Priya Patel", specialty: "Cardiologist", hospital: "Fortis Hospital", address: "Bannerghatta Road, Bangalore", distance: 1.2, fee: 1200, rating: 4.9, experience: 22, available: "Mon-Fri, 10AM-4PM", languages: ["Hindi", "English", "Gujarati"], phone: "+919511928019" },
+  { id: 3, name: "Dr. Rohan Mehta", specialty: "Dermatologist", hospital: "Max Super Speciality", address: "Saket, New Delhi", distance: 1.5, fee: 800, rating: 4.6, experience: 10, available: "Mon-Sat, 11AM-7PM", languages: ["Hindi", "English"], phone: "+919511928019" },
+  { id: 4, name: "Dr. Sneha Iyer", specialty: "Gynecologist", hospital: "Manipal Hospital", address: "Old Airport Road, Bangalore", distance: 2.0, fee: 1000, rating: 4.7, experience: 18, available: "Tue-Sat, 9AM-3PM", languages: ["Hindi", "English", "Kannada"], phone: "+919511928019" },
+  { id: 5, name: "Dr. Vikram Singh", specialty: "Orthopedic", hospital: "AIIMS", address: "Ansari Nagar, New Delhi", distance: 2.3, fee: 600, rating: 4.5, experience: 20, available: "Mon-Fri, 8AM-2PM", languages: ["Hindi", "English", "Punjabi"], phone: "+919511928019" },
+  { id: 6, name: "Dr. Kavitha Reddy", specialty: "Pediatrician", hospital: "Rainbow Children's Hospital", address: "Banjara Hills, Hyderabad", distance: 2.8, fee: 700, rating: 4.8, experience: 14, available: "Mon-Sat, 9AM-6PM", languages: ["Hindi", "English", "Telugu"], phone: "+919511928019" },
+  { id: 7, name: "Dr. Arjun Nair", specialty: "ENT Specialist", hospital: "Amrita Hospital", address: "Ponekkara, Kochi", distance: 3.1, fee: 650, rating: 4.4, experience: 12, available: "Mon-Fri, 10AM-5PM", languages: ["Hindi", "English", "Malayalam"], phone: "+919511928019" },
+  { id: 8, name: "Dr. Meera Joshi", specialty: "Neurologist", hospital: "Kokilaben Hospital", address: "Andheri West, Mumbai", distance: 3.5, fee: 1500, rating: 4.9, experience: 25, available: "Mon-Thu, 10AM-4PM", languages: ["Hindi", "English", "Marathi"], phone: "+919511928019" },
+  { id: 9, name: "Dr. Rajesh Kumar", specialty: "Dentist", hospital: "Clove Dental", address: "Connaught Place, New Delhi", distance: 1.0, fee: 400, rating: 4.3, experience: 8, available: "Mon-Sat, 9AM-8PM", languages: ["Hindi", "English"], phone: "+919511928019" },
+  { id: 10, name: "Dr. Ananya Ghosh", specialty: "Ophthalmologist", hospital: "Sankara Nethralaya", address: "Nungambakkam, Chennai", distance: 4.0, fee: 900, rating: 4.7, experience: 16, available: "Mon-Fri, 9AM-5PM", languages: ["Hindi", "English", "Bengali"], phone: "+919511928019" },
+  { id: 11, name: "Dr. Siddharth Desai", specialty: "Psychiatrist", hospital: "NIMHANS", address: "Hosur Road, Bangalore", distance: 4.5, fee: 1100, rating: 4.6, experience: 19, available: "Mon-Fri, 11AM-6PM", languages: ["Hindi", "English", "Gujarati"], phone: "+919511928019" },
+  { id: 12, name: "Dr. Pooja Agarwal", specialty: "Pulmonologist", hospital: "Medanta Hospital", address: "Sector 38, Gurugram", distance: 5.0, fee: 1300, rating: 4.8, experience: 17, available: "Mon-Sat, 10AM-4PM", languages: ["Hindi", "English"], phone: "+919511928019" },
+  { id: 13, name: "Dr. Karan Malhotra", specialty: "General Physician", hospital: "Sir Ganga Ram Hospital", address: "Rajinder Nagar, New Delhi", distance: 1.8, fee: 550, rating: 4.5, experience: 11, available: "Mon-Sat, 8AM-4PM", languages: ["Hindi", "English", "Punjabi"], phone: "+919511928019" },
+  { id: 14, name: "Dr. Lakshmi Venkatesh", specialty: "Cardiologist", hospital: "Narayana Health", address: "Bommasandra, Bangalore", distance: 5.5, fee: 1400, rating: 4.9, experience: 28, available: "Mon-Wed-Fri, 9AM-1PM", languages: ["Hindi", "English", "Tamil", "Kannada"], phone: "+919511928019" },
+  { id: 15, name: "Dr. Neeraj Gupta", specialty: "Dermatologist", hospital: "Skin & You Clinic", address: "Juhu, Mumbai", distance: 2.5, fee: 950, rating: 4.4, experience: 9, available: "Tue-Sat, 11AM-7PM", languages: ["Hindi", "English", "Marathi"], phone: "+919511928019" },
+  { id: 16, name: "Dr. Deepa Krishnan", specialty: "Gynecologist", hospital: "Cloudnine Hospital", address: "Jayanagar, Bangalore", distance: 3.3, fee: 1100, rating: 4.8, experience: 21, available: "Mon-Sat, 10AM-5PM", languages: ["Hindi", "English", "Malayalam", "Kannada"], phone: "+919511928019" },
+  { id: 17, name: "Dr. Aditya Bhatt", specialty: "Orthopedic", hospital: "Hinduja Hospital", address: "Mahim, Mumbai", distance: 3.8, fee: 850, rating: 4.6, experience: 13, available: "Mon-Fri, 9AM-3PM", languages: ["Hindi", "English", "Gujarati"], phone: "+919511928019" },
+  { id: 18, name: "Dr. Ishita Sen", specialty: "Pediatrician", hospital: "Wockhardt Hospital", address: "Mira Road, Mumbai", distance: 6.0, fee: 600, rating: 4.5, experience: 10, available: "Mon-Sat, 9AM-5PM", languages: ["Hindi", "English", "Bengali"], phone: "+919511928019" },
+  { id: 19, name: "Dr. Manish Tiwari", specialty: "ENT Specialist", hospital: "Safdarjung Hospital", address: "Ring Road, New Delhi", distance: 2.0, fee: 500, rating: 4.3, experience: 15, available: "Mon-Sat, 8AM-2PM", languages: ["Hindi", "English"], phone: "+919511928019" },
+  { id: 20, name: "Dr. Ritu Saxena", specialty: "Neurologist", hospital: "BLK Hospital", address: "Pusa Road, New Delhi", distance: 4.2, fee: 1600, rating: 4.7, experience: 23, available: "Mon-Thu, 9AM-3PM", languages: ["Hindi", "English"], phone: "+919511928019" },
 ];
 
-const PHONE = "+91 7990588077";
+const PHONE = "+91 9511928019";
 
 const PRICE_RANGES = [
   { label: "All Prices", min: 0, max: Infinity },
@@ -156,6 +156,18 @@ export default function FindDoctorsPage() {
         if (status === "ended" || status === "failed") {
           clearInterval(pollRef.current);
           pollRef.current = null;
+
+          const isError = data.ended_reason && (data.ended_reason.includes('error') || data.ended_reason.includes('failed'));
+          
+          if (status === "failed" || isError) {
+             setCallState(prev => ({
+               ...prev,
+               phase: "failed",
+               error: data.ended_message || "The call failed to connect or encountered an error.",
+             }));
+             return;
+          }
+
           setCallState(prev => ({
             ...prev,
             phase: status,

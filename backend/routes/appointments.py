@@ -13,7 +13,7 @@ VAPI_BASE = "https://api.vapi.ai"
 class CallRequest(BaseModel):
     doctor_name: str
     doctor_specialty: str
-    doctor_phone: str          # e164 format e.g. "+917990588077"
+    doctor_phone: str          # e164 format e.g. "+919511928019"
     doctor_hospital: str
     doctor_available: str
     patient_name: Optional[str] = "the patient"
@@ -187,6 +187,7 @@ async def poll_call(call_id: str):
                 "call_id": call_id,
                 "status": data.get("status"),
                 "ended_reason": data.get("endedReason"),
+                "ended_message": data.get("endedMessage"),
                 "structured_data": analysis.get("structuredData"),
                 "summary": analysis.get("summary"),
                 "transcript": artifact.get("transcript"),

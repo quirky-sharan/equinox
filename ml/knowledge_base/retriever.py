@@ -18,7 +18,7 @@ def _get_collection():
     global _client, _collection
     if _collection is None:
         ef = embedding_functions.SentenceTransformerEmbeddingFunction(
-            model_name="all-MiniLM-L6-v2"
+            model_name="NeuML/pubmedbert-base-embeddings"
         )
         _client = chromadb.PersistentClient(path=CHROMA_DIR)
         _collection = _client.get_collection(

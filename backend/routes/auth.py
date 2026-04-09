@@ -73,6 +73,7 @@ async def verify_firebase_token(id_token: str) -> dict:
             algorithms=["RS256"],
             audience=settings.FIREBASE_PROJECT_ID,
             issuer=f"https://securetoken.google.com/{settings.FIREBASE_PROJECT_ID}",
+            leeway=60,
         )
         return payload
 
@@ -80,7 +81,9 @@ async def verify_firebase_token(id_token: str) -> dict:
         raise HTTPException(status_code=401, detail="Firebase token has expired")
     except pyjwt.InvalidTokenError as e:
         logger.error(f"Firebase token validation error: {e}")
-        raise HTTPException(status_code=401, detail=f"Invalid Firebase token: {str(e)}")
+        unverified_payload = pyjwt.decode(id_token, options={"verify_signature": False})
+        expected_aud = settings.FIREBASE_PROJECT_ID
+        raise HTTPException(status_code=401, detail=f"Invalid Firebase token: {str(e)} | Audience Expected: {expected_aud} | Got Payload: {unverified_payload}")
 
 @router.post("/register", response_model=TokenResponse)
 def register(payload: UserCreate, db: Session = Depends(get_db)):

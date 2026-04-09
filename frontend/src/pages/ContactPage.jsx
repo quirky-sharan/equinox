@@ -68,7 +68,7 @@ export default function ContactPage() {
 
           {/* Phone Card */}
           <motion.a
-            href="tel:+917990588077"
+            href="tel:+919511928019"
             whileHover={{ y: -8, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             className="card"

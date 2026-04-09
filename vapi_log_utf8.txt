@@ -1,0 +1,90 @@
+﻿{
+  "id": "019d6ec5-74c1-7000-851d-3cf4028543f1",
+  "phoneNumberId": "f310dbf8-1e15-4434-991c-1041538c500c",
+  "type": "outboundPhoneCall",
+  "createdAt": "2026-04-08T20:25:27.489Z",
+  "updatedAt": "2026-04-08T20:25:27.725Z",
+  "orgId": "c215ae5a-5b95-4f18-a9f3-04939a8be3b5",
+  "cost": 0,
+  "assistant": {
+    "name": "Equinox Appointment Agent",
+    "model": {
+      "model": "gpt-4o-mini",
+      "messages": [
+        {
+          "role": "system",
+          "content": "You are an AI medical receptionist calling on behalf of a patient to book an appointment.\n\nDoctor Information:\n- Name: Dr. Manish Tiwari\n- Specialty: ENT Specialist\n- Hospital: Safdarjung Hospital\n- Available Hours: Mon-Sat, 8AM-2PM\n\nYour job:\n1. Greet the doctor's receptionist or the doctor professionally.\n2. Explain you are calling to book an appointment for the patient.\n3. Ask for an available appointment slot.\n4. Confirm the date and time clearly.\n5. Thank them and end the call politely.\n\nIf no one answers or the line is busy, leave a brief voicemail.\nKeep the call under 2 minutes.\nBe polite, professional, and concise."
+        }
+      ],
+      "provider": "openai",
+      "maxTokens": 500,
+      "temperature": 0.7
+    },
+    "voice": {
+      "voiceId": "emma",
+      "provider": "azure"
+    },
+    "firstMessage": "Hello, I'm calling on behalf of the patient to schedule an appointment with Dr. Manish Tiwari, ENT Specialist at Safdarjung Hospital. Could you please help me find an available slot?",
+    "firstMessageMode": "assistant-speaks-first",
+    "endCallMessage": "Thank you for your time. Goodbye!",
+    "endCallPhrases": [
+      "goodbye",
+      "bye",
+      "have a good day",
+      "thank you, goodbye",
+      "we're all set",
+      "that's all we needed"
+    ],
+    "maxDurationSeconds": 180,
+    "analysisPlan": {
+      "summaryPlan": {
+        "enabled": true,
+        "messages": [
+          {
+            "content": "Summarize this appointment-booking call in 1-2 sentences.",
+            "role": "system"
+          }
+        ]
+      },
+      "structuredDataPlan": {
+        "enabled": true,
+        "schema": {
+          "type": "object",
+          "required": [
+            "confirmed"
+          ],
+          "properties": {
+            "notes": {
+              "description": "Any additional instructions or notes from the receptionist",
+              "type": "string"
+            },
+            "confirmed": {
+              "description": "True if an appointment was successfully booked",
+              "type": "boolean"
+            },
+            "appointment_date": {
+              "description": "The date of the appointment (e.g. 'April 15, 2026' or '15/04/2026')",
+              "type": "string"
+            },
+            "appointment_time": {
+              "description": "The time of the appointment (e.g. '10:30 AM')",
+              "type": "string"
+            }
+          }
+        },
+        "messages": [
+          {
+            "content": "You are a data extractor. Given the call transcript, extract the appointment details. Set confirmed=true only if a specific date and time were agreed upon.",
+            "role": "system"
+          }
+        ]
+      }
+    }
+  },
+  "customer": {
+    "number": "+917990588077"
+  },
+  "status": "ended",
+  "endedReason": "call.start.error-get-transport",
+  "endedMessage": "Couldn't Create Twilio Call. Twilio Error: The number +917990588077 is unverified. Trial accounts may only make calls to verified numbers."
+}

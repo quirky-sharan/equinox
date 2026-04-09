@@ -27,15 +27,15 @@ class GroqConfig:
     model: str               = "llama-3.1-8b-instant"
     temperature: float       = 0.07      
     top_p: float             = 0.9
-    max_tokens_chat: int     = 512    # keep conversational turns tight
+    max_tokens_chat: int     = 2048   # keep conversational turns tight, but allow final JSON
     max_tokens_final: int    = 2048   # final JSON needs room
     frequency_penalty: float = 0.1
     presence_penalty: float  = 0.1
     seed: int                = 42
     retries: int             = 3
-    max_history_turns: int   = 10     # trim beyond this many user+assistant pairs
-    final_turn_threshold: int = 5     # trigger final-assessment mode after N user turns
-
+    max_history_turns: int   = 15     # allow enough history for AI to autonomously decide
+    max_hard_turns: int      = 15     # fail-safe trigger for final assessment
+    
 CONFIG = GroqConfig()
 
 
@@ -141,6 +141,10 @@ def call_groq(system_prompt: str, messages: list, is_final_turn: bool = False) -
     client = _get_client()
     full_messages = [{"role": "system", "content": system_prompt}] + messages
     max_tok = CONFIG.max_tokens_final if is_final_turn else CONFIG.max_tokens_chat
+    
+    # If we reached the hard limit, force the LLM to output the final JSON.
+    if is_final_turn:
+        full_messages.append({"role": "system", "content": "FORCE ASSESSMENT COMPLETE. Output the final JSON assessment NOW. Do not ask any more questions."})
 
     for attempt in range(CONFIG.retries):
         try:
@@ -199,7 +203,8 @@ def process_message(session_id: str, user_message: str, profile_context: str | N
     history = _trim_history(raw_history)
 
     turn_count = session_manager.get_turn_count(session_id)
-    is_final_turn = turn_count >= CONFIG.final_turn_threshold
+    # Give the LLM control, but enforce a hard stop to prevent endless loops
+    is_final_turn = turn_count >= (CONFIG.max_hard_turns * 2)
 
     raw_reply = call_groq(system_prompt, history, is_final_turn=is_final_turn)
     session_manager.add_message(session_id, "assistant", raw_reply)

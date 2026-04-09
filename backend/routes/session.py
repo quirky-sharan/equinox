@@ -230,51 +230,55 @@ async def submit_answer(
                 "warning_signs": final_data.get("warning_signs", [])
             }
             
-            uhm = UserHealthMemory(
-                user_id=current_user.id,
-                session_id=str(session.id),
-                condition=final_data.get("condition"),
-                risk_tier=final_data.get("risk_tier"),
-                confidence_percent=final_data.get("confidence_percent"),
-                symptoms_summary=symptoms_summary,
-                key_findings=key_findings,
-                see_doctor=final_data.get("see_doctor"),
-                see_doctor_urgency=final_data.get("see_doctor_urgency")
-            )
-            db.add(uhm)
-            db.flush() # get uhm.id without committing
+            uhm = db.query(UserHealthMemory).filter(UserHealthMemory.session_id == str(session.id)).first()
+            if not uhm:
+                uhm = UserHealthMemory(
+                    user_id=current_user.id,
+                    session_id=str(session.id),
+                    condition=final_data.get("condition"),
+                    risk_tier=final_data.get("risk_tier"),
+                    confidence_percent=final_data.get("confidence_percent"),
+                    symptoms_summary=symptoms_summary,
+                    key_findings=key_findings,
+                    see_doctor=final_data.get("see_doctor"),
+                    see_doctor_urgency=final_data.get("see_doctor_urgency")
+                )
+                db.add(uhm)
+                db.flush() # get uhm.id without committing
+                
+                # 3. Call ML memory sync endpoint (async, fire-and-forget)
+                import asyncio
+                asyncio.create_task(call_ml("memory/sync", {"user_id": current_user.id, "user_health_memory_id": uhm.id}))
             
             # 2. Create training_examples row
-            tc_messages = []
-            
-            # Inject system context for fine-tuning data to ensure the AI learns
-            # from the user's habits, lifestyle, and previous disease history.
-            system_context = "You are a clinical AI. The patient has the following profile:\n"
-            system_context += profile_context if profile_context else "No profile data provided.\n"
-            
-            if memory_payload:
-                system_context += "\nPatient's previous history of diseases/conditions:\n"
-                system_context += json.dumps(memory_payload)
+            te = db.query(TrainingExample).filter(TrainingExample.session_id == str(session.id)).first()
+            if not te:
+                tc_messages = []
                 
-            tc_messages.append({"role": "system", "content": system_context})
-            
-            for a in all_answers:
-                tc_messages.append({"role": "assistant", "content": a.question_text})
-                tc_messages.append({"role": "user", "content": a.answer_text})
+                # Inject system context for fine-tuning data to ensure the AI learns
+                # from the user's habits, lifestyle, and previous disease history.
+                system_context = "You are a clinical AI. The patient has the following profile:\n"
+                system_context += profile_context if profile_context else "No profile data provided.\n"
                 
-            import hashlib
-            te = TrainingExample(
-                session_id=str(session.id),
-                user_id=current_user.id,
-                messages=tc_messages,
-                system_prompt_hash=hashlib.sha256(b"dynamic_prompt").hexdigest(), # mock hash for now, real one depends on prompt builder
-                final_output=final_data,
-            )
-            db.add(te)
-            
-            # 3. Call ML memory sync endpoint (async, fire-and-forget)
-            import asyncio
-            asyncio.create_task(call_ml("memory/sync", {"user_id": current_user.id, "user_health_memory_id": uhm.id}))
+                if memory_payload:
+                    system_context += "\nPatient's previous history of diseases/conditions:\n"
+                    system_context += json.dumps(memory_payload)
+                    
+                tc_messages.append({"role": "system", "content": system_context})
+                
+                for a in all_answers:
+                    tc_messages.append({"role": "assistant", "content": a.question_text})
+                    tc_messages.append({"role": "user", "content": a.answer_text})
+                    
+                import hashlib
+                te = TrainingExample(
+                    session_id=str(session.id),
+                    user_id=current_user.id,
+                    messages=tc_messages,
+                    system_prompt_hash=hashlib.sha256(b"dynamic_prompt").hexdigest(), # mock hash for now, real one depends on prompt builder
+                    final_output=final_data,
+                )
+                db.add(te)
 
         db.commit()
 
