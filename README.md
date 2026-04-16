@@ -1,14 +1,14 @@
 <div align="center">
 
-<!-- BANNER — Replace with your actual banner image -->
-<img src="https://placehold.co/1200x300/0a0f1e/38bdf8?text=EQUINOX&font=montserrat" alt="Equinox Banner" width="100%" />
+<!-- BANNER -->
+<img src="screenshots/landing_page.png" alt="Equinox Banner" width="100%" />
 
 <br/>
 <br/>
 
 <!-- PROJECT NAME + TAGLINE -->
 <h1>
-  <img src="https://placehold.co/32x32/38bdf8/0a0f1e?text=⚕" alt="icon" width="28" valign="middle" />
+  <img src="screenshots/logo.png" alt="icon" width="28" valign="middle" />
   &nbsp;EQUINOX
 </h1>
 
@@ -82,8 +82,7 @@ Patients interface via a dynamic React frontend. As they describe symptoms, an a
 </td>
 <td width="40%" valign="top" align="center">
 
-<!-- REPLACE WITH ACTUAL SCREENSHOT -->
-<img src="https://placehold.co/420x580/0a0f1e/38bdf8?text=App+Screenshot%0A%0A(Replace+this)" alt="App Screenshot" width="100%" style="border-radius:12px;" />
+<img src="screenshots/inference.png" alt="Clinical Inference Interface" width="100%" style="border-radius:12px;" />
 
 <br/><br/>
 
@@ -152,21 +151,60 @@ Longitudinal session tracking that natively injects past patient medical visits 
 
 <div align="center">
 
-> Replace the placeholders below with actual screenshots of your application.
-
 <table>
 <tr>
-<td align="center" width="33%">
-<img src="https://placehold.co/380x240/0a0f1e/38bdf8?text=Main+Chat+UI" alt="Main Chat UI" width="100%" />
-<br/><sub><b>Clinical Intake Interface</b></sub>
+<td align="center" width="50%">
+<img src="screenshots/dashboard.png" alt="Dashboard" width="100%" />
+<br/><sub><b>Patient Dashboard</b></sub>
+<br/><sub>Central hub showing active sessions, recent assessments, and health snapshot at a glance.</sub>
 </td>
-<td align="center" width="33%">
-<img src="https://placehold.co/380x240/0a0f1e/f97316?text=Risk+Assessment+View" alt="Risk Assessment" width="100%" />
+<td align="center" width="50%">
+<img src="screenshots/inference.png" alt="Clinical Inference" width="100%" />
+<br/><sub><b>Clinical Intake & Agentic Interview</b></sub>
+<br/><sub>Real-time agentic loop driving the symptom intake with targeted follow-up questions.</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="50%">
+<img src="screenshots/assesment.png" alt="Risk Assessment" width="100%" />
 <br/><sub><b>Risk Stratification Output</b></sub>
+<br/><sub>Differential diagnosis with calibrated risk tier, red flags, and recommended care pathway.</sub>
 </td>
-<td align="center" width="33%">
-<img src="https://placehold.co/380x240/0a0f1e/22c55e?text=PDF+Report+Preview" alt="PDF Report" width="100%" />
+<td align="center" width="50%">
+<img src="screenshots/pdf.png" alt="PDF Handover Report" width="100%" />
 <br/><sub><b>Clinician Handover PDF</b></sub>
+<br/><sub>Auto-generated PCR report structured for direct clinical handover — no reformatting needed.</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="50%">
+<img src="screenshots/analyses.png" alt="Analytics View" width="100%" />
+<br/><sub><b>Clinical Analyses Panel</b></sub>
+<br/><sub>Longitudinal symptom trends, session telemetry, and aggregated health signal visualizations.</sub>
+</td>
+<td align="center" width="50%">
+<img src="screenshots/history.png" alt="Visit History" width="100%" />
+<br/><sub><b>Visit History & Memory</b></sub>
+<br/><sub>Persistent longitudinal record of all past assessments, injected into future AI context windows.</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="50%">
+<img src="screenshots/profile.png" alt="Health Profile" width="100%" />
+<br/><sub><b>Patient Health Profile</b></sub>
+<br/><sub>Stored medications, allergies, and chronic conditions that personalize every risk assessment.</sub>
+</td>
+<td align="center" width="50%">
+<img src="screenshots/map.png" alt="Care Map" width="100%" />
+<br/><sub><b>Care Routing Map</b></sub>
+<br/><sub>Geo-aware emergency routing that surfaces nearby care facilities based on assessed risk tier.</sub>
+</td>
+</tr>
+<tr>
+<td align="center" width="50%">
+<img src="screenshots/population.png" alt="Population View" width="100%" />
+<br/><sub><b>Population-Level Insights</b></sub>
+<br/><sub>Aggregate epidemiological view across the platform — symptom clusters, regional trends, and more.</sub>
 </td>
 </tr>
 </table>
@@ -474,6 +512,19 @@ equinox/
 │       ├── ingest.py              # SentenceTransformer embedding push to ChromaDB
 │       ├── retriever.py           # Query embedding and nearest-neighbor retrieval
 │       └── medical_knowledge*.json# Static structured condition definitions for differential matching
+│
+├── screenshots/                   # Application screenshots for documentation
+│   ├── landing_page.png           # Hero / landing page
+│   ├── dashboard.png              # Patient dashboard
+│   ├── inference.png              # Clinical intake & agentic interview
+│   ├── assesment.png              # Risk stratification output
+│   ├── pdf.png                    # Clinician handover PDF
+│   ├── analyses.png               # Analytics panel
+│   ├── history.png                # Visit history
+│   ├── profile.png                # Patient health profile
+│   ├── map.png                    # Care routing map
+│   ├── population.png             # Population-level insights
+│   └── logo.png                   # Application logo
 │
 ├── README.md                      # This file
 └── start_all.bat                  # Sequential boot script for all services
