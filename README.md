@@ -621,7 +621,7 @@ These are embedded alongside the Kaggle transcripts and serve as the authoritati
 
 <sub>
 
-**Medical Disclaimer:** Equinox is an AI research tool strictly intended for educational demonstration purposes.<br/>
+**Medical Disclaimer:** Equinox is an AI research tool strictly intended for educational demonstration purposes.
 It is **not** a diagnostic medical device and its outputs must never supersede professional clinical judgment.
 
 </sub>
