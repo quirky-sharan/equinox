@@ -626,8 +626,6 @@ It is **not** a diagnostic medical device and its outputs must never supersede p
 
 </sub>
 
-<br/>
-
 <sub>Made with precision by the Equinox team.</sub>
 
 </div>
