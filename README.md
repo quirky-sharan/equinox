@@ -166,3 +166,99 @@ equinox/
 ├── README.md                      # Detailed technical breakdown detailing platform intent and functionality
 └── start_all.bat                  # Shell executable scripting sequential boots of all internal servers
 ```
+
+---
+
+## ⚙️ Local Setup
+
+### Prerequisites
+- **Python 3.11+**
+- **Node.js 18+**
+- **Git**
+
+### 1 — Clone the Repository
+```bash
+git clone https://github.com/quirky-sharan/equinox.git
+cd equinox
+```
+
+### 2 — Install Dependencies & Environment Variables
+
+**Frontend:**
+```bash
+cd frontend
+npm install
+```
+*Create `frontend/.env`:*
+```env
+VITE_FIREBASE_API_KEY=your_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+**Backend:**
+```bash
+cd ../backend
+pip install -r requirements.txt
+```
+*Create `backend/.env`:*
+```env
+DATABASE_URL=sqlite:///./meowmeow.db
+JWT_SECRET=super-secret-production-key-change-me
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=1440
+ML_SERVICE_URL=http://localhost:8001
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_API_KEY=your_key
+FRONTEND_URL=http://localhost:5173
+GROQ_API_KEY=gsk_your_groq_api_key_here
+VAPI_API_KEY=your_vapi_key
+VAPI_PHONE_NUMBER_ID=your_vapi_phone_id
+```
+
+**ML Service:**
+```bash
+cd ../ml
+pip install -r requirements.txt
+
+# IMPORTANT: Run the ingestion script ONCE to build you local ChromaDB vector index
+python -m knowledge_base.ingest
+```
+
+### 3 — Launch the Platform
+From the root directory, simply run the initialization batch script:
+```bat
+start_all.bat
+```
+This command boots all three microservices sequentially in parallel windows:
+- **ML Engine** (FastAPI)       → `http://localhost:8001`
+- **Backend API** (FastAPI)     → `http://localhost:8000`
+- **Frontend UI** (Vite/React)  → `http://localhost:5173`
+
+> **Note:** The first time the ML service starts, please wait a few moments as it will download the `SentenceTransformer` and `PubMedBERT` weights locally.
+
+---
+
+## 🗂️ API Reference Map
+
+| Method | Component | Endpoint | Description |
+|---|---|---|---|
+| `POST` | Backend | `/api/session/new` | Instantiate a new patient encounter |
+| `POST` | ML Engine | `/ml/chat` | Main RAG logic triggering Groq and returning risk tiers |
+| `POST` | ML Engine | `/ml/report/pdf` | Generate the post-assessment clinician PCR Handover PDF |
+| `POST` | ML Engine | `/ml/speak` | Stream Edge TTS voice synthesis data |
+| `GET`  | Backend | `/api/history` | Return all past user assessment logs |
+| `POST` | Backend | `/api/auth/verify` | Validate Firebase OAuth tokens and issue JWT |
+
+---
+
+## 👥 Contributors
+
+- **Sharan** — *AI / ML Pipeline, NLP Engineering, and Frontend architecture refinement*
+- **Devatman** — *Frontend UI/UX, Backend APIs, 3D Models (Three.js), and Database Management*
+- **Varun** — *AI Agentic Call Base, Agent Autonomy, and Frontend Functionalities*
+
+---
+
+> ⚕️ **Medical Disclaimer:** Equinox is an AI research tool strictly intended for educational demonstration purposes. It is **not** a diagnostic medical device and its outputs must never supersede professional clinical judgment.
